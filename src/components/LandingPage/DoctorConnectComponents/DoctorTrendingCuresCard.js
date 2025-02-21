@@ -54,15 +54,6 @@ const DoctorTrendingCuresCard = ({
                 </div>
               </div>
             ),
-            paragraph: (
-              <div className="ce-block py-2">
-                <div className="ce-block__content">
-                  <div className="ce-paragraph cdx-block">
-                    <p>{textContent}</p>
-                  </div>
-                </div>
-              </div>
-            ),
             warning: (
               <div className="ce-block p-1">
                 <div

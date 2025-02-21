@@ -7,6 +7,7 @@ import DoctorsArticles from "./DoctorConnectComponents/DoctorsArticles";
 import ValuesSection from "./DoctorConnectComponents/ValuesSection";
 import Footer from "../Footer/Footer";
 import DoctorByMedicineType from "./DoctorConnectComponents/DoctorByMedicineType";
+import TopDoctor from "./DoctorConnectComponents/TopDoctor";
 
 function DoctorLandingPage() {
   return (
@@ -25,8 +26,17 @@ function DoctorLandingPage() {
         </section>
 
         <DoctorByMedicineType />
+     
+     <TopDoctor/>
 
         <ValuesSection />
+        <div>
+          <img
+            src="https://ik.imagekit.io/qi0xxmh2w/productimages/assets/img/3step.jpg"
+            alt="3 Step Image"
+            style={{ width: "100%", height: "250px" }}
+          />
+        </div>
 
         <section className="mb-64 mt-10 " style={{ height: "650px" }}>
           <div className="container" id="trends">
@@ -37,12 +47,11 @@ function DoctorLandingPage() {
                 </div>
               </div>
             </div>
-            <div className="row mt-4" >
+            <div className="row mt-4">
               <DoctorsArticles />
             </div>
           </div>
         </section>
-     
       </main>
       <Footer />
     </>

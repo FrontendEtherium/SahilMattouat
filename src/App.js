@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Main from "./components/MainComponent";
 import CookieConsent from "react-cookie-consent";
 import AppBanner from "./components/LandingPage/AppBanner";
 import { Link } from "react-router-dom";
 import "./cookie.css";
-
+import clarity from "@microsoft/clarity";
 const App = () => {
+  useEffect(() => {
+    clarity.init("q9o6f2uidb");
+  }, []);
   return (
     <div>
       <Main />

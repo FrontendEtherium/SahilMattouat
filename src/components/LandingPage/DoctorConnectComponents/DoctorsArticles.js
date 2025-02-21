@@ -142,7 +142,7 @@ const DoctorsArticles = (props) => {
                           title = title.replace(regex, "-");
                           return (
                             <div className="col-4">
-                              <div className="card my-2 w-100">
+                              <div className=" my-2 w-100">
                                 <div className="card-img">
                                   <img src={imageLoc} />
                                 </div>
