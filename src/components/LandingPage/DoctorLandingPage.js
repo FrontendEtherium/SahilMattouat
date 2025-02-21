@@ -30,13 +30,13 @@ function DoctorLandingPage() {
      <TopDoctor/>
 
         <ValuesSection />
-        <div>
+        {/* <div>
           <img
             src="https://ik.imagekit.io/qi0xxmh2w/productimages/assets/img/3step.jpg"
             alt="3 Step Image"
             style={{ width: "100%", height: "250px" }}
           />
-        </div>
+        </div> */}
 
         <section className="mb-64 mt-10 " style={{ height: "650px" }}>
           <div className="container" id="trends">
