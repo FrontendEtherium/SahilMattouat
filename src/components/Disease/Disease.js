@@ -19,6 +19,7 @@ import Breadcrumbs from "./DiseasePageComponent/Breadcrumbs";
 import Rating from "./DiseasePageComponent/Rating.js";
 import ArticleComments from "./DiseasePageComponent/ArticleComments.js";
 import DiseaseModal from "./DiseasePageComponent/DiseaseModal.js";
+import { userId } from "../UserId.js";
 const Disease = () => {
   const [state, setState] = useState({
     items: [],
@@ -47,6 +48,7 @@ const Disease = () => {
   // console.log("component rendered");
   // const MarkdownPreview = lazy(() => import("./MarkdownPreview.js"));
   const { id } = useParams();
+  const location = useLocation();
   const history = useHistory();
   const containerRef = useRef(null);
   const [parsedContent, setParsedContent] = useState();
@@ -98,6 +100,7 @@ const Disease = () => {
     // console.log('Image clicked!',ad);
     axios.put(`${backendHost}/sponsored/ads/clicks/${ad}`);
   };
+
   const fetchBlog = async () => {
     const articleId = id.split("-")[0];
 
@@ -196,6 +199,24 @@ const Disease = () => {
       setState((prev) => ({ ...prev, ads: newResponse }));
     } catch (error) {
       setState((prev) => ({ ...prev, error: error.message }));
+    }
+  };
+  useEffect(() => {
+    pageLoading();
+  }, [ ]);
+
+  const pageLoading = async () => {
+    const articleId = id.split("-")[0];
+    if (location.search.includes("whatsapp")) {
+      await axios.post(
+        `${backendHost}/article/${articleId}/${
+          userId ? userId : 0
+        }/jsession/whatsapp`
+      );
+    } else {
+      await axios.post(
+        `${backendHost}/article/${articleId}/${userId ? userId : 0}/jsession/NA`
+      );
     }
   };
 
