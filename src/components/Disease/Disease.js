@@ -103,6 +103,7 @@ const Disease = () => {
 
   const fetchBlog = async () => {
     const articleId = id.split("-")[0];
+    console.log(articleId)
 
     if (/^[0-9]+$/.test(articleId)) {
       // If the URL contains article_id
