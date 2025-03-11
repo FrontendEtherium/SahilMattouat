@@ -19,14 +19,14 @@
 .values-section {
   /* Keeping overall section padding as originally set.
      You can adjust these values if you want a different mobile feel. */
-  padding: var(--padding-medium) var(--padding-small);
+
 }
 
 /* Container for centering content */
 .values-section__container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 var(--padding-small);
+
   text-align: center;
 }
 

@@ -10,7 +10,7 @@ import axios from "axios";
 import { backendHost } from "../../../api-config";
 import "./DoctorConnectCard.css";
 import { imgKitImagePath } from "../../../image-path";
-
+import { Link } from "react-router-dom";
 function DoctorConnectCard({ doc }) {
   const imgLoc = doc.imgLoc ? `${imgKitImagePath}/${doc.imgLoc}` : DummyDoc;
   const [showAppointmentModal, setShowAppointmentModal] = useState(false);
@@ -55,27 +55,31 @@ function DoctorConnectCard({ doc }) {
   return (
     <>
       <div className="doctor-card">
-        <div className="doctor-card-main">
-          <div className="doctor-image-container">
-            <img
-              src={imgLoc}
-              alt={`Dr.${doc.firstName} ${doc.lastName}`}
-              className="doctor-image"
-            />
+        <Link
+          to={`/doctor/${doc.docID}-${doc.firstName}-${doc.lastName}`}
         
-          </div>
-          <div className="doctor-details">
-            <div className="doctor-name">
-              Dr. {doc.firstName} {doc.lastName}{" "}
-              <VerifiedIcon color="success" style={{ fontSize: "12px" }} />
+          id="profile"
+        >
+          <div className="doctor-card-main">
+            <div className="doctor-image-container">
+              <img
+                src={imgLoc}
+                alt={`Dr.${doc.firstName} ${doc.lastName}`}
+                className="doctor-image"
+              />
             </div>
-            <div className="doctor-specialty">{doc.medicineTypeName}</div>
-            <div className="doctor-location">
-              {doc.cityName}, {doc.addressCountry}
-            </div>
-            <div className="doctor-hospital">{doc.hospitalAffiliated}</div>
-            <div className="doctor-separator"></div>
-            {/* <div className="doctor-rating">
+            <div className="doctor-details">
+              <div className="doctor-name">
+                Dr. {doc.firstName} {doc.lastName}{" "}
+                <VerifiedIcon color="success" style={{ fontSize: "12px" }} />
+              </div>
+              <div className="doctor-specialty">{doc.medicineTypeName}</div>
+              <div className="doctor-location">
+                {doc.cityName}, {doc.addressCountry}
+              </div>
+              <div className="doctor-hospital">{doc.hospitalAffiliated}</div>
+              <div className="doctor-separator"></div>
+              {/* <div className="doctor-rating">
               <ThumbUpIcon className="doctor-rating-icon" />
               {`${Math.ceil((doc.ratingValueAverage / 5)* 100) }%`}
               <button className="whatsapp-button">
@@ -83,8 +87,9 @@ function DoctorConnectCard({ doc }) {
                 <span className="whatsapp-text">WhatsApp</span>
               </button>
             </div> */}
+            </div>
           </div>
-        </div>
+        </Link>
         <div className="book-button-container">
           {doc.videoService === 1 && (
             <div className="book-availability">Available</div>
