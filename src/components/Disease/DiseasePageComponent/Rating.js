@@ -54,10 +54,7 @@ function Rating({ id }) {
   }, [articleId]);
 
   useEffect(() => {
-
-    
     const getRate = async () => {
-
       try {
         const response = await axios.get(
           `${backendHost}/rating/target/${articleId}/targettype/2?userid=${
@@ -82,7 +79,7 @@ function Rating({ id }) {
         {userAccess ? (
           state.rating.length === 0 ? (
             <span className="text-muted medium">
-              You have not rated yet. Please rate.
+               Rate here:
             </span>
           ) : (
             <p className="small font-weight-bold" style={{ color: "#00415e" }}>
