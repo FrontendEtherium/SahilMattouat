@@ -25,7 +25,7 @@ const CenterWell = ({
   var rows;
   var textContent;
   if (typeof text === "string") {
-    // Modify the HTML string to ensure it is wrapped in an <h2> tag
+ 
     textContent = level === 2 ? `<h2>${text}</h2>` : text;
     textContent = parse(textContent);
   }

@@ -1,0 +1,42 @@
+.buttonVideo {
+  position: relative;
+  overflow: hidden;
+  height: 3rem;
+  padding: 0 2rem;
+  border-radius: 1.5rem;
+  background: #00415e; /* Updated to default color */
+  background-size: 400%;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+}
+
+.buttonVideo:hover::before {
+  transform: scaleX(1);
+}
+
+.buttonVideo-content {
+  position: relative;
+  z-index: 1;
+  color: #fff;
+}
+
+.buttonVideo::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  width: 100%;
+  height: inherit;
+  border-radius: inherit;
+  background: linear-gradient(
+    82.3deg,
+    rgba(0, 97, 145, 1) 10.8%,
+    /* Slightly lighter shade of default color */ rgba(0, 65, 94, 1) 94.3%
+      /* Darker shade for contrast */
+  );
+  transition: all 0.475s;
+}

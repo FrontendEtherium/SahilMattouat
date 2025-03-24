@@ -20,6 +20,8 @@ import Rating from "./DiseasePageComponent/Rating.js";
 import ArticleComments from "./DiseasePageComponent/ArticleComments.js";
 import DiseaseModal from "./DiseasePageComponent/DiseaseModal.js";
 import { userId } from "../UserId.js";
+import VideoPopover from "./DiseasePageComponent/VideoPopover.js";
+import InlineVideoPlayer from "./DiseasePageComponent/Video.js";
 const Disease = () => {
   const [state, setState] = useState({
     items: [],
@@ -53,8 +55,11 @@ const Disease = () => {
   const containerRef = useRef(null);
   const [parsedContent, setParsedContent] = useState();
   const [diseaseConditionId, setDiseaseConditionId] = useState();
+  const [videoURL, setVideoURL] = useState();
   useEffect(() => {
     fetchBlog();
+    fetchVideoURL();
+
     setTimeout(() => {
       if (adSpacRef.current) {
         adSpacRef.current.scrollIntoView({ behavior: "smooth" });
@@ -95,6 +100,16 @@ const Disease = () => {
       document.head.appendChild(canonicalLink);
     }
   }, [id]);
+  const fetchVideoURL = async () => {
+    try {
+      const { data } = await axios.get(
+        `${backendHost}/doctors/${state.items.reg_doc_pat_id}/url`
+      );
+      setVideoURL(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const handleClick = (ad) => {
     // console.log('Image clicked!',ad);
@@ -204,7 +219,7 @@ const Disease = () => {
   };
   useEffect(() => {
     pageLoading();
-  }, [ ]);
+  }, []);
 
   const pageLoading = async () => {
     const articleId = id.split("-")[0];
@@ -356,6 +371,7 @@ const Disease = () => {
               carouselItems={state.carouselItems}
               id={id}
             />
+
             <Rating id={id} />
             <ArticleDetails
               title={state.items.title}
@@ -391,19 +407,19 @@ const Disease = () => {
             history={history}
             dcName={state.items.dc_name}
             id={state.items.article_id}
+            videoURL={videoURL}
           />
         </Col>
       </Row>
       <DiseaseModal />
       <SubscriberBtn />
+      <div id="video-popover">
+        {videoURL && <VideoPopover videoURL={videoURL} />}
+      </div>
 
       <Footer />
     </div>
   );
 };
 
-// Disease.whyDidYouRender = {
-//   logOnDifferentValues: true,
-//   customName: "Article",
-// };
 export default Disease;

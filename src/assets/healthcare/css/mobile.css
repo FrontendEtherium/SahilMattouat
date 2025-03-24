@@ -1,12 +1,25 @@
-@media only screen and (min-width: 320px) and (max-width: 480px){
-#right-sidebar-wrapper{
-display:none;
-}
-#doctor .item-img, #featured .item-img img, #specialists .item-img img {
-width:100%;
-} 
+@media only screen and (min-width: 320px) and (max-width: 480px) {
+  #right-sidebar-wrapper {
+    display: none;
+  }
+  #doctor .item-img,
+  #featured .item-img img,
+  #specialists .item-img img {
+    width: 100%;
+  }
+} /* ----------- iPhone 4 and 4S ----------- */
 
-}/* ----------- iPhone 4 and 4S ----------- */
+@media only screen and (min-width: 481px) {
+  #video-popover {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  #video-popover {
+    display: block; /* Ensure it's visible on mobile */
+  }
+}
 
 @media only screen and (min-width: 220px) and (max-width: 480px) {
   div#socilaBtn {
@@ -31,11 +44,11 @@ width:100%;
   /* .breadcrumb {
     padding: 2rem 1rem;
   } */
-  .breadcrumb{
+  .breadcrumb {
     padding-top: 2rem;
-      padding-bottom: 0px;
+    padding-bottom: 0px;
   }
-  #center-well #share-icons-regions{
+  #center-well #share-icons-regions {
     position: absolute;
     top: 30px;
   }
@@ -159,7 +172,7 @@ width:100%;
     padding: 0;
     position: relative;
     left: 15px;
-    top:10px;
+    top: 10px;
   }
   #searchArticle {
     margin: 58px 0 0 0;
@@ -227,16 +240,16 @@ width:100%;
 }
 
 /* .breadcrumb{padding: 1rem 1rem } */
-.breadcrumb{
+.breadcrumb {
   padding-top: 1rem;
-    padding-bottom: 0px;
-   margin-bottom:0rem;
+  padding-bottom: 0px;
+  margin-bottom: 0rem;
 }
-#center-well #share-icons-regions{
+#center-well #share-icons-regions {
   position: absolute;
   top: 50px;
 }
-#socilaBtn{
+#socilaBtn {
   /* position: absolute; */
   right: 28px;
 }
@@ -257,16 +270,15 @@ width:100%;
   /* .breadcrumb {
     padding: 2rem 1rem ;
   } */
-  .breadcrumb{
+  .breadcrumb {
     padding-top: 2rem;
-      padding-bottom: 0px;
+    padding-bottom: 0px;
   }
 
-  #center-well #share-icons-regions{
+  #center-well #share-icons-regions {
     position: absolute;
     margin-top: 35px;
   }
-
 
   #share-icons-regions {
     position: relative;
@@ -278,13 +290,12 @@ width:100%;
     position: relative;
     bottom: 30px;
   }
-  #s1:first-child{
-    margin-left:20px;
+  #s1:first-child {
+    margin-left: 20px;
   }
 
-  #article-acc-to-regions{
+  #article-acc-to-regions {
     /* flex-direction: column; */
-    
   }
 
   #starMob {
@@ -394,10 +405,6 @@ width:100%;
 
 /* Portrait and Landscape */
 @media only screen and (min-width: 375px) and (max-width: 914px) {
-
-
- 
-
   div#socilaBtn {
     position: relative;
     /* top: 15px; */
@@ -414,11 +421,11 @@ width:100%;
     
   } */
 
-  .breadcrumb{
+  .breadcrumb {
     padding-top: 2rem;
-      padding-bottom: 0px;
+    padding-bottom: 0px;
   }
-  
+
   #share-icons-regions {
     position: relative;
     flex-direction: column-reverse;
@@ -557,9 +564,9 @@ width:100%;
     padding: 2rem 0rem;
   } */
 
-  .breadcrumb{
+  .breadcrumb {
     padding-top: 2rem;
-      padding-bottom: 0px;
+    padding-bottom: 0px;
   }
   #share-icons-regions {
     position: relative;
@@ -932,9 +939,9 @@ width:100%;
     padding: 2rem 1rem;
   } */
 
-  .breadcrumb{
-    padding-top:1rem;
-    padding-bottom:0px;
+  .breadcrumb {
+    padding-top: 1rem;
+    padding-bottom: 0px;
   }
   #share-icons-regions {
     position: relative;
@@ -1305,13 +1312,13 @@ width:100%;
     left: 0px;
   }
 
-     @media (max-width: 576px) {
-  /* Apply styles for small screens */
-  .radio-button {
-    display: block;
-    margin-top: 10px;
+  @media (max-width: 576px) {
+    /* Apply styles for small screens */
+    .radio-button {
+      display: block;
+      margin-top: 10px;
+    }
   }
-}
   .serchlabel {
     margin-bottom: 160px;
   }

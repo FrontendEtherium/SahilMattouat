@@ -23,6 +23,7 @@ import VideocamRoundedIcon from "@mui/icons-material/VideocamRounded";
 import HelmetMetaData from "../HelmetMetaData";
 import { imagePath } from "../../image-path";
 import Chat from "./Chat";
+import { Tabs, Tab } from "react-bootstrap";
 
 // import Calendar from 'react-calendar';
 import dayjs from "dayjs";
@@ -759,14 +760,32 @@ class Profile extends Component {
                             Unani
                           </h2>
                           {items.imgLoc ? (
-                            <img
-                              alt={items.firstName}
-                              src={`https://ik.imagekit.io/hg4fpytvry/product-images/tr:w-180,h-230,f-webp${items.imgLoc}`}
-                            />
+                            <>
+                              <img
+                                alt={items.firstName}
+                                src={`https://ik.imagekit.io/hg4fpytvry/product-images/tr:w-180,h-230,f-webp${items.imgLoc}`}
+                              />
+                            </>
                           ) : (
                             <i class="fas fa-user-md fa-6x"></i>
                           )}
                         </div>
+                        {this.state.items.videoService === 1 && (
+                          <button
+                            type="button"
+                            className="btn btn-primary border-0"
+                            data-toggle="modal"
+                            onClick={() => this.consult()}
+                            data-target="#exampleModal"
+                            style={{
+                              backgroundColor: "#00415e",
+                              whiteSpace: "nowrap",
+                            }}
+                          >
+                            <VideocamRoundedIcon />
+                            Consult Now
+                          </button>
+                        )}
 
                         {this.props.match.params.id.split("-")[0] === userId ||
                         userAccess == 9 ? (
@@ -812,10 +831,12 @@ class Profile extends Component {
                               {items.primarySpl}
                             </div>
                             <div className="h5 ">{items.experience}</div>
-                            <div className="h5 text-capitalize">
-                              <i class="fas fa-hospital pr-1"></i>
-                              {items.hospitalAffiliated} {items.country}
-                            </div>
+                  
+                              <div className="h5 text-capitalize">
+                                <i class="fas fa-hospital pr-1"></i>
+                                {items.hospitalAffiliated} {items.country}
+                              </div>
+                        
 
                             <div></div>
                           </div>
@@ -840,20 +861,6 @@ class Profile extends Component {
                               </Button>
                             ) : null}
 
-                            {this.state.items.videoService == 1 && (
-                              <button
-                                type="button"
-                                class="btn btn-primary border-0 ml-2"
-                                data-toggle="modal"
-                                onClick={() => this.consult()}
-                                data-target="#exampleModal"
-                                style={{ backgroundColor: "#00415e" }}
-                              >
-                                <VideocamRoundedIcon />
-                                Consult Now
-                              </button>
-                            )}
-                      
                             {this.state.show && (
                               <Test
                                 show={true}
@@ -904,127 +911,171 @@ class Profile extends Component {
                     </div>
                   </div>
 
-                  <div className="aboutDr">
-                    <div className="h4 font-weight-bold">
-                      About {items.prefix} {items.firstName} {items.middleName}{" "}
-                      {items.lastName}
-                    </div>
+                  <Tabs
+                    defaultActiveKey="about"
+                    id="doctorTabs"
+                    className="mt-4"
+                  >
+                    {/* About Tab */}
+                    <Tab
+                      eventKey="about"
+                      title={
+                        <span>
+                          <i className="fas fa-info-circle mr-2"></i> About
+                        </span>
+                      }
+                    >
+                      <div className="mt-3">
+                        <div className="h4 font-weight-bold">
+                          About {items.prefix} {items.firstName}{" "}
+                          {items.middleName} {items.lastName}
+                        </div>
+                        <div id="about-contain">
+                          {items.about ? (
+                            <p className="text one">
+                              {items.about.includes("•")
+                                ? items.about
+                                    .split("•")
+                                    .map((i, idx) => <li key={idx}>{i}</li>)
+                                : items.about}
+                            </p>
+                          ) : (
+                            <p>No information available.</p>
+                          )}
+                          {items.websiteUrl ? (
+                            <a
+                              href={items.websiteUrl}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="h6"
+                            >
+                              {items.websiteUrl}
+                            </a>
+                          ) : null}
+                        </div>
+                      </div>
+                    </Tab>
 
-                    <div id="about-contain">
-                      <p className="text one">
-                        {" "}
-                        {items.about.includes("•")
-                          ? items.about
+                    {/* Education Tab */}
+                    <Tab
+                      eventKey="education"
+                      title={
+                        <span>
+                          <i className="fas fa-graduation-cap mr-2"></i>{" "}
+                          Education
+                        </span>
+                      }
+                    >
+                      <div className="mt-3">
+                        <div className="abt-eduction">
+                          <div className="h4 font-weight-bold">Education</div>
+                          {items.degDesc ? (
+                            items.degDesc
+                          ) : (
+                            <p>No information available.</p>
+                          )}
+                        </div>
+                        <div className="mt-5">
+                          <div className="h4 font-weight-bold">
+                            Accomplishments
+                          </div>
+                          {items.awards ? (
+                            items.awards
                               .split("•")
-                              .map((i, idx) => (
-                                <li className={`list-${idx}`}>{i}</li>
-                              ))
-                          : items.about}{" "}
-                        {/* {this.props.match.params.id.split('-')[0] == 874?<li>More about him at <a href="https://planetayurveda.com" target="_blank" rel="noreferrer">www.planetayurveda.com</a>.</li>: null} */}
-                        {this.props.match.params.id.split("-")[0] == 872 ? (
-                          <>
-                            <br />
-                            More about him at{" "}
-                            <a
-                              href="https://ayurvedguru.com"
-                              target="_blank"
-                              rel="noreferrer"
-                            >
-                              www.ayurvedguru.com
-                            </a>
-                            .
-                          </>
-                        ) : null}
-                        {this.props.match.params.id.split("-")[0] == 878 ? (
-                          <>
-                            <br />
-                            More about him at{" "}
-                            <a
-                              href="http://www.ayushmanbhavayurveda.com/"
-                              target="_blank"
-                              rel="noreferrer"
-                            >
-                              www.ayushmanbhavayurveda.com
-                            </a>
-                            .
-                          </>
-                        ) : null}
-                        {/* {this.props.match.params.id.split('-')[0] == 878?<><br/>More about him at <a href="https://www.ayurvedanashik.com" target="_blank" rel="noreferrer">www.ayurvedanashik.com</a>.</>: null} */}
-                        {this.props.match.params.id.split("-")[0] == 884 ? (
-                          <>
-                            <br />
-                            More about him at{" "}
-                            <a
-                              href="http://expertayurveda.com/"
-                              target="_blank"
-                              rel="noreferrer"
-                            >
-                              http://expertayurveda.com/
-                            </a>
-                            .
-                          </>
-                        ) : null}
-                      </p>
-                      <a
-                        href={`${items.websiteUrl}`}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="h6"
-                      >
-                        {items.websiteUrl}
-                      </a>
-                    </div>
-                    <div></div>
+                              .map((award, idx) => <li key={idx}>{award}</li>)
+                          ) : (
+                            <p>No information available.</p>
+                          )}
+                        </div>
+                      </div>
+                    </Tab>
 
-                    <br />
-                    <div className="abt-eduction ">
-                      <div className="h4 font-weight-bold">Education</div>
-                      {items.degDesc}
-                    </div>
-                    <div className="mt-5">
-                      <div className="h4 font-weight-bold">Accomplishments</div>
-                      {items.awards.split("•").map((i, idx) => (
-                        <li className={`list-${idx}`}>{i}</li>
-                      ))}
-                    </div>
+                    {/* Miscellaneous Tab */}
+                    <Tab
+                      eventKey="miscellaneous"
+                      title={
+                        <span>
+                          <i className="fas fa-map-marker-alt mr-2"></i>{" "}
+                          Miscellaneous
+                        </span>
+                      }
+                    >
+                      <div className="mt-3">
+                        <div className="abt-eduction">
+                          <div className="h4 font-weight-bold">
+                            Miscellaneous
+                          </div>
+                          {items.city ||
+                          items.state ||
+                          items.country ||
+                          items.gender ? (
+                            <>
+                              {items.city && (
+                                <div className="h6 font-weight-bold">
+                                  City: <span>{items.city}</span>
+                                </div>
+                              )}
+                              {items.state && (
+                                <div className="h6 font-weight-bold">
+                                  State: <span>{items.state}</span>
+                                </div>
+                              )}
+                              {items.country && (
+                                <div className="h6 font-weight-bold">
+                                  Country: <span>{items.country}</span>
+                                </div>
+                              )}
+                              {items.gender && (
+                                <div className="h6 font-weight-bold">
+                                  Gender:{" "}
+                                  {items.gender === 2 ? (
+                                    <span>Male</span>
+                                  ) : (
+                                    <span>Female</span>
+                                  )}
+                                </div>
+                              )}
+                            </>
+                          ) : (
+                            <p>No information available.</p>
+                          )}
+                        </div>
+                      </div>
+                    </Tab>
 
-                    <br />
-                    <div className="about-specialties">
-                      <div className="h4 font-weight-bold">Specialties</div>
-                      <ul>
-                        <li>{items.primarySpl}</li>
-                      </ul>
-                      <ul>
-                        <li>{items.otherSpecializations}</li>
-                      </ul>
-                    </div>
-                    <br />
-
-                    {/* </div> */}
-                    <div className="abt-eduction ">
-                      <div className="h4 font-weight-bold">Miscellaneous</div>
-                      <div className="h6 font-weight-bold">
-                        City:
-                        <span> {items.city}</span>
+                    {/* Services Offered Tab */}
+                    <Tab
+                      eventKey="services"
+                      title={
+                        <span>
+                          <i className="fas fa-stethoscope mr-2"></i> Services
+                          Offered
+                        </span>
+                      }
+                    >
+                      <div className="mt-3">
+                        <div className="about-specialties">
+                          <div className="h4 font-weight-bold">Specialties</div>
+                          {items.primarySpl || items.otherSpecializations ? (
+                            <>
+                              {items.primarySpl && (
+                                <ul>
+                                  <li>{items.primarySpl}</li>
+                                </ul>
+                              )}
+                              {items.otherSpecializations && (
+                                <ul>
+                                  <li>{items.otherSpecializations}</li>
+                                </ul>
+                              )}
+                            </>
+                          ) : (
+                            <p>No information available.</p>
+                          )}
+                        </div>
                       </div>
-                      <div className="h6 font-weight-bold">
-                        State:
-                        <span> {items.state}</span>
-                      </div>
-                      <div className="h6 font-weight-bold">
-                        Country:
-                        <span> {items.country}</span>
-                      </div>
-                      <div className="h6 font-weight-bold">
-                        Gender:
-                        {items.gender === 2 ? (
-                          <span> Male </span>
-                        ) : (
-                          <span> Female</span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
+                    </Tab>
+                  </Tabs>
 
                   {userAccess ? (
                     <>
