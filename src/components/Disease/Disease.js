@@ -420,9 +420,8 @@ const Disease = () => {
       </Row>
       <DiseaseModal />
       <SubscriberBtn />
-      <div id="video-popover">
-        {videoURL && <VideoPopover videoURL={videoURL} />}
-      </div>
+
+      {videoURL && <VideoPopover videoURL={videoURL} regDocId={regDocId} />}
 
       <Footer />
     </div>

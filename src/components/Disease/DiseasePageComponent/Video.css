@@ -1,16 +1,20 @@
 .buttonVideo {
   position: relative;
   overflow: hidden;
-  height: 3rem;
+  height: 2rem;
   padding: 0 2rem;
   border-radius: 1.5rem;
-  background: #00415e; /* Updated to default color */
+  background: #00415e;
   background-size: 400%;
   color: #fff;
   border: none;
   cursor: pointer;
   transition: background 0.3s ease-in-out;
+  display: block;       /* Make the button a block-level element */
+  margin: 0 auto;       /* Center it horizontally */
+  text-align: center;   /* Center the text inside */
 }
+
 
 .buttonVideo:hover::before {
   transform: scaleX(1);
@@ -20,6 +24,7 @@
   position: relative;
   z-index: 1;
   color: #fff;
+  font-size: 12px;
 }
 
 .buttonVideo::before {

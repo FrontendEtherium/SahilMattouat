@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import ReactPlayer from "react-player";
-
+import { Link } from "react-router-dom";
 // Import Material-UI icons
 import CloseIcon from "@mui/icons-material/Close";
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import FullscreenExitIcon from "@mui/icons-material/FullscreenExit";
 
-const VideoPopover = ({ videoURL }) => {
+const VideoPopover = ({ videoURL, regDocId }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
-
+  const [showMessage, setShowMessage] = useState(false);
   if (!isVisible) return null;
+  console.log("refId", regDocId);
 
   const toggleExpand = () => {
     setIsExpanded((prev) => !prev);
@@ -78,6 +79,11 @@ const VideoPopover = ({ videoURL }) => {
           playing
           loop
           controls
+          onProgress={({ playedSeconds }) => {
+            if (playedSeconds >= 5) {
+              setShowMessage(true);
+            }
+          }}
           // Video will start muted when not expanded and unmuted when expanded
           muted={!isExpanded}
           width="100%"
@@ -97,6 +103,31 @@ const VideoPopover = ({ videoURL }) => {
           }}
         />
       </div>
+      {showMessage && isExpanded && (
+        <div
+          style={{
+            position: "absolute",
+            bottom: "5px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            backgroundColor: "rgba(0,0,0,0.8)",
+            color: "#fff",
+            padding: "10px 20px",
+            borderRadius: "5px",
+            zIndex: 20,
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <button className="buttonVideo">
+            <span className="buttonVideo-content">
+              <Link to={`/doctor/${regDocId}`}>Consult Now</Link>
+            </span>
+          </button>
+        </div>
+      )}
     </div>
   );
 };
