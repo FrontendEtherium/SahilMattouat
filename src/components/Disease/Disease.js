@@ -55,11 +55,11 @@ const Disease = () => {
   const containerRef = useRef(null);
   const [parsedContent, setParsedContent] = useState();
   const [diseaseConditionId, setDiseaseConditionId] = useState();
+  const [regDocId, setRegDocId] = useState("");
   const [videoURL, setVideoURL] = useState();
   useEffect(() => {
     const loadData = async () => {
       await fetchBlog();
-      await fetchVideoURL();
     };
     loadData();
 
@@ -103,12 +103,13 @@ const Disease = () => {
       document.head.appendChild(canonicalLink);
     }
   }, [id]);
-  const fetchVideoURL = async () => {
+  const fetchVideoURL = async (id) => {
+    console.log("id", id);
+
     try {
-      const { data } = await axios.get(
-        `${backendHost}/doctors/${state.items.reg_doc_pat_id}/url`
-      );
+      const { data } = await axios.get(`${backendHost}/doctors/${id}/url`);
       setVideoURL(data);
+      console.log("url", data);
     } catch (error) {
       console.error(error);
     }
@@ -141,6 +142,9 @@ const Disease = () => {
           items: json,
         }));
         setDiseaseConditionId(json.disease_condition_id);
+
+        setRegDocId(json.reg_doc_pat_id);
+        await fetchVideoURL(json.reg_doc_pat_id);
 
         // Perform subsequent calls and updates
         await Promise.all([

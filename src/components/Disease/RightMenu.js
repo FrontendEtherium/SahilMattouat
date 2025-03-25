@@ -8,6 +8,7 @@ import "./style.css";
 import { Container } from "react-bootstrap";
 import { backendHost } from "../../api-config";
 import Heart from "../../assets/img/heart.png";
+import InlineVideoPlayer from "./DiseasePageComponent/Video";
 const Side = (props) => {
   const [isloaded, setisLoaded] = useState(false);
   const [items, setItems] = useState([]);
@@ -61,7 +62,9 @@ const Side = (props) => {
           activeKey="/home"
           onSelect={(selectedKey) => alert(`selected ${selectedKey}`)}
         >
-          <div className="sidebar-sticky"></div>
+          <div style={{ padding: "10px", textAlign: "center", width: "100%" }}>
+            {props.videoURL && <InlineVideoPlayer videoURL={props.videoURL} />}
+          </div>
 
           <Nav.Item className="set-width" id="dc-right-menu">
             <div className="h4 pb-3">
@@ -107,9 +110,6 @@ const Side = (props) => {
     );
   }
 };
-Side.whyDidYouRender = {
-  logOnDifferentValues: true,
-  customName: "SidebarRight",
-};
+
 const SidebarRight = withRouter(Side);
 export default memo(SidebarRight);
