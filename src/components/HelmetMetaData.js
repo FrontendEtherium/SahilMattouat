@@ -8,6 +8,7 @@ export default function HelmetMetaData(props) {
   let currentUrl = "https://all-cures.com" + location.pathname;
 
   let quote = props.quote !== undefined ? props.quote : "";
+  let publishedDate = props.publishedDate;
 
   let title =
     props.title !== undefined
@@ -64,6 +65,35 @@ export default function HelmetMetaData(props) {
       <meta property="og:url" content={currentUrl} />
       <meta property="og:site_name" content="AllCures" />
       <meta property="og:description" content={description} />
+      <script type="application/ld+json">
+        {`
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "${title}",
+      "description": "${description}",
+      "image": "${image}",
+      "author": {
+        "@type": "Organization",
+        "name": "All Cures",
+        "url": "https://all-cures.com"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "All Cures",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://ik.imagekit.io/hg4fpytvry/product-images/tr:w-300,f-webp/assets/img/heart.png"
+        }
+      },
+      "datePublished": "${publishedDate}",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "${currentUrl}"
+      }
+    }
+    `}
+      </script>
     </Helmet>
   );
 }
