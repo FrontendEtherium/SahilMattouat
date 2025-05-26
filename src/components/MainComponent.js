@@ -21,7 +21,6 @@ import AuthApi from "./AuthApi";
 import Disease from "./Disease/Disease";
 import ChatList from "./LandingPage/ChatList";
 import Dashboard from "./Dashboard/Dashboard.js";
-import HelmetMetaData from "./HelmetMetaData";
 import Analytics from "./Dashboard/Analytics";
 import Blogpage from "./BlogPage/Blogpage";
 import Medicinepage from "./BlogPage/Medicinepage";
@@ -89,6 +88,7 @@ import ResponseRedirect from "./Profile/ResponseRedirect.js";
 import DoctorConnect from "./LandingPage/DoctorConnect.js";
 import DoctorLandingPage from "./LandingPage/DoctorLandingPage.js";
 import Bookings from "./Profile/Bookings.js";
+import AllBlogs from "./BlogPage/AllBlogs.js";
 
 function Main(props) {
   const history = useHistory();
@@ -164,8 +164,12 @@ const Routes = (props) => {
         <Route exact path="/paymentRedirection" component={PaymentRedirect} />
         <Route exact path="/statusPayment" component={ResponseRedirect} />
         <Route exact path="/bookings" component={Bookings} />
-        <Route exact path="/doctor-connect" component={DoctorConnect} />
-        <Route exact path="/landing-doctor" component={DoctorLandingPage} />
+        <Route
+          exact
+          path="/doctor-connect/:medicineType?"
+          component={DoctorConnect}
+        />
+        <Route exact path="/doctor" component={DoctorLandingPage} />
 
         <Route exact path="/privacy" component={Privacy} />
 
@@ -198,6 +202,7 @@ const Routes = (props) => {
         <Route exact path="/alldisease-Y" component={Y} />
         <Route exact path="/alldisease-Z" component={Z} />
         <Route exact path="/allcategory" component={All} />
+        <Route exact path="/allcures" component={AllBlogs} />
 
         {/* Doctor search page */}
         <Route exact path="/search/:city" component={Search} />
@@ -277,11 +282,7 @@ const Routes = (props) => {
         <Route path="/searchcures/:type" component={Blogpage} />
 
         <Route exact path="/searchmedicine" component={Medicinepage} />
-
-        <Route
-          path="/searchmedicine/medicinetype/:medicine_type"
-          component={Medicinepage}
-        />
+        <Route path="/searchmedicine/:cureType" component={Medicinepage} />
 
         {/*category*/}
         <Route exact path="/searchcategory" component={Categorypage} />

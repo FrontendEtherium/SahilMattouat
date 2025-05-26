@@ -1,62 +1,66 @@
+// src/components/DoctorConnect/DoctorConnect.js
 import React, { useEffect, useState } from "react";
-import { useHistory, useLocation } from "react-router-dom"; // React Router v5
+import { useHistory, useParams } from "react-router-dom";
 import Header from "../Header/Header";
-import DocBanner from "../../assets/img/DocBanner.png";
-import { backendHost } from "../../api-config";
-import Check from "../../assets/icon/check.svg";
-import NavigateNextIcon from "@mui/icons-material/NavigateNext";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import Footer from "../Footer/Footer";
 import DoctorConnectCard from "./DoctorConnectComponents/DoctorConnectCard";
 import DoctorConnectSearch from "./DoctorConnectComponents/DoctorConnectSearch";
-import Footer from "../Footer/Footer";
-import "./DoctorConnect.css";
+import { backendHost } from "../../api-config";
 import { imgKitImagePath } from "../../image-path";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import "./DoctorConnect.css";
+
+const MED_TYPE_MAP = {
+  ayurveda: 1,
+  homeopathy: 8,
+  persian: 3,
+  naturopathy: 9,
+  unani: 2,
+  chinese: 4,
+};
 
 function DoctorConnect() {
+  const { medicineType } = useParams(); // slug or undefined
+  const history = useHistory();
   const [docList, setDocList] = useState([]);
-  const [totalPages, setTotalPages] = useState();
+  const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const history = useHistory(); // React Router v5
-  const { search } = useLocation();
-  const queryParams = new URLSearchParams(search);
-  const selectedTitle = queryParams.get("title");
-  const [selectedSpeciality, setSelectedSpeciality] = useState(selectedTitle);
 
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
-
+  // reset page when filter changes
   useEffect(() => {
-    fetchData();
-    scrollToTop();
-  }, [currentPage, selectedSpeciality]);
+    setCurrentPage(1);
+  }, [medicineType]);
 
+  // fetch whenever type or page changes
   useEffect(() => {
-    // Update URL when selectedSpeciality changes
-    if (selectedSpeciality) {
-      history.push(`?title=${selectedSpeciality}`);
-    } else {
-      history.push(`/doctor-connect`); // Default route if no specialty selected
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    fetchDoctors();
+  }, [medicineType, currentPage]);
+
+  async function fetchDoctors() {
+    const offset = (currentPage - 1) * 10;
+    let url = `${backendHost}/video/get/doctors?offset=${offset}`;
+
+    const medTypeID = MED_TYPE_MAP[medicineType];
+    if (medTypeID) {
+      url += `&medTypeID=${medTypeID}`;
     }
-  }, [selectedSpeciality, history]);
 
-  const fetchData = async () => {
     try {
-      const response = await fetch(
-        `${backendHost}/video/get/doctors?offset=${
-          (currentPage - 1) * 10
-        }&medTypeID=${selectedSpeciality}`
-      );
-      const json = await response.json();
-      
-      setDocList(json.data);
-      setTotalPages(json.totalPagesCount.totalPages);
-    } catch (error) {
-      console.error("Error fetching data:", error);
+      const res = await fetch(url);
+      const json = await res.json();
+      setDocList(json.data || []);
+      setTotalPages(json.totalPagesCount?.totalPages || 0);
+    } catch (err) {
+      console.error("Error fetching doctors:", err);
     }
+  }
+
+  // passed down to <DoctorConnectSearch>
+  const changeSpeciality = (slug) => {
+    if (slug) history.push(`/doctor-connect/${slug}`);
+    else history.push(`/doctor-connect`);
   };
 
   const renderPageButtons = () => {
@@ -66,7 +70,7 @@ function DoctorConnect() {
         <button
           key={i}
           type="button"
-          className={`pagination-button ${currentPage === i ? "active" : ""}`}
+          className={`pagination-button${currentPage === i ? " active" : ""}`}
           aria-current={currentPage === i ? "page" : undefined}
           onClick={() => setCurrentPage(i)}
         >
@@ -77,13 +81,10 @@ function DoctorConnect() {
     return buttons;
   };
 
-  const changeSpeciality = (item) => {
-    setSelectedSpeciality(item);
-  };
-
   return (
     <>
       <Header showSearch={false} />
+
       <div className="doctor-connect-container">
         <div className="doctor-connect-content">
           <img
@@ -91,15 +92,17 @@ function DoctorConnect() {
             alt="Doctor Connect Banner"
             className="doc-banner"
           />
+
           <div className="doc-search-section">
             <DoctorConnectSearch
-              speciality={selectedSpeciality}
-              changeSpeciality={(item) => changeSpeciality(item)}
+              speciality={medicineType}
+              changeSpeciality={changeSpeciality}
             />
           </div>
+
           <div className="doc-text-container">
             <div className="doc-text-item">
-              <img src={Check} alt="check" />
+              {/* <img src="/assets/icon/check.svg" alt="check" /> */}
               <div>
                 Book appointments with minimum wait-time & verified doctor
                 details
@@ -108,7 +111,6 @@ function DoctorConnect() {
           </div>
 
           <div className="doc-grid">
-            {/* Doctor List Section */}
             <div className="doc-list-section">
               {docList.map((doc) => (
                 <DoctorConnectCard key={doc.id} doc={doc} />
@@ -120,26 +122,27 @@ function DoctorConnect() {
                   className="pagination-button"
                   aria-label="Previous"
                   disabled={currentPage === 1}
-                  onClick={() => setCurrentPage((prev) => prev - 1)}
+                  onClick={() => setCurrentPage((p) => p - 1)}
                 >
                   <ChevronLeftIcon />
                 </button>
+
                 {renderPageButtons()}
+
                 <button
                   type="button"
                   className="pagination-button"
                   aria-label="Next"
                   disabled={currentPage === totalPages}
-                  onClick={() => setCurrentPage((prev) => prev + 1)}
+                  onClick={() => setCurrentPage((p) => p + 1)}
                 >
                   <NavigateNextIcon />
                 </button>
               </nav>
             </div>
-
-            {/* Search Section */}
           </div>
         </div>
+
         <Footer />
       </div>
     </>

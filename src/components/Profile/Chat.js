@@ -4,7 +4,7 @@ import { Alert, Button, Form, Modal } from "react-bootstrap";
 import ChatWindow from "./ChatWindow";
 import axios from "axios";
 import { userId } from "../UserId";
-import moment from "moment/moment";
+import dayjs from "dayjs";
 
 import "./ChatPopup.css";
 
@@ -210,7 +210,7 @@ function ChatButton(props) {
                           color: message.From_id === userId ? "#fff" : "#000",
                         }}
                       >
-                        {moment(message.Time).format("h:mm A")}
+                          {dayjs(message.Time).format("h:mm A")}
                       </span>
                     </p>
                   </div>

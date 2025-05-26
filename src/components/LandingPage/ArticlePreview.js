@@ -6,7 +6,7 @@ import Heart from "../../assets/img/heart.png";
 import Date from "../Date";
 import { useHistory } from "react-router";
 
-var Promise = require("es6-promise").Promise;
+
 
 const ArticlePreview = (props) => {
   const [items, setItems] = useState([]);
@@ -28,30 +28,6 @@ const ArticlePreview = (props) => {
       })
       .catch((err) => null);
   }
-
-  const getJSON = (url) => {
-    console.log("Get Json");
-    var promise = new Promise(function (resolve, reject) {
-      var client = new XMLHttpRequest();
-      client.open("GET", url);
-      client.onreadystatechange = handler;
-      client.responseType = "json";
-      client.setRequestHeader("Accept", "application/json");
-      client.send();
-
-      function handler() {
-        if (this.readyState === this.DONE) {
-          if (this.status === 200) {
-            resolve(this.response);
-          } else {
-            reject(this);
-          }
-        }
-      }
-    });
-
-    return promise;
-  };
 
   function allPosts() {
     // For all available blogs "/blogs"

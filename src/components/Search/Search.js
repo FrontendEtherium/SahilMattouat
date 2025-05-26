@@ -6,7 +6,7 @@ import Cookies from 'js-cookie';
 import Doct from "../../assets/img/doct.png";
 import '../../assets/healthcare/css/main.css';
 import '../../assets/healthcare/css/responsive.css';
-import '../../assets/healthcare/css/animate.css';
+
 import '../../assets/healthcare/icomoon/style.css';
 import {Form ,Container } from 'react-bootstrap';
 import axios from 'axios';

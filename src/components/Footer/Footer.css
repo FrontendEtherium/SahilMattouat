@@ -1,0 +1,126 @@
+/* src/components/Footer.css */
+
+/* ── Top section common styles ── */
+.footer-top {
+  background-color: #00415e;
+}
+.footer-top {
+  padding: 10px 0;
+}
+.footer-brand .brand-icon {
+  width: 40px;
+  margin-right: 8px;
+}
+.footer-brand .brand-text {
+  font-size: 16px;
+  font-weight: 400;
+  color: #fff;
+}
+.brand-text {
+  color: #fff;
+}
+.list-unstyled {
+  font-weight: 300;
+}
+/* Link lists */
+.footer-links li {
+  margin-bottom: 5px;
+}
+.footer-links li a {
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-links li a:hover {
+  color: #c3d8fd;
+}
+
+/* “Quick Links” heading */
+.quick-links-heading {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 12px;
+}
+
+/* Download heading */
+.download-heading {
+  font-size: 12px;
+  font-weight: 400;
+  color: #fff;
+}
+
+/* App badges */
+.app-badges .badge-img {
+  width: 150px;
+  margin-right: 8px;
+  margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Social icons */
+.social-icons .social-icon {
+  width: 30px;
+  height: 30px;
+  transition: opacity 0.2s;
+}
+.social-icons .social-icon:hover {
+  opacity: 0.7;
+}
+
+/* ── Bottom section ── */
+.footer-bottom {
+  background-color: #e1e1e1;
+}
+.footer-bottom .disclaimer {
+  color: #555;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ── Responsive tweaks ── */
+@media (max-width: 991.98px) {
+  /* reduce top padding on mobile */
+  .footer-top {
+    padding: 5px 0;
+  }
+  /* centre text in left mobile col */
+  .footer-mobile-left {
+    text-align: center;
+  }
+  /* tighten up link spacing on mobile */
+  .footer-mobile-left .footer-links li,
+  .footer-mobile-right .footer-links li {
+    margin-bottom: 4px;
+  }
+  /* decrease overall font size on mobile */
+  .footer-top,
+  .footer-bottom {
+    font-size: 14px;
+  }
+  .footer-links li a {
+    font-size: 11px;
+  }
+  .quick-links-heading {
+    font-size: 14px;
+  }
+  .download-heading {
+    font-size: 10px;
+  }
+  .brand-text {
+    font-size: 14px;
+  }
+  .footer-bottom .disclaimer {
+    font-size: 8px;
+  }
+}
+
+@media (max-width: 512px) {
+  .app-badges .badge-img {
+    width: 100px;
+  }
+  .disclaimer {
+    font-size: 8px;
+  }
+}

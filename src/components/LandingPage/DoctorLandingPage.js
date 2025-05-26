@@ -1,17 +1,15 @@
 import React from "react";
 import Header from "../Header/Header";
 import "./DoctorConnect.css";
-import Medicine from "../../assets/img/doctorLandingMain.png";
-import FeaturedArticles from "./FeaturedArticles";
-import DoctorsArticles from "./DoctorConnectComponents/DoctorsArticles";
+
 import ValuesSection from "./DoctorConnectComponents/ValuesSection";
 import Footer from "../Footer/Footer";
 import DoctorByMedicineType from "./DoctorConnectComponents/DoctorByMedicineType";
 import TopDoctor from "./DoctorConnectComponents/TopDoctor";
-// import DoctorCarousel from "./DoctorConnectComponents/DoctorAnimatedCarousel";
 
 import { imgKitImagePath } from "../../image-path";
-import DoctorCarousel from "./DoctorConnectComponents/DoctorAnimatedCarousel";
+
+import DoctorCures from "./HomeComponents/DoctorCures";
 function DoctorLandingPage() {
   return (
     <>
@@ -82,20 +80,7 @@ function DoctorLandingPage() {
         </div>
 
         <ValuesSection />
-
-        <section className="mb-64 mt-10 " style={{ height: "650px" }}>
-          <div className="container" id="trends">
-            <div className="row">
-              <div className="values-section__title">
-                Read top articles from our health experts
-              </div>
-            </div>
-            <div className="row mt-4">
-              <DoctorsArticles />
-            </div>
-          </div>
-        </section>
-        {/* <DoctorCarousel/> */}
+        <DoctorCures />
       </main>
       <Footer />
     </>

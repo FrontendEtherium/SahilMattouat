@@ -1,0 +1,65 @@
+.trending-cures__slider {
+  padding: 0 10px;
+  will-change: transform;
+}
+
+.trending-cures__card {
+  padding-left: 10px;
+  padding-right : 10px;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.trending-cures__image {
+  height: 85px;
+  width: 85px;
+  border-radius: 50%;
+  object-fit: cover;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.trending-cures__heading {
+  text-align: center;
+  color: #000;
+  font-size: 0.625rem;
+  font-weight: 500;
+  margin-top: 3px;
+
+}
+
+.trending-cures__loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  font-size: 1rem;
+  color: #666;
+}
+
+@media (min-width: 768px) {
+  .trending-cures__image {
+    height: 150px;
+    width: 150px;
+    border-radius: 75px;
+  }
+
+  .trending-cures__heading {
+    font-size: 1.25rem;
+    margin-top: 6px;
+  }
+}
+
+/* Optimize animations */
+.trending-cures__slider .slick-slide {
+  transition: transform 0.3s ease-out;
+  will-change: transform;
+}
+
+.trending-cures__slider .slick-track {
+  will-change: transform;
+}

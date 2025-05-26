@@ -5,7 +5,7 @@ import Rating from "../StarRating";
 import Doct from "../../assets/img/doct.png";
 import "../../assets/healthcare/css/main.css";
 import "../../assets/healthcare/css/responsive.css";
-import "../../assets/healthcare/css/animate.css";
+
 import "../../assets/healthcare/icomoon/style.css";
 import { Container, Button } from "react-bootstrap";
 import axios from "axios";
@@ -831,12 +831,11 @@ class Profile extends Component {
                               {items.primarySpl}
                             </div>
                             <div className="h5 ">{items.experience}</div>
-                  
-                              <div className="h5 text-capitalize">
-                                <i class="fas fa-hospital pr-1"></i>
-                                {items.hospitalAffiliated} {items.country}
-                              </div>
-                        
+
+                            <div className="h5 text-capitalize">
+                              <i class="fas fa-hospital pr-1"></i>
+                              {items.hospitalAffiliated} {items.country}
+                            </div>
 
                             <div></div>
                           </div>
@@ -914,29 +913,30 @@ class Profile extends Component {
                   <Tabs
                     defaultActiveKey="about"
                     id="doctorTabs"
-                    className="mt-4"
+                    className="mt-4 mb-4 d-flex "
                   >
-                    {/* About Tab */}
-                    <Tab
+                    <Tab.Pane
                       eventKey="about"
                       title={
-                        <span>
+                        <span className="px-3 py-2 d-inline-block">
                           <i className="fas fa-info-circle mr-2"></i> About
                         </span>
                       }
                     >
-                      <div className="mt-3">
-                        <div className="h4 font-weight-bold">
+                      <div className="p-4">
+                        <div className="h4 font-weight-bold mb-4">
                           About {items.prefix} {items.firstName}{" "}
                           {items.middleName} {items.lastName}
                         </div>
-                        <div id="about-contain">
+                        <div id="about-contain" className="pl-3">
                           {items.about ? (
                             <p className="text one">
                               {items.about.includes("•")
-                                ? items.about
-                                    .split("•")
-                                    .map((i, idx) => <li key={idx}>{i}</li>)
+                                ? items.about.split("•").map((i, idx) => (
+                                    <li key={idx} className="mb-2">
+                                      {i}
+                                    </li>
+                                  ))
                                 : items.about}
                             </p>
                           ) : (
@@ -947,134 +947,154 @@ class Profile extends Component {
                               href={items.websiteUrl}
                               target="_blank"
                               rel="noreferrer"
-                              className="h6"
+                              className="h6 mt-3 d-inline-block"
                             >
                               {items.websiteUrl}
                             </a>
                           ) : null}
                         </div>
                       </div>
-                    </Tab>
+                    </Tab.Pane>
 
-                    {/* Education Tab */}
-                    <Tab
+                    <Tab.Pane
                       eventKey="education"
                       title={
-                        <span>
+                        <span className="px-3 py-2 d-inline-block">
                           <i className="fas fa-graduation-cap mr-2"></i>{" "}
                           Education
                         </span>
                       }
                     >
-                      <div className="mt-3">
+                      <div className="p-4">
                         <div className="abt-eduction">
-                          <div className="h4 font-weight-bold">Education</div>
-                          {items.degDesc ? (
-                            items.degDesc
-                          ) : (
-                            <p>No information available.</p>
-                          )}
+                          <div className="h4 font-weight-bold mb-4">
+                            Education
+                          </div>
+                          <div className="pl-3">
+                            {items.degDesc ? (
+                              items.degDesc
+                            ) : (
+                              <p>No information available.</p>
+                            )}
+                          </div>
                         </div>
                         <div className="mt-5">
-                          <div className="h4 font-weight-bold">
+                          <div className="h4 font-weight-bold mb-4">
                             Accomplishments
                           </div>
-                          {items.awards ? (
-                            items.awards
-                              .split("•")
-                              .map((award, idx) => <li key={idx}>{award}</li>)
-                          ) : (
-                            <p>No information available.</p>
-                          )}
+                          <div className="pl-3">
+                            {items.awards ? (
+                              items.awards.split("•").map((award, idx) => (
+                                <li key={idx} className="mb-2">
+                                  {award}
+                                </li>
+                              ))
+                            ) : (
+                              <p>No information available.</p>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </Tab>
+                    </Tab.Pane>
 
-                    {/* Miscellaneous Tab */}
-                    <Tab
+                    <Tab.Pane
                       eventKey="miscellaneous"
                       title={
-                        <span>
+                        <span className="px-3 py-2 d-inline-block">
                           <i className="fas fa-map-marker-alt mr-2"></i>{" "}
                           Miscellaneous
                         </span>
                       }
                     >
-                      <div className="mt-3">
+                      <div className="p-4">
                         <div className="abt-eduction">
-                          <div className="h4 font-weight-bold">
+                          <div className="h4 font-weight-bold mb-4">
                             Miscellaneous
                           </div>
-                          {items.city ||
-                          items.state ||
-                          items.country ||
-                          items.gender ? (
-                            <>
-                              {items.city && (
-                                <div className="h6 font-weight-bold">
-                                  City: <span>{items.city}</span>
-                                </div>
-                              )}
-                              {items.state && (
-                                <div className="h6 font-weight-bold">
-                                  State: <span>{items.state}</span>
-                                </div>
-                              )}
-                              {items.country && (
-                                <div className="h6 font-weight-bold">
-                                  Country: <span>{items.country}</span>
-                                </div>
-                              )}
-                              {items.gender && (
-                                <div className="h6 font-weight-bold">
-                                  Gender:{" "}
-                                  {items.gender === 2 ? (
-                                    <span>Male</span>
-                                  ) : (
-                                    <span>Female</span>
-                                  )}
-                                </div>
-                              )}
-                            </>
-                          ) : (
-                            <p>No information available.</p>
-                          )}
+                          <div className="pl-3">
+                            {items.city ||
+                            items.state ||
+                            items.country ||
+                            items.gender ? (
+                              <>
+                                {items.city && (
+                                  <div className="h6 font-weight-bold mb-3">
+                                    City:{" "}
+                                    <span className="font-weight-normal">
+                                      {items.city}
+                                    </span>
+                                  </div>
+                                )}
+                                {items.state && (
+                                  <div className="h6 font-weight-bold mb-3">
+                                    State:{" "}
+                                    <span className="font-weight-normal">
+                                      {items.state}
+                                    </span>
+                                  </div>
+                                )}
+                                {items.country && (
+                                  <div className="h6 font-weight-bold mb-3">
+                                    Country:{" "}
+                                    <span className="font-weight-normal">
+                                      {items.country}
+                                    </span>
+                                  </div>
+                                )}
+                                {items.gender && (
+                                  <div className="h6 font-weight-bold mb-3">
+                                    Gender:{" "}
+                                    <span className="font-weight-normal">
+                                      {items.gender === 2 ? "Male" : "Female"}
+                                    </span>
+                                  </div>
+                                )}
+                              </>
+                            ) : (
+                              <p>No information available.</p>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </Tab>
+                    </Tab.Pane>
 
-                    {/* Services Offered Tab */}
-                    <Tab
+                    <Tab.Pane
                       eventKey="services"
                       title={
-                        <span>
+                        <span className="px-3 py-2 d-inline-block">
                           <i className="fas fa-stethoscope mr-2"></i> Services
                           Offered
                         </span>
                       }
                     >
-                      <div className="mt-3">
+                      <div className="p-4">
                         <div className="about-specialties">
-                          <div className="h4 font-weight-bold">Specialties</div>
-                          {items.primarySpl || items.otherSpecializations ? (
-                            <>
-                              {items.primarySpl && (
-                                <ul>
-                                  <li>{items.primarySpl}</li>
-                                </ul>
-                              )}
-                              {items.otherSpecializations && (
-                                <ul>
-                                  <li>{items.otherSpecializations}</li>
-                                </ul>
-                              )}
-                            </>
-                          ) : (
-                            <p>No information available.</p>
-                          )}
+                          <div className="h4 font-weight-bold mb-4">
+                            Specialties
+                          </div>
+                          <div className="pl-3">
+                            {items.primarySpl || items.otherSpecializations ? (
+                              <>
+                                {items.primarySpl && (
+                                  <ul className="list-unstyled">
+                                    <li className="mb-2">{items.primarySpl}</li>
+                                  </ul>
+                                )}
+                                {items.otherSpecializations && (
+                                  <ul className="list-unstyled">
+                                    <li className="mb-2">
+                                      {items.otherSpecializations}
+                                    </li>
+                                  </ul>
+                                )}
+                              </>
+                            ) : (
+                              <p>No information available.</p>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </Tab>
+                    </Tab.Pane>
                   </Tabs>
 
                   {userAccess ? (

@@ -1,0 +1,178 @@
+/* Container & Title */
+.cures-container {
+  padding: 1rem;
+}
+.landing-page__title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+/* Grid Layout */
+.cures-grid__grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-rows: repeat(2, 190px);
+  gap: 1rem;
+}
+
+/* Positioning for 1-big + 4-small */
+.cures-grid__item:nth-child(1) {
+  grid-column: 1 / 2;
+  grid-row: 1 / 3;
+  min-height: 400px;
+}
+.cures-grid__item:nth-child(2) {
+  grid-column: 2 / 3;
+  grid-row: 1 / 2;
+}
+.cures-grid__item:nth-child(3) {
+  grid-column: 3 / 4;
+  grid-row: 1 / 2;
+}
+.cures-grid__item:nth-child(4) {
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+}
+.cures-grid__item:nth-child(5) {
+  grid-column: 3 / 4;
+  grid-row: 2 / 3;
+}
+
+/* Card Base */
+.cures-grid__item {
+  position: relative;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #222;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+.cures-grid__item:hover {
+  transform: translateY(-4px);
+}
+
+/* Link resets */
+.cures-grid__link {
+  display: block;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Dark overlay gradient + padding */
+.cures-grid__overlay {
+  position: absolute;
+  /* Ensure overlay covers the entire box, even the empty parts */
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.85),
+    rgba(0, 0, 0, 0.7),
+    transparent
+  ); /* Adjusted gradient slightly */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%; /* Ensure overlay takes full height */
+}
+
+/* Text Styles */
+.cures-grid__headline {
+  margin: 0 0 0.5rem;
+  font-size: 1.05rem;
+  color: #fff;
+}
+.cures-grid__paragraph {
+  margin: 0 0 1rem;
+  font-size: 0.9rem;
+  color: #ddd;
+}
+.cures-grid__cta {
+  font-weight: 500;
+  font-size: 1rem;
+  color: #fff;
+  text-align: right;
+}
+
+/* "See all" link */
+.cures-see-all {
+  margin-top: 1rem;
+  text-align: right;
+
+  color: #007bff;
+  cursor: pointer;
+}
+.cures-grid__item {
+  background-size: cover;
+}
+
+@media (max-width: 767px) {
+  .cures-grid__grid {
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: repeat(2, 100px);
+  }
+
+  /* Big card spans both rows in col 1 */
+  .cures-grid__item:nth-child(1) {
+    grid-column: 1 / 2;
+    grid-row: 1 / 3;
+    min-height: 220px;
+  }
+
+  /* Second card at top right */
+  .cures-grid__item:nth-child(2) {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+  }
+
+  /* Third card below it */
+  .cures-grid__item:nth-child(3) {
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+  }
+
+  /* Hide any leftover items (you're already slicing to 3, so these won't exist) */
+  .cures-grid__item:nth-child(n + 4) {
+    display: none;
+  }
+
+  .cures-grid__cta {
+    font-size: 0.675rem;
+  }
+
+  .cures-grid__item {
+    background-size: cover;
+  }
+  .cures-grid__headline {
+    font-size: 0.55rem;
+  }
+}
+
+/* Skeleton Loading Animation */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-loading {
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-text {
+  border-radius: 4px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}

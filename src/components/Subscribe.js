@@ -1,13 +1,11 @@
 import React, { Component } from "react";
 import { backendHost } from "../api-config";
 import axios from "axios";
-import TextField from "@mui/material/TextField";
 import PhoneInput from "react-phone-number-input";
 import Input from "@material-ui/core/Input";
 import { Select, MenuItem } from "@material-ui/core";
 import { userId } from "./UserId";
 import Heart from "../assets/img/heart.png";
-import { Button, Modal, Form } from "react-bootstrap";
 import { isValidPhoneNumber } from "react-phone-number-input";
 import axiosInstance from "../axiosInstance";
 

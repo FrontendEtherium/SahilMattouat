@@ -2,11 +2,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Raleway&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Dosis&family=Raleway&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=PT+Sans&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
 * {
   padding: 0;
   margin: 0;
-  text-align: left;
-  font-family: "Raleway", sans-serif;
+
+  font-family: "Inter", sans-serif;
 }
 body {
   font-weight: 400;
@@ -1844,10 +1845,7 @@ button:active {
 button:focus {
   outline: none;
 }
-button.ghost {
-  background-color: transparent;
-  border-color: #ffffff;
-}
+
 input {
   background-color: #eee;
   border: none;
@@ -1937,8 +1935,6 @@ input {
   transform: translateX(-100%);
 }
 .overlay {
-  background: #ff416c;
-  background: linear-gradient(to right, #ff4b2b, #ff416c);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 0 0;
@@ -2887,9 +2883,7 @@ img#heartend {
   .MuiOutlinedInput-root {
   margin-bottom: 7px;
 }
-.css-wb57ya-MuiFormControl-root-MuiTextField-root {
-  height: 56px;
-}
+
 .articlesub {
   width: 800px;
   display: flex;

@@ -64,7 +64,6 @@ const Side = ({ diseaseId, id, name }) => {
 
   return (
     <Nav className="d-md-block" activeKey="/home">
-      <div className="sidebar-sticky"></div>
       <Nav.Item className="set-width pl-3">
         <div className="h3 pl-2 pb-1" id="l-menu">
           <u className="text-decoration-none">Menu</u>

@@ -344,6 +344,7 @@ const Disease = () => {
               <div className="d-flex justify-content-center">
                 <img
                   className="mt-5"
+                  style={{marginTop:"20px"}}
                   id="left-menu-ad"
                   src={state.ads}
                   alt="adjjjj"
@@ -352,10 +353,11 @@ const Disease = () => {
               </div>
             ) : (
               <button
-                className="btn pl-4 mt-2"
+                className="btn pl-4"
                 id="left-menu-ad"
                 data-toggle="modal"
                 data-target=".bd-example-modal-lg"
+                style={{marginTop:"100px"}}
               >
                 <img
                   className="pl-4"

@@ -7,7 +7,7 @@ import { EDITOR_JS_TOOLS } from "../BlogPage/tools";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import Input from "@material-ui/core/Input";
-import { useStateWithCallbackLazy } from "use-state-with-callback";
+
 import { Checkbox, FormControlLabel } from "@material-ui/core";
 import { backendHost } from "../../api-config";
 import CenterWell from "../Disease/CenterWell";
@@ -33,7 +33,7 @@ const EditModal = (props) => {
   const [author, setAuthor] = useState([]);
   const [country, setCountry] = useState("");
   const [win, setWin] = useState("");
-  const [articleStatus, setArticleStatus] = useStateWithCallbackLazy();
+  const [articleStatus, setArticleStatus] = useState();
   const [editedBy, setEditedBy] = useState(0);
   const [disease, setDisease] = useState("");
   const [articleContent, setArticleContent] = useState("");
@@ -373,7 +373,7 @@ const EditModal = (props) => {
             ...block,
             data: {
               ...block.data,
-              target: "_blank", 
+              target: "_blank",
             },
           };
         }

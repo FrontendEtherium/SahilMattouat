@@ -208,7 +208,7 @@ function CarouselArticle({ diseaseConditionId, carouselItems, id }) {
           </TwitterShareButton>
           <WhatsappShareButton
             url={encodeURI(`https://all-cures.com${location.pathname}`)}
-            title={`*All Cures }`}
+            title={`All Cures`}
             separator=": "
             className="socialMediaButton"
           >

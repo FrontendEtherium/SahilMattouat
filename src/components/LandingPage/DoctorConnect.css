@@ -171,14 +171,14 @@
 }
 .upper-section-container-text-image {
   width: 350px;
-  background: url("../../assets/img/bg_pattern.png") center/cover no-repeat;
+ 
   height: 350px;
 }
 
 @media (max-width:768px){
   .upper-section-container-text-image {
     width: 220px;
-    background: url("../../assets/img/bg_pattern.png") center/cover no-repeat;
+   
     height: 220px;
   }
 }
