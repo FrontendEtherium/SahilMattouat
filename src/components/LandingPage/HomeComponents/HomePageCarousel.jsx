@@ -5,8 +5,6 @@ import { userId } from "../../UserId";
 import axios from "axios";
 import { imageUrl, imgKitImagePath } from "../../../image-path";
 import "./HomePageCarousel.css";
-import mobileImage1 from "../../../assets/img/banner2.jpg";
-import mobileImage2 from "../../../assets/img/banner1.jpg";
 
 const HomePageCarousel = memo(() => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
