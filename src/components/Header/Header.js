@@ -34,7 +34,7 @@ const NAV_ITEMS = [
     ],
   },
   { to: "/allcures", label: "Cures" },
-  { to: "/article", label: "Create Article" },
+
 ];
 const NAV_ITEMS_DESKTOP = [
   { to: "/", label: "Home" },
@@ -402,6 +402,11 @@ const ToggleButton = React.memo(function ToggleButton(props) {
           <Dropdown.Item>
             <Link className="text-dark btn" to={`/bookings`}>
               My Bookings
+            </Link>
+          </Dropdown.Item>
+          <Dropdown.Item>
+            <Link to="/article" className="text-dark btn">
+              Create Article
             </Link>
           </Dropdown.Item>
           {props.userAccess >= 4 ? (
