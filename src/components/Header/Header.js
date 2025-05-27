@@ -250,7 +250,7 @@ export default function UpdatedHeader() {
                   sx={{
                     width: { xs: 80, s: 100, m: 120, lg: 150 },
                     "& .MuiAutocomplete-listbox": {
-                      fontSize: { xs: "0.875rem", sm: "1rem" },
+                      fontSize: { xs: "0.575rem", sm: "0.775rem" },
                       maxHeight: "200px",
                     },
                     "& .MuiAutocomplete-option": {
@@ -260,10 +260,11 @@ export default function UpdatedHeader() {
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      placeholder="Search Cures"
+                      placeholder="cures"
                       variant="standard"
                       className="text-input"
                       aria-label="Search Cures"
+                      style={{fontSize:"8px"}}
                     />
                   )}
                 />
