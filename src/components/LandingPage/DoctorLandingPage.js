@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "../Header/Header";
 import "./DoctorConnect.css";
 
@@ -11,6 +11,9 @@ import { imgKitImagePath } from "../../image-path";
 
 import DoctorCures from "./HomeComponents/DoctorCures";
 function DoctorLandingPage() {
+  useEffect(( ) => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <>
       <Header showSearch={false} />

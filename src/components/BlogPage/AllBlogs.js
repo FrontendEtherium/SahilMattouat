@@ -107,6 +107,7 @@ export default function AllBlogs() {
   const limit = isMobile ? 7 : 12;
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
     };

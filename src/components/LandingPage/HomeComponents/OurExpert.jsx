@@ -30,7 +30,7 @@ const OurExpert = React.memo(({ isMobile }) => {
       speed: 700,
       slidesToShow: 5,
       slidesToScroll: 1,
-      autoplay: false,
+      autoplay: true,
       autoplaySpeed: 4000,
       arrows: true,
       pauseOnFocus: true,

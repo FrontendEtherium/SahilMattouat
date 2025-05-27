@@ -48,6 +48,13 @@ function Home() {
   //   axios.put(`${backendHost}/sponsored/ads/clicks/${adId}`);
   // };
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const location = useLocation();
+
+  // Add scroll to top effect
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
