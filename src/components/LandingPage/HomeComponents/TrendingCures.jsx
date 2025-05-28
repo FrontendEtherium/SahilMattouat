@@ -79,8 +79,8 @@ const TrendingCures = memo(() => {
               className="trending-cures__card"
               role="article"
             >
-              <Link
-                to={`/searchmedicine/${cure.title.toLowerCase()}-cures`}
+              <a
+                href={`/searchmedicine/medicinetype/${cure.medicineType}`}
                 aria-label={`View ${cure.title} medicines`}
               >
                 <img
@@ -96,7 +96,7 @@ const TrendingCures = memo(() => {
                   }}
                 />
                 <div className="trending-cures__heading">{cure.title}</div>
-              </Link>
+              </a>
             </div>
           ))}
         </Slider>

@@ -282,7 +282,7 @@ const Routes = (props) => {
         <Route path="/searchcures/:type" component={Blogpage} />
 
         <Route exact path="/searchmedicine" component={Medicinepage} />
-        <Route path="/searchmedicine/:cureType" component={Medicinepage} />
+        <Route path="/searchmedicine/medicinetype/:medicineType" component={Medicinepage} />
 
         {/*category*/}
         <Route exact path="/searchcategory" component={Categorypage} />
