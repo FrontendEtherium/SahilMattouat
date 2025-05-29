@@ -106,7 +106,7 @@ const Footer = () => (
                 {CuresData.map((cure) => (
                   <li key={cure.medicineType}>
                     <Link
-                      to={`/searchmedicine/${cure.title.toLowerCase()}-cures`}
+                      to={`/searchmedicine/medicinetype/${cure.medicineType}`}
                       aria-label={`Explore ${cure.title} treatments`}
                     >
                       <div style={{ color: "white" }}>{cure.title}</div>
