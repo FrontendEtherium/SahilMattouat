@@ -96,7 +96,7 @@ function DoctorConnectCard({ doc }) {
           )}
           <button className="book-button" onClick={consult}>
             <LocalPharmacyIcon className="book-button-icon" />
-            Consult Now
+            Consult
           </button>
         </div>
       </div>

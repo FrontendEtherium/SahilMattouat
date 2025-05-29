@@ -1,5 +1,4 @@
 body {
- 
   background-color: #f8f9fa;
   margin: 0;
   padding: 0;
@@ -11,33 +10,79 @@ body {
   padding: 10px;
 }
 
+/* Updated slider styles */
+.top-doctors-slider {
+  margin: 20px 0;
+}
+
+.slider-item {
+  padding: 0 10px; /* Add padding between slides */
+}
+
+/* Slick carousel custom styles */
+.top-doctors-slider .slick-dots {
+  bottom: -50px;
+}
+
+.top-doctors-slider .slick-dots li button:before {
+  color: #00415e;
+  font-size: 12px;
+}
+
+.top-doctors-slider .slick-dots li.slick-active button:before {
+  color: #00415e;
+  opacity: 1;
+}
+
+.top-doctors-slider .slick-prev,
+.top-doctors-slider .slick-next {
+  z-index: 1;
+  width: 40px;
+  height: 40px;
+}
+
+.top-doctors-slider .slick-prev {
+  left: -50px;
+}
+
+.top-doctors-slider .slick-next {
+  right: -50px;
+}
+
+.top-doctors-slider .slick-prev:before,
+.top-doctors-slider .slick-next:before {
+  color: #00415e;
+  font-size: 24px;
+}
+
+/* Legacy grid styles (keeping for backward compatibility) */
 .grid {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 15px;
-  overflow-x: auto; /* Enables horizontal scrolling */
-  white-space: nowrap; /* Prevents items from wrapping to the next line */
-  padding: 10px; /* Adds padding for better scrolling experience */
-  scroll-snap-type: x mandatory; /* Enables smooth snapping to each item */
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 10px;
+  scroll-snap-type: x mandatory;
 }
 
 .grid::-webkit-scrollbar {
-  height: 8px; /* Adjusts scrollbar height */
+  height: 8px;
 }
 
 .grid::-webkit-scrollbar-thumb {
-  background: #ccc; /* Custom scrollbar styling */
+  background: #ccc;
   border-radius: 4px;
 }
 
 .grid::-webkit-scrollbar-track {
-  background: #f1f1f1; /* Light background for track */
+  background: #f1f1f1;
 }
 
 .grid > * {
-  scroll-snap-align: start; /* Ensures smooth scrolling to each item */
-  flex: 0 0 auto; /* Prevents items from shrinking */
+  scroll-snap-align: start;
+  flex: 0 0 auto;
 }
 
 .card-top-doc {
@@ -100,4 +145,16 @@ body {
   font-size: 14px;
   font-weight: bold;
   color: #333;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .top-doctors-slider .slick-prev,
+  .top-doctors-slider .slick-next {
+    display: none !important;
+  }
+
+  .slider-item {
+    padding: 0 5px;
+  }
 }
