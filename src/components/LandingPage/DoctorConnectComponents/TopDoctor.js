@@ -18,6 +18,7 @@ function TopDoctor() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showAppointmentModal, setShowAppointmentModal] = useState(false);
+  const [selectedDocId, setSelectedDocId] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
@@ -64,16 +65,13 @@ function TopDoctor() {
     ],
   };
 
+  const handleConsult = (docId) => {
+    setSelectedDocId(docId);
+    setShowAppointmentModal(true);
+  };
+
   if (loading) return <div className="text-center">Loading...</div>;
   if (error) return <div className="text-center error">{error}</div>;
-
-  const consult = () => {
-    if (userAccess && userId) {
-      setShowAppointmentModal(true);
-    } else {
-      setShowModal(true);
-    }
-  };
 
   return (
     <>
@@ -83,12 +81,20 @@ function TopDoctor() {
           <Slider {...sliderSettings}>
             {doctors.map((doctor, index) => (
               <div key={doctor.docID || index} className="slider-item">
-                <DoctorConnectCard doc={doctor} />
+                <DoctorConnectCard doc={doctor} onConsult={handleConsult} />
               </div>
             ))}
           </Slider>
         </div>
       </div>
+      {showAppointmentModal && (
+        <AppointmentModal
+          show={showAppointmentModal}
+          onHide={() => setShowAppointmentModal(false)}
+          docId={selectedDocId}
+          userId={userId}
+        />
+      )}
     </>
   );
 }

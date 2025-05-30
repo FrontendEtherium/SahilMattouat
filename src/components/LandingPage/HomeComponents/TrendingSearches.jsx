@@ -31,7 +31,6 @@ const TrendingSearches = memo(({ items, onSelect }) => {
 
   useEffect(() => {
     let isMounted = true;
-
     const controller = new AbortController();
 
     (async () => {
@@ -49,6 +48,12 @@ const TrendingSearches = memo(({ items, onSelect }) => {
       controller.abort();
     };
   }, [fetchTrendingCategories]);
+
+  const createDiseaseSlug = (category) => {
+    return `${category.dc_id}-${category.category
+      .toLowerCase()
+      .replace(/\s+/g, "-")}`;
+  };
 
   if (error) {
     return (
@@ -82,7 +87,7 @@ const TrendingSearches = memo(({ items, onSelect }) => {
         ) : (
           trending.map((category) => (
             <Link
-              to={`/searchcategory/disease/${category.dc_id}`}
+              to={`/searchcategory/disease/${createDiseaseSlug(category)}`}
               key={category.dc_id}
               className="ts-link"
             >

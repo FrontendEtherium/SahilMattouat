@@ -34,7 +34,6 @@ const NAV_ITEMS = [
     ],
   },
   { to: "/allcures", label: "Cures" },
-
 ];
 const NAV_ITEMS_DESKTOP = [
   { to: "/", label: "Home" },
@@ -264,7 +263,7 @@ export default function UpdatedHeader() {
                       variant="standard"
                       className="text-input"
                       aria-label="Search Cures"
-                      style={{fontSize:"8px"}}
+                      style={{ fontSize: "8px" }}
                     />
                   )}
                 />

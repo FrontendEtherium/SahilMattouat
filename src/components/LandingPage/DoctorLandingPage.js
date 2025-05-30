@@ -10,12 +10,14 @@ import TopDoctor from "./DoctorConnectComponents/TopDoctor";
 import { imgKitImagePath } from "../../image-path";
 
 import DoctorCures from "./HomeComponents/DoctorCures";
+
 function DoctorLandingPage() {
-  useEffect(( ) => {
+  useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
   return (
-    <>
+    <div className="doctor-landing-page">
       <Header showSearch={false} />
       <div
         style={{
@@ -86,7 +88,7 @@ function DoctorLandingPage() {
         <DoctorCures />
       </main>
       <Footer />
-    </>
+    </div>
   );
 }
 

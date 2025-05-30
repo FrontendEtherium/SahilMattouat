@@ -97,6 +97,21 @@ const Footer = () => (
                     Cures
                   </Link>
                 </li>
+                <li className="mt-3">
+                  <div
+                    style={{
+                      color: "#fff",
+                      fontSize: "12px",
+                      lineHeight: "1.4",
+                    }}
+                  >
+                    Etherium Technologies Private Limited,
+                    <br />
+                    92/6, Trikuta Nagar,
+                    <br />
+                    Jammu, Jammu and Kashmir 180020
+                  </div>
+                </li>
               </ul>
             </div>
 
@@ -247,6 +262,20 @@ const Footer = () => (
                 />
                 <div className="brand-text">All CURES</div>
               </a>
+              <div
+                style={{
+                  color: "#fff",
+                  fontSize: "10px",
+                  lineHeight: "1.3",
+                  marginTop: "10px",
+                }}
+              >
+                Etherium Technologies Private Limited,
+                <br />
+                92/6, Trikuta Nagar,
+                <br />
+                Jammu, Jammu and Kashmir 180020
+              </div>
             </div>
 
             {/* right col */}
