@@ -185,7 +185,7 @@ export default class Medicinepage extends Component {
             ))}
           </div>
         </div>
-        <div>
+        {/* <div>
           <button
             id="mobile-subscribe-fixed-btn"
             className="btn newsletter-icon rounded subscribe-btn newsletter_float"
@@ -203,7 +203,7 @@ export default class Medicinepage extends Component {
             </button>
           </Link>
           <Subscribe />
-        </div>
+        </div> */}
         <Footer />
       </>
     );
