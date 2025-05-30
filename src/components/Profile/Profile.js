@@ -867,14 +867,14 @@ class Profile extends Component {
                               />
                             )}
 
-                            <div
-                              class="modal"
+                             {/* <div
+                              className="modal"
                               id="exampleModal"
                               tabindex="0"
                               role="dialog"
                               aria-labelledby="exampleModalLabel"
                               aria-hidden="true"
-                            >
+                            >  */}
                               {userId && (
                                 <AppointmentModal
                                   show={this.state.showAppointmentModal}
@@ -895,7 +895,7 @@ class Profile extends Component {
                                   userId={userId}
                                 />
                               )}
-                            </div>
+                            {/* </div> */}
 
                             <EditProfile
                               show={this.state.modalShow}
@@ -1267,7 +1267,7 @@ class Profile extends Component {
             </div>
           </section>
           <div></div>
-          <div
+          {/* <div
             className="modal fade bd-example-modal-lg"
             tabindex="-1"
             role="dialog"
@@ -1318,7 +1318,7 @@ class Profile extends Component {
                 </section>
               </div>
             </div>
-          </div>
+          </div> */}
           <Footer />
         </div>
       );
