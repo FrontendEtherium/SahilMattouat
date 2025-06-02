@@ -6,8 +6,6 @@ import { Link } from "react-router-dom";
 // Dynamically import Slider to reduce initial bundle size
 const Slider = lazy(() => import("react-slick"));
 
-
-
 const CuresData = [
   { title: "Ayurveda", medicineType: 1, img: "ayurveda04.png" },
   { title: "Chinese", medicineType: 4, img: "Chinese04.png" },
@@ -57,6 +55,12 @@ const preloadImages = () => {
   });
 };
 
+// Helper function to create SEO-friendly URL slug
+const createUrlSlug = (medicineType, title) => {
+  const titleSlug = title.toLowerCase().replace(/\s+/g, "-");
+  return `${medicineType}-${titleSlug}`;
+};
+
 const TrendingCures = memo(() => {
   React.useEffect(() => {
     preloadImages();
@@ -80,7 +84,10 @@ const TrendingCures = memo(() => {
               role="article"
             >
               <a
-                href={`/searchmedicine/medicinetype/${cure.medicineType}`}
+                href={`/searchmedicine/medicinetype/${createUrlSlug(
+                  cure.medicineType,
+                  cure.title
+                )}`}
                 aria-label={`View ${cure.title} medicines`}
               >
                 <img

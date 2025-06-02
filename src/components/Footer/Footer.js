@@ -21,6 +21,12 @@ const CuresData = [
   { title: "Naturopathy", medicineType: 9, img: "Naturpathy04.png" },
 ];
 
+// Helper function to create SEO-friendly URL slug
+const createUrlSlug = (medicineType, title) => {
+  const titleSlug = title.toLowerCase().replace(/\s+/g, "-");
+  return `${medicineType}-${titleSlug}`;
+};
+
 // Social media data moved outside component
 const socialMediaLinks = [
   {
@@ -121,7 +127,10 @@ const Footer = () => (
                 {CuresData.map((cure) => (
                   <li key={cure.medicineType}>
                     <Link
-                      to={`/searchmedicine/medicinetype/${cure.medicineType}`}
+                      to={`/searchmedicine/medicinetype/${createUrlSlug(
+                        cure.medicineType,
+                        cure.title
+                      )}`}
                       aria-label={`Explore ${cure.title} treatments`}
                     >
                       <div style={{ color: "white" }}>{cure.title}</div>
@@ -302,7 +311,10 @@ const Footer = () => (
                 {CuresData.map((cure) => (
                   <li key={cure.medicineType}>
                     <Link
-                      to={`/searchmedicine/${cure.title.toLowerCase()}-cures`}
+                      to={`/searchmedicine/medicinetype/${createUrlSlug(
+                        cure.medicineType,
+                        cure.title
+                      )}`}
                       aria-label={`Explore ${cure.title} treatments`}
                     >
                       <div style={{ color: "white" }}>{cure.title}</div>

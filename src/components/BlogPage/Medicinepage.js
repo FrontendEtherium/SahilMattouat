@@ -29,6 +29,34 @@ export default class Medicinepage extends Component {
       articleFilter: "recent",
     };
   }
+
+  // Helper function to extract medicine type ID from URL parameter like "1-ayurveda"
+  extractMedicineTypeId(medicineTypeParam) {
+    if (!medicineTypeParam) return null;
+    // If it contains a hyphen, extract the number before the first hyphen
+    if (medicineTypeParam.includes("-")) {
+      return medicineTypeParam.split("-")[0];
+    }
+    // If it's just a number (backward compatibility)
+    return medicineTypeParam;
+  }
+
+  // Helper function to extract title from URL parameter like "1-ayurveda"
+  extractMedicineTypeTitle(medicineTypeParam) {
+    if (!medicineTypeParam) return null;
+    // If it contains a hyphen, extract and format the title part
+    if (medicineTypeParam.includes("-")) {
+      const titlePart = medicineTypeParam.split("-").slice(1).join("-");
+      // Convert kebab-case to Title Case
+      return titlePart
+        .split("-")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
+    }
+    // If it's just a number, return null (no title available)
+    return null;
+  }
+
   allPosts(loadMore) {
     // For all available blogs "/blogs"
     const headers = new Headers({
@@ -116,7 +144,10 @@ export default class Medicinepage extends Component {
     //   this.allPosts()
     // }
     if (this.props.match.params.medicineType !== undefined) {
-      this.medicinePosts(this.props.match.params.medicineType);
+      const medicineTypeId = this.extractMedicineTypeId(
+        this.props.match.params.medicineType
+      );
+      this.medicinePosts(medicineTypeId);
     } else if (this.props.location.search) {
       this.regionalPosts();
     } else {
@@ -130,7 +161,10 @@ export default class Medicinepage extends Component {
       this.props.match.params.medicineType
     ) {
       if (this.props.match.params.medicineType) {
-        this.medicinePosts(this.props.match.params.medicineType);
+        const medicineTypeId = this.extractMedicineTypeId(
+          this.props.match.params.medicineType
+        );
+        this.medicinePosts(medicineTypeId);
       } else {
         this.allPosts();
       }
@@ -159,12 +193,53 @@ export default class Medicinepage extends Component {
         <Header history={this.props.history} />
 
         <div className="container my-4">
-          {/* {
-                this.state.param.medicineType?
-                <h1 className="h2 text-center">Cures related to "{this.state.param.medicineType}"</h1>
-                :<h1 className="h2 text-center">All Cures</h1>
-              } */}
-          <div className="row" id="posts-container">
+         
+          {this.state.param.medicineType ? (
+            <>
+              <h1 className="h2 text-center">
+                Cures related to "
+                {this.extractMedicineTypeTitle(this.state.param.medicineType) ||
+                  this.extractMedicineTypeId(this.state.param.medicineType)}
+                "
+              </h1>
+              <h2
+                className="h5 text-center text-muted"
+                style={{ fontSize: "clamp(0.875rem, 3vw, 1.25rem)" }}
+              >
+                Explore Proven Natural Remedies from Trusted Healing Systems
+              </h2>
+            </>
+          ) : (
+            <h1 className="h2 text-center">All Cures</h1>
+          )}
+           <nav aria-label="breadcrumb mb-4">
+            <ol
+              className="breadcrumb"
+              style={{ display: "flex", alignItems: "center" }}
+            >
+              <li
+                className="breadcrumb-item"
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                <Link to="/">Home</Link>
+              </li>
+              <li
+                className="breadcrumb-item"
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                <Link to="/allcures">Cures</Link>
+              </li>
+              <li
+                className="breadcrumb-item active"
+                style={{ display: "flex", alignItems: "center" }}
+                aria-current="page"
+              >
+                 {this.extractMedicineTypeTitle(this.state.param.medicineType) ||
+                  this.extractMedicineTypeId(this.state.param.medicineType)}
+              </li>
+            </ol>
+          </nav>
+          <div className="row mt-4" id="posts-container" >
             {items.map((i) => (
               <AllPost
                 docID={i.docID}
