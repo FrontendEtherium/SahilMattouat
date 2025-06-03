@@ -1,5 +1,5 @@
 // src/components/DoctorConnect/DoctorConnectComponents/DoctorConnectSearch.js
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import PersonIcon from "@mui/icons-material/Person";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -27,7 +27,12 @@ const fields = [
 function DoctorConnectSearch({ changeSpeciality, speciality }) {
   const [searchName, setSearchName] = useState("");
   const [searchCity, setSearchCity] = useState("");
-  const [selectedSpeciality, setSelectedSpeciality] = useState(speciality || "");
+  const [selectedSpeciality, setSelectedSpeciality] = useState("");
+
+  // Update selectedSpeciality when speciality prop changes
+  useEffect(() => {
+    setSelectedSpeciality(speciality || "");
+  }, [speciality]);
 
   // Handler for searching by doctor name (requires min 3 chars)
   const handleSearchByName = () => {
@@ -111,9 +116,10 @@ function DoctorConnectSearch({ changeSpeciality, speciality }) {
 
         {/* Filter by Speciality */}
         <div>
-          <label className="search-input-label">Filter Doctor by Speciality</label>
+          <label className="search-input-label">
+            Filter Doctor by Speciality
+          </label>
           <div className="input-wrapper">
-           
             <select
               className="input-field"
               value={selectedSpeciality}

@@ -59,8 +59,11 @@ function DoctorConnect() {
 
   // passed down to <DoctorConnectSearch>
   const changeSpeciality = (slug) => {
-    if (slug) history.push(`/doctor-connect/${slug}`);
-    else history.push(`/doctor-connect`);
+    if (slug) {
+      history.push(`/doctor-connect/${slug}`);
+    } else {
+      history.push(`/doctor-connect`);
+    }
   };
 
   const renderPageButtons = () => {

@@ -106,6 +106,7 @@ const CuresGrid = memo(({ title = "Cures", blogPage }) => {
                       imgLoc.replace(".json", ".png").split("/webapps/")[1]
                     }`
                 : "https://ik.imagekit.io/qi0xxmh2w/productimages/tr:h-100,w-300,f-webp/cures_articleimages//299/default.png";
+                
 
               return (
                 <div
