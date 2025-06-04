@@ -44,6 +44,12 @@ const sliderSettings = {
         slidesToShow: 4,
       },
     },
+    {
+      breakpoint: 390,
+      settings: {
+        slidesToShow: 3,
+      },
+    },
   ],
 };
 

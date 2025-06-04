@@ -763,7 +763,7 @@ class Profile extends Component {
                             <>
                               <img
                                 alt={items.firstName}
-                                src={`https://ik.imagekit.io/hg4fpytvry/product-images/tr:w-180,h-230,f-webp${items.imgLoc}`}
+                                src={`https://ik.imagekit.io/hg4fpytvry/product-images/tr:w-150,h-200,f-webp${items.imgLoc}`}
                               />
                             </>
                           ) : (
@@ -773,7 +773,7 @@ class Profile extends Component {
                         {this.state.items.videoService === 1 && (
                           <button
                             type="button"
-                            className="btn btn-primary border-0"
+                            className="btn btn-primary border-0 mt-2"
                             data-toggle="modal"
                             onClick={() => this.consult()}
                             data-target="#exampleModal"

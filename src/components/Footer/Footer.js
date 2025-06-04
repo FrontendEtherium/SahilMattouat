@@ -109,6 +109,7 @@ const Footer = () => (
                       color: "#fff",
                       fontSize: "12px",
                       lineHeight: "1.4",
+             
                     }}
                   >
                     Etherium Technologies Private Limited,
@@ -256,8 +257,8 @@ const Footer = () => (
         <div className="container">
           <div className="row">
             {/* left col */}
-            <div className="col-4 text-center footer-mobile-left">
-              <a href="/" className="d-block mb-3" aria-label="All Cures Home">
+            <div className="col-4 text-center footer-mobile-left ml-4">
+              <a href="/" className="d-flex flex-column mb-3" aria-label="All Cures Home">
                 <img
                   src={WhiteHeart}
                   style={{
@@ -269,14 +270,15 @@ const Footer = () => (
                   alt="All Cures Logo"
                   loading="lazy"
                 />
-                <div className="brand-text">All CURES</div>
+                <div className="text-left brand-text">All CURES</div>
               </a>
               <div
                 style={{
                   color: "#fff",
-                  fontSize: "10px",
+                  fontSize: "9px",
                   lineHeight: "1.3",
                   marginTop: "10px",
+                  textAlign: "left",
                 }}
               >
                 Etherium Technologies Private Limited,
