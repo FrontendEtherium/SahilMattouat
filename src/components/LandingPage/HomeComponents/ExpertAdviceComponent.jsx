@@ -42,6 +42,8 @@ export default function ExpertAdviceComponent() {
   const handleVideoLoad = (index) => {
     setLoadedVideos((prev) => ({ ...prev, [index]: true }));
   };
+  console.log("Video initialised");
+  
 
   return (
     <section
