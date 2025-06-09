@@ -1,4 +1,4 @@
-import React, { useState, memo } from "react";
+import React, { useState, memo, useRef } from "react";
 import ReactPlayer from "react-player";
 import "./ExpertAdviceComponent.css";
 
@@ -9,7 +9,7 @@ const videos = [
 ];
 
 // Memoize the video player component to prevent unnecessary re-renders
-const VideoPlayer = memo(({ url, onReady }) => (
+const VideoPlayer = memo(({ url, onReady, isPlaying, onPlay, onPause }) => (
   <ReactPlayer
     url={url}
     muted
@@ -18,6 +18,9 @@ const VideoPlayer = memo(({ url, onReady }) => (
     width="100%"
     height="100%"
     onReady={onReady}
+    playing={isPlaying}
+    onPlay={onPlay}
+    onPause={onPause}
     config={{
       youtube: {
         playerVars: {
@@ -38,12 +41,22 @@ const VideoPlayer = memo(({ url, onReady }) => (
 
 export default function ExpertAdviceComponent() {
   const [loadedVideos, setLoadedVideos] = useState({});
+  const [playingIndex, setPlayingIndex] = useState(null);
+  const playersRef = useRef({});
 
   const handleVideoLoad = (index) => {
     setLoadedVideos((prev) => ({ ...prev, [index]: true }));
   };
-  console.log("Video initialised");
-  
+
+  const handlePlay = (index) => {
+    setPlayingIndex(index);
+  };
+
+  const handlePause = (index) => {
+    if (playingIndex === index) {
+      setPlayingIndex(null);
+    }
+  };
 
   return (
     <section
@@ -60,7 +73,13 @@ export default function ExpertAdviceComponent() {
                   <div className="expert-advice__loading-spinner"></div>
                 </div>
               )}
-              <VideoPlayer url={url} onReady={() => handleVideoLoad(idx)} />
+              <VideoPlayer
+                url={url}
+                onReady={() => handleVideoLoad(idx)}
+                isPlaying={playingIndex === idx}
+                onPlay={() => handlePlay(idx)}
+                onPause={() => handlePause(idx)}
+              />
             </div>
           </div>
         ))}
