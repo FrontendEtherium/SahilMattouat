@@ -63,7 +63,7 @@ const preloadImages = () => {
 
 // Helper function to create SEO-friendly URL slug
 const createUrlSlug = (medicineType, title) => {
-  const titleSlug = title.toLowerCase().replace(/\s+/g, "-");
+  const titleSlug = title.replace(new RegExp(" ", "g"), "-");
   return `${medicineType}-${titleSlug}`;
 };
 

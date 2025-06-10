@@ -45,9 +45,6 @@ const AllPost = ({
   //replace via regex
   articleTitle = articleTitle.replace(regex, "-");
 
-  // var authorLinkName = authorName
-  // authorLinkName = authorLinkName.replace(regex, '-');
-  // authorLinkName = authorLinkName.replace(regexDr, '');
   return (
     <>
       <div
@@ -55,10 +52,7 @@ const AllPost = ({
         className="d-flex cures-search-tab w-100 card mb-5"
       >
         <div className="col-md-3 cures-tab-img rounded px-0">
-          <img
-            src={`${imageLoc}?dummy=${parseInt(Math.random() * 10000)}`}
-            alt={articleTitle}
-          />
+          <img src={`${imageLoc}`} alt={articleTitle} />
           {/* {
                                     over_allrating !== 0?
                                     <div className='checked'id="starMob"><span class="fa fa-star checked mr-1"></span>{Math.round(over_allrating * 10) / 10}</div>

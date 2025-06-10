@@ -11,7 +11,6 @@ import { Link } from "react-router-dom";
 import "./DoctorCures.css";
 import { imageUrl, imgKitImagePath } from "../../../image-path";
 
-
 function DoctorCures({ blogPage }) {
   const [items, setItems] = useState([]);
   const [loaded, setLoaded] = useState(false);
@@ -103,6 +102,9 @@ function DoctorCures({ blogPage }) {
               contentObj?.blocks?.[0]?.data?.text?.slice(0, 50) ||
               "No preview available.";
 
+            // Format title for URL
+            const articleTitle = item.title.replace(new RegExp(" ", "g"), "-");
+
             return (
               <div key={item.id} className="doctor-cures__item">
                 <div className="doctor-cures__image">
@@ -119,7 +121,7 @@ function DoctorCures({ blogPage }) {
                     className="doctor-cures_docImg"
                   />
                 </div>
-                <Link to={`/cure/${item.article_id}-${item.title}`}>
+                <Link to={`/cure/${item.article_id}-${articleTitle}`}>
                   <div className="doctor-cures__content">
                     <h2 className="doctor-cures__headline">{item.title}</h2>
                     <h2 className="doctor-cures__docName">
@@ -158,17 +160,25 @@ function DoctorCures({ blogPage }) {
               contentObj?.blocks?.[0]?.data?.text?.slice(0, 40) ||
               "No preview available.";
 
+            // Format title for URL
+            const articleTitle = item.title.replace(new RegExp(" ", "g"), "-");
+
             return (
               <div key={item.id} className="doctor-cures__item">
                 <div className="doctor-cures__image">
-                  <img src={imageLoc} alt={item.title} loading="lazy" style={{width: "100%"}} />
+                  <img
+                    src={imageLoc}
+                    alt={item.title}
+                    loading="lazy"
+                    style={{ width: "100%" }}
+                  />
                   <img
                     src={` ${imgKitImagePath}${item.image_location}`}
                     alt="Doctor"
                     className="doctor-cures_docImg"
                   />
                 </div>
-                <Link to={`/cure/${item.article_id}-${item.title}`}>
+                <Link to={`/cure/${item.article_id}-${articleTitle}`}>
                   <div className="doctor-cures__content">
                     <h2 className="doctor-cures__headline">{item.title}</h2>
                     <h6 className="doctor-cures__docName">

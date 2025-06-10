@@ -6,6 +6,7 @@ const videos = [
   "https://www.youtube.com/shorts/Hjh_tGBtL1U",
   "https://www.youtube.com/shorts/YA-UDrEFVec",
   "https://www.youtube.com/shorts/N5i20fg_fFU",
+  "https://www.youtube.com/shorts/lhkehJDzVvo",
 ];
 
 // Memoize the video player component to prevent unnecessary re-renders

@@ -29,6 +29,9 @@ function CureGrid({ items, isMobile, onNext, onPrev, hasPrev }) {
               }`
             : `${imageUrl}/tr:h-400,w-250,f-webp/cures_articleimages//299/default.png`;
 
+          // Format title for URL
+          const articleTitle = item.title.replace(new RegExp(" ", "g"), "-");
+
           return (
             <div className="curesGrid__container">
               <div
@@ -38,7 +41,7 @@ function CureGrid({ items, isMobile, onNext, onPrev, hasPrev }) {
                 <div className="cure-card__info">
                   <Link
                     key={item.id}
-                    to={`/cure/${item.article_id}-${item.title}`}
+                    to={`/cure/${item.article_id}-${articleTitle}`}
                     className="cure-card"
                   >
                     <p className="expert-card__meta">

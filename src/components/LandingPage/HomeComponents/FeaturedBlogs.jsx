@@ -90,12 +90,15 @@ function FeaturedBlogs({ isMobile }) {
               contentObj?.blocks?.[0]?.data?.text?.slice(0, 58) ||
               "No preview available.";
 
+            // Format title for URL
+            const articleTitle = item.title.replace(new RegExp(" ", "g"), "-");
+
             return (
               <div key={item.id} className="featured-blogs__item">
                 <div className="featured-blogs__image">
                   <img src={imageLoc} alt={item.title} loading="lazy" />
                 </div>
-                <Link to={`/cure/${item.article_id}-${item.title}`}>
+                <Link to={`/cure/${item.article_id}-${articleTitle}`}>
                   <div className="featured-blogs__content">
                     <h2 className="featured-blogs__headline">{item.title}</h2>
                     <p className="featured-blogs__paragraph">
@@ -108,7 +111,7 @@ function FeaturedBlogs({ isMobile }) {
           })}
         </Slider>
       ) : (
-        <div style={{display:"flex",flexDirection:"column",gap:"10px"}}> 
+        <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
           {displayItems.map((item) => {
             let contentObj;
             try {
@@ -133,12 +136,15 @@ function FeaturedBlogs({ isMobile }) {
               contentObj?.blocks?.[0]?.data?.text?.slice(0, 50) ||
               "No preview available.";
 
+            // Format title for URL
+            const articleTitle = item.title.replace(new RegExp(" ", "g"), "-");
+
             return (
               <div key={item.id} className="featured-blogs__item">
                 <div className="featured-blogs__image">
                   <img src={imageLoc} alt={item.title} loading="lazy" />
                 </div>
-                <Link to={`/cure/${item.article_id}-${item.title}`}>
+                <Link to={`/cure/${item.article_id}-${articleTitle}`}>
                   <div className="featured-blogs__content">
                     <h2 className="featured-blogs__headline">{item.title}</h2>
                     <p className="featured-blogs__paragraph">
