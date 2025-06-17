@@ -103,7 +103,7 @@ const Footer = () => (
                     Cures
                   </Link>
                 </li>
-                <li className="mt-3">
+                {/* <li className="mt-3">
                   <div
                     style={{
                       color: "#fff",
@@ -118,7 +118,7 @@ const Footer = () => (
                     <br />
                     Jammu, Jammu and Kashmir 180020
                   </div>
-                </li>
+                </li> */}
               </ul>
             </div>
 
@@ -272,7 +272,7 @@ const Footer = () => (
                 />
                 <div className="text-left brand-text">All CURES</div>
               </a>
-              <div
+              {/* <div
                 style={{
                   color: "#fff",
                   fontSize: "9px",
@@ -286,7 +286,7 @@ const Footer = () => (
                 92/6, Trikuta Nagar,
                 <br />
                 Jammu, Jammu and Kashmir 180020
-              </div>
+              </div> */}
             </div>
 
             {/* right col */}

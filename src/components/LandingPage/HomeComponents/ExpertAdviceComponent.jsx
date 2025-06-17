@@ -10,35 +10,38 @@ const videos = [
 ];
 
 // Memoize the video player component to prevent unnecessary re-renders
-const VideoPlayer = memo(({ url, onReady, isPlaying, onPlay, onPause }) => (
-  <ReactPlayer
-    url={url}
-    muted
-    loop={false}
-    controls
-    width="100%"
-    height="100%"
-    onReady={onReady}
-    playing={isPlaying}
-    onPlay={onPlay}
-    onPause={onPause}
-    config={{
-      youtube: {
-        playerVars: {
-          controls: 1,
-          modestbranding: 1,
-          rel: 0,
-          enablejsapi: 0,
-          origin: window.location.origin,
-          iv_load_policy: 3,
-          fs: 1,
-          playsinline: 1,
+const VideoPlayer = memo(
+  ({ url, onReady, isPlaying, onPlay, onPause, playerRef }) => (
+    <ReactPlayer
+      ref={playerRef}
+      url={url}
+      muted
+      loop={false}
+      controls
+      width="100%"
+      height="100%"
+      onReady={onReady}
+      playing={isPlaying}
+      onPlay={onPlay}
+      onPause={onPause}
+      config={{
+        youtube: {
+          playerVars: {
+            controls: 1,
+            modestbranding: 1,
+            rel: 0,
+            enablejsapi: 0,
+            origin: window.location.origin,
+            iv_load_policy: 3,
+            fs: 1,
+            playsinline: 1,
+          },
         },
-      },
-    }}
-    loading="lazy"
-  />
-));
+      }}
+      loading="lazy"
+    />
+  )
+);
 
 export default function ExpertAdviceComponent() {
   const [loadedVideos, setLoadedVideos] = useState({});
@@ -50,6 +53,14 @@ export default function ExpertAdviceComponent() {
   };
 
   const handlePlay = (index) => {
+    // Reset previous video's timer if there was one playing
+    if (
+      playingIndex !== null &&
+      playingIndex !== index &&
+      playersRef.current[playingIndex]
+    ) {
+      playersRef.current[playingIndex].seekTo(0);
+    }
     setPlayingIndex(index);
   };
 
@@ -80,6 +91,7 @@ export default function ExpertAdviceComponent() {
                 isPlaying={playingIndex === idx}
                 onPlay={() => handlePlay(idx)}
                 onPause={() => handlePause(idx)}
+                playerRef={(player) => (playersRef.current[idx] = player)}
               />
             </div>
           </div>

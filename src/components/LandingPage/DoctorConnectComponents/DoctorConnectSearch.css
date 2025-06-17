@@ -2,10 +2,6 @@
 .search-container {
   background-color: #ffffff;
   border-radius: 0.5rem;
-
-
-
-
 }
 
 /* Search Heading */
@@ -18,7 +14,7 @@
 }
 
 @media (min-width: 768px) {
-  .search-container{
+  .search-container {
     padding: 1.5rem;
   }
   .search-heading {
@@ -62,8 +58,6 @@
   justify-self: center;
 }
 
-
-
 /* Search Inputs */
 .search-input-group {
   display: flex;
@@ -72,9 +66,8 @@
   justify-content: space-around;
 }
 
-
 @media (min-width: 768px) {
-  .search-input-group{
+  .search-input-group {
     flex-direction: row;
     gap: 1.5rem;
   }
