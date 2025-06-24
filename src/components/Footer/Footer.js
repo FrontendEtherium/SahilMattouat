@@ -304,7 +304,7 @@ const Footer = () => (
                   </Link>
                 </li>
                 <li>
-                  <Link to="/cures" aria-label="Explore all cures">
+                  <Link to="/allcures" aria-label="Explore all cures">
                     Cures
                   </Link>
                 </li>
