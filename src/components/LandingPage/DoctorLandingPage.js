@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../Header/Header";
 import "./DoctorConnect.css";
 
@@ -6,15 +6,25 @@ import ValuesSection from "./DoctorConnectComponents/ValuesSection";
 import Footer from "../Footer/Footer";
 import DoctorByMedicineType from "./DoctorConnectComponents/DoctorByMedicineType";
 import TopDoctor from "./DoctorConnectComponents/TopDoctor";
+import AppointmentModal from "../../features/BookAppointment";
+import { userId } from "../UserId";
 
 import { imgKitImagePath } from "../../image-path";
 
 import DoctorCures from "./HomeComponents/DoctorCures";
 
 function DoctorLandingPage() {
+  const [showAppointmentModal, setShowAppointmentModal] = useState(false);
+  const [selectedDocId, setSelectedDocId] = useState(null);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const handleConsult = (docId) => {
+    setSelectedDocId(docId);
+    setShowAppointmentModal(true);
+  };
 
   return (
     <div className="doctor-landing-page">
@@ -43,7 +53,7 @@ function DoctorLandingPage() {
             className="upper-section-container-text-image"
           />
         </section> */}
-        <TopDoctor />
+        <TopDoctor onConsult={handleConsult} />
 
         <div
           style={{
@@ -88,6 +98,16 @@ function DoctorLandingPage() {
         <DoctorCures />
       </main>
       <Footer />
+
+      {/* Render modal at page level */}
+      {showAppointmentModal && (
+        <AppointmentModal
+          show={showAppointmentModal}
+          onHide={() => setShowAppointmentModal(false)}
+          docId={selectedDocId}
+          userId={userId}
+        />
+      )}
     </div>
   );
 }

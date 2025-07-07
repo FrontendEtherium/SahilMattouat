@@ -1,10 +1,13 @@
 // src/components/DoctorConnect/DoctorConnect.js
 import React, { useEffect, useState } from "react";
+import ReactDOM from "react-dom";
 import { useHistory, useParams } from "react-router-dom";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import DoctorConnectCard from "./DoctorConnectComponents/DoctorConnectCard";
 import DoctorConnectSearch from "./DoctorConnectComponents/DoctorConnectSearch";
+import AppointmentModal from "../../features/BookAppointment";
+import { userId } from "../UserId";
 import { backendHost } from "../../api-config";
 import { imgKitImagePath } from "../../image-path";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -26,6 +29,8 @@ function DoctorConnect() {
   const [docList, setDocList] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const [showAppointmentModal, setShowAppointmentModal] = useState(false);
+  const [selectedDocId, setSelectedDocId] = useState(null);
 
   // reset page when filter changes
   useEffect(() => {
@@ -64,6 +69,26 @@ function DoctorConnect() {
     } else {
       history.push(`/doctor-connect`);
     }
+  };
+
+  const handleConsultClick = (docId) => {
+    setSelectedDocId(docId);
+    setShowAppointmentModal(true);
+  };
+
+  // Render modal using portal to document body
+  const renderModal = () => {
+    if (!showAppointmentModal) return null;
+
+    return ReactDOM.createPortal(
+      <AppointmentModal
+        show={showAppointmentModal}
+        onHide={() => setShowAppointmentModal(false)}
+        docId={selectedDocId}
+        userId={userId}
+      />,
+      document.body
+    );
   };
 
   const renderPageButtons = () => {
@@ -116,7 +141,11 @@ function DoctorConnect() {
           <div className="doc-grid">
             <div className="doc-list-section">
               {docList.map((doc) => (
-                <DoctorConnectCard key={doc.id} doc={doc} />
+                <DoctorConnectCard
+                  key={doc.id}
+                  doc={doc}
+                  onConsult={handleConsultClick}
+                />
               ))}
 
               <nav className="pagination-container" aria-label="Pagination">
@@ -148,6 +177,9 @@ function DoctorConnect() {
 
         <Footer />
       </div>
+
+      {/* Modal rendered using portal to document body */}
+      {renderModal()}
     </>
   );
 }

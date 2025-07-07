@@ -12,7 +12,6 @@ const Comment = ({ refreshComments, article_id }, props) => {
   const [alertMsg, setAlertMsg] = useState(true);
   const [comment, setComment] = useState();
   const [afterSubmitLoad, setafterSubmitLoad] = useState(false);
-  console.log("comments page re rendered");
 
   function Alert(msg) {
     setShowAlert(true);

@@ -11,7 +11,6 @@ const ResponseRedirect = () => {
   const response = localStorage.getItem("apiResponse");
 
   const responseObject = JSON.parse(response);
-  console.log('res',responseObject.orderID)
 
   const [getResponse, setGetResponse] = useState("");
   useEffect(() => {

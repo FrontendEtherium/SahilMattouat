@@ -5,7 +5,6 @@ import "./TopDoctorStyles.css";
 import { imgKitImagePath } from "../../../image-path";
 import { userAccess } from "../../UserAccess";
 import { userId } from "../../UserId";
-import AppointmentModal from "../../../features/BookAppointment";
 import Test from "../test";
 import LocalPharmacyIcon from "@mui/icons-material/LocalPharmacy";
 import DoctorConnectCard from "./DoctorConnectCard";
@@ -13,13 +12,10 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-function TopDoctor() {
+function TopDoctor({ onConsult }) {
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [showAppointmentModal, setShowAppointmentModal] = useState(false);
-  const [selectedDocId, setSelectedDocId] = useState(null);
-  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const fetchTopDoctor = async () => {
@@ -39,7 +35,7 @@ function TopDoctor() {
 
   const sliderSettings = {
     dots: true,
-    infinite: true,
+    infinite: false,
     speed: 500,
     slidesToShow: 2,
     slidesToScroll: 1,
@@ -66,36 +62,25 @@ function TopDoctor() {
   };
 
   const handleConsult = (docId) => {
-    setSelectedDocId(docId);
-    setShowAppointmentModal(true);
+    onConsult(docId);
   };
 
   if (loading) return <div className="text-center">Loading...</div>;
   if (error) return <div className="text-center error">{error}</div>;
 
   return (
-    <>
-      <div className="container">
-        <h2>Top Doctors</h2>
-        <div className="top-doctors-slider">
-          <Slider {...sliderSettings}>
-            {doctors.map((doctor, index) => (
-              <div key={doctor.docID || index} className="slider-item">
-                <DoctorConnectCard doc={doctor} onConsult={handleConsult} />
-              </div>
-            ))}
-          </Slider>
-        </div>
+    <div className="container">
+      <h2>Top Doctors</h2>
+      <div className="top-doctors-slider">
+        <Slider {...sliderSettings}>
+          {doctors.map((doctor, index) => (
+            <div key={doctor.docID || index} className="slider-item">
+              <DoctorConnectCard doc={doctor} onConsult={handleConsult} />
+            </div>
+          ))}
+        </Slider>
       </div>
-      {showAppointmentModal && (
-        <AppointmentModal
-          show={showAppointmentModal}
-          onHide={() => setShowAppointmentModal(false)}
-          docId={selectedDocId}
-          userId={userId}
-        />
-      )}
-    </>
+    </div>
   );
 }
 

@@ -46,11 +46,13 @@ const AppointmentModal = ({
   };
 
   const bookAppn = async (e) => {
+    
     e.preventDefault();
     setBookingLoading(true);
     setError(null);
 
     try {
+      console.log("creating appointment");
       const response = await axios.post(`${backendHost}/appointments/create`, {
         docID: docId,
         userID: parseInt(userId),
@@ -62,6 +64,8 @@ const AppointmentModal = ({
       });
 
       const responseObject = response.data;
+      console.log("responseObject", responseObject);
+      localStorage.removeItem("apiResponse");
       localStorage.setItem("encKey", responseObject.encRequest);
       localStorage.setItem("apiResponse", JSON.stringify(response.data));
 

@@ -10,14 +10,11 @@ import { backendHost } from "../../../api-config";
 import "./DoctorConnectCard.css";
 import { imgKitImagePath } from "../../../image-path";
 import { Link } from "react-router-dom";
-import AppointmentModal from "../../../features/BookAppointment";
 
 function DoctorConnectCard({ doc, onConsult }) {
   const imgLoc = doc.imgLoc ? `${imgKitImagePath}/${doc.imgLoc}` : DummyDoc;
   const [showModal, setShowModal] = useState(false);
   const [notAvailable, setNotAvailable] = useState(false);
-  const [showAppointmentModal, setShowAppointmentModal] = useState(false);
-  const [selectedDocId, setSelectedDocId] = useState(null);
 
   const DoctorNotAvailable = async () => {
     setNotAvailable(true);
@@ -33,8 +30,7 @@ function DoctorConnectCard({ doc, onConsult }) {
   const consult = () => {
     if (doc.videoService === 1) {
       if (userAccess && userId) {
-          setSelectedDocId(doc.docID);
-        setShowAppointmentModal(true);
+        onConsult(doc.docID);
       } else {
         setShowModal(true);
       }
@@ -137,14 +133,6 @@ function DoctorConnectCard({ doc, onConsult }) {
             </div>
           </div>
         </div>
-      )}
-       {showAppointmentModal && (
-        <AppointmentModal
-          show={showAppointmentModal}
-          onHide={() => setShowAppointmentModal(false)}
-          docId={selectedDocId}
-          userId={userId}
-        />
       )}
     </>
   );
