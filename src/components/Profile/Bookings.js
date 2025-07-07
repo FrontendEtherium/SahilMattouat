@@ -8,12 +8,14 @@ import { Box, Tab, Tabs, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 
 import "./Bookings.css";
+import { imagePath, imgKitImagePath } from "../../image-path";
 
 const Bookings = () => {
   const history = useHistory();
   const [value, setValue] = useState(0);
   const [data, setData] = useState([]);
   const [docData, setDocData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   // Retrieve doctor ID if logged in as doctor; else handle user
   const docID = localStorage.getItem("doctorid");
@@ -22,6 +24,7 @@ const Bookings = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
         const response = await fetch(
           `${backendHost}/appointments/get/user/${userId}`
         );
@@ -29,11 +32,14 @@ const Bookings = () => {
         setData(json);
       } catch (error) {
         console.error("Error fetching user appointments:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
     const fetchDocData = async () => {
       try {
+        setLoading(true);
         const response = await fetch(
           `${backendHost}/appointments/get/${docID}`
         );
@@ -41,11 +47,12 @@ const Bookings = () => {
         setDocData(json);
       } catch (error) {
         console.error("Error fetching doctor appointments:", error);
+      } finally {
+        setLoading(false);
       }
     };
-    console.log(docID);
 
-    if (docID) {
+    if (docID != 0) {
       fetchDocData();
     } else {
       fetchData();
@@ -68,7 +75,7 @@ const Bookings = () => {
         {...other}
       >
         {value === index && (
-          <Box sx={{ p: 3 }}>
+          <Box className="appointment-tab-content">
             <Typography component="div">{children}</Typography>
           </Box>
         )}
@@ -89,48 +96,75 @@ const Bookings = () => {
     };
   }
 
-  // Reusable card for each appointment
-  const AppointmentCard = ({ appointment, isDoctor }) => {
-    // Decide how to display name:
-    //   if isDoctor => show userName
-    //   else => show doctorName
-    const displayName = isDoctor
-      ? appointment.userName
-      : `Dr. ${appointment.doctorName}`;
-    const { appointmentDate, startTime, endTime, status } = appointment;
+  // Patient appointment card - shows doctor info with image and medicine type
+  const PatientAppointmentCard = ({ appointment }) => {
+    const {
+      appointmentDate,
+      startTime,
+      endTime,
+      status,
+      doctorName,
+      imgLoc,
+      medicineType,
+    } = appointment;
 
-    // Optional: show a status text or badge
-    // 0 => Upcoming
-    // 2 => Completed
     const statusText =
       status === 0 ? "Upcoming" : status === 2 ? "Completed" : "Other";
 
+    const statusClass =
+      status === 0
+        ? "status-upcoming"
+        : status === 2
+        ? "status-completed"
+        : "status-other";
+
     return (
-      <div className="card shadow-sm booking-card">
-        <div className="card-body d-flex align-items-center">
-          <div className="avatar">
-            <i className="fas fa-user-md"></i>
+      <div className="appointment-item">
+        <div className={`status-indicator ${statusClass}`}>{statusText}</div>
+
+        <div className="appointment-content">
+          <div className="profile-image-section">
+            {imgLoc ? (
+              <img
+                src={`${imgKitImagePath}${imgLoc}`}
+                alt={`Dr. ${doctorName}`}
+                className="profile-avatar"
+                onError={(e) => {
+                  e.target.style.display = "none";
+                  e.target.nextSibling.style.display = "flex";
+                }}
+              />
+            ) : null}
+            <div
+              className="profile-placeholder"
+              style={{ display: imgLoc ? "none" : "flex" }}
+            >
+              {doctorName?.charAt(0)?.toUpperCase() || "D"}
+            </div>
           </div>
-          <div className="booking-info">
-            <div className="d-flex justify-content-between align-items-center mb-1">
-              <h5 className="doctor-name">{displayName}</h5>
-              <span
-                className={`status-badge ${
-                  status === 0
-                    ? "status-upcoming"
-                    : status === 2
-                    ? "status-completed"
-                    : ""
-                }`}
-              >
-                {statusText}
-              </span>
+
+          <div className="appointment-details">
+            <div className="appointment-header">
+              <h3 className="person-name">Dr. {doctorName}</h3>
             </div>
-            <div className="time-slot mb-1">
-              <strong>Date:</strong> {appointmentDate}
-            </div>
-            <div className="time-slot">
-              <strong>Time:</strong> {startTime} - {endTime}
+
+            {medicineType && (
+              <div className="specialty-badge">{medicineType}</div>
+            )}
+
+            <div className="appointment-meta">
+              <div className="meta-item">
+                <i className="fas fa-calendar-alt meta-icon"></i>
+                <span className="meta-label">Date:</span>
+                <span className="meta-value">{appointmentDate}</span>
+              </div>
+              <div className="meta-item">
+                <i className="fas fa-clock meta-icon"></i>
+                <span className="meta-label">Time:</span>
+                <span className="meta-value">
+                  {startTime} - {endTime}
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -138,79 +172,183 @@ const Bookings = () => {
     );
   };
 
+  // Doctor appointment card - shows patient info (simpler)
+  const DoctorAppointmentCard = ({ appointment }) => {
+    const { appointmentDate, startTime, endTime, status, userName } =
+      appointment;
+
+    const statusText =
+      status === 0 ? "Upcoming" : status === 2 ? "Completed" : "Other";
+
+    const statusClass =
+      status === 0
+        ? "status-upcoming"
+        : status === 2
+        ? "status-completed"
+        : "status-other";
+
+    return (
+      <div className="appointment-item">
+        <div className={`status-indicator ${statusClass}`}>{statusText}</div>
+
+        <div className="appointment-content">
+          <div className="profile-image-section">
+            <div className="profile-placeholder">
+              {userName?.charAt(0)?.toUpperCase() || "P"}
+            </div>
+          </div>
+
+          <div className="appointment-details">
+            <div className="appointment-header">
+              <h3 className="person-name">{userName}</h3>
+            </div>
+
+            <div className="appointment-meta">
+              <div className="meta-item">
+                <i className="fas fa-calendar-alt meta-icon"></i>
+                <span className="meta-label">Date:</span>
+                <span className="meta-value">{appointmentDate}</span>
+              </div>
+              <div className="meta-item">
+                <i className="fas fa-clock meta-icon"></i>
+                <span className="meta-label">Time:</span>
+                <span className="meta-value">
+                  {startTime} - {endTime}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // Loading skeleton component
+  const LoadingSkeleton = () => <div className="appointment-skeleton"></div>;
+
+  // Empty state component
+  const EmptyState = ({ type }) => (
+    <div className="empty-appointments">
+      <div className="empty-icon">
+        <i className="fas fa-calendar-times"></i>
+      </div>
+      <h3 className="empty-title">No {type.toLowerCase()} appointments</h3>
+      <p className="empty-subtitle">
+        {type === "Upcoming"
+          ? "You don't have any upcoming appointments scheduled."
+          : "You haven't completed any appointments yet."}
+      </p>
+    </div>
+  );
+
+  // Filter appointments by status
+  const getFilteredAppointments = (appointments, statusFilter) => {
+    return appointments.filter(
+      (appointment) => appointment.status === statusFilter
+    );
+  };
+
+  const upcomingAppointments =
+    docID != 0
+      ? getFilteredAppointments(docData, 0)
+      : getFilteredAppointments(data, 0);
+
+  const completedAppointments =
+    docID != 0
+      ? getFilteredAppointments(docData, 2)
+      : getFilteredAppointments(data, 2);
+
   return (
     <div>
       <Header history={history} />
 
-      <div className="bookings-page container">
+      <div className="appointments-container">
+        {/* Page Header */}
+        <div className="appointments-header mt-30">
+          <h1 className="appointments-title">My Appointments</h1>
+          <p className="appointments-subtitle">
+            {docID != 0
+              ? "Manage your patient appointments and consultations"
+              : "View and manage your medical appointments"}
+          </p>
+        </div>
+
         {/* Tab Section */}
-        <Box sx={{ width: "100%", mt: 5 }}>
-          <Box
-            sx={{
-              borderBottom: 1,
-              borderColor: "divider",
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              centered
-              variant="scrollable"
-              scrollButtons
-              allowScrollButtonsMobile
-            >
-              <Tab label="Upcoming Meetings" {...a11yProps(0)} />
-              <Tab label="Completed Meetings" {...a11yProps(1)} />
-            </Tabs>
+        <div className="appointment-tabs-wrapper">
+          <Box sx={{ width: "100%" }}>
+            <Box sx={{ borderBottom: 1, borderColor: "#b9daf1" }}>
+              <Tabs
+                value={value}
+                onChange={handleChange}
+                centered
+                variant="fullWidth"
+              >
+                <Tab
+                  label={`Upcoming Appointments (${upcomingAppointments.length})`}
+                  {...a11yProps(0)}
+                />
+                <Tab
+                  label={`Completed Appointments (${completedAppointments.length})`}
+                  {...a11yProps(1)}
+                />
+              </Tabs>
+            </Box>
+
+            {/* Upcoming Appointments */}
+            <CustomTabPanel value={value} index={0}>
+              {loading ? (
+                <>
+                  <LoadingSkeleton />
+                  <LoadingSkeleton />
+                  <LoadingSkeleton />
+                </>
+              ) : upcomingAppointments.length === 0 ? (
+                <EmptyState type="Upcoming" />
+              ) : (
+                upcomingAppointments.map((appointment, index) =>
+                  docID != 0 ? (
+                    <DoctorAppointmentCard
+                      key={`upcoming-${appointment.appointmentID}-${index}`}
+                      appointment={appointment}
+                    />
+                  ) : (
+                    <PatientAppointmentCard
+                      key={`upcoming-${appointment.appointmentID}-${index}`}
+                      appointment={appointment}
+                    />
+                  )
+                )
+              )}
+            </CustomTabPanel>
+
+            {/* Completed Appointments */}
+            <CustomTabPanel value={value} index={1}>
+              {loading ? (
+                <>
+                  <LoadingSkeleton />
+                  <LoadingSkeleton />
+                  <LoadingSkeleton />
+                </>
+              ) : completedAppointments.length === 0 ? (
+                <EmptyState type="Completed" />
+              ) : (
+                completedAppointments.map((appointment, index) =>
+                  docID != 0 ? (
+                    <DoctorAppointmentCard
+                      key={`completed-${appointment.appointmentID}-${index}`}
+                      appointment={appointment}
+                    />
+                  ) : (
+                    <PatientAppointmentCard
+                      key={`completed-${appointment.appointmentID}-${index}`}
+                      appointment={appointment}
+                    />
+                  )
+                )
+              )}
+            </CustomTabPanel>
           </Box>
-
-          {/* Upcoming */}
-          <CustomTabPanel value={value} index={0}>
-            {/* If doc is logged in, show docData appointments, else show data */}
-            {docID
-              ? docData
-                  .filter((d) => d.status === 0)
-                  .map((appointment) => (
-                    <AppointmentCard
-                      key={appointment.id}
-                      appointment={appointment}
-                      isDoctor
-                    />
-                  ))
-              : data
-                  .filter((d) => d.status === 0)
-                  .map((appointment) => (
-                    <AppointmentCard
-                      key={appointment.id}
-                      appointment={appointment}
-                    />
-                  ))}
-          </CustomTabPanel>
-
-          {/* Completed */}
-          <CustomTabPanel value={value} index={1}>
-            {docID
-              ? docData
-                  .filter((d) => d.status === 2)
-                  .map((appointment) => (
-                    <AppointmentCard
-                      key={appointment.id}
-                      appointment={appointment}
-                      isDoctor
-                    />
-                  ))
-              : data
-                  .filter((d) => d.status === 2)
-                  .map((appointment) => (
-                    <AppointmentCard
-                      key={appointment.id}
-                      appointment={appointment}
-                    />
-                  ))}
-          </CustomTabPanel>
-        </Box>
+        </div>
       </div>
 
       <Footer />

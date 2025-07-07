@@ -1,87 +1,712 @@
-/* Container spacing for the entire bookings page */
-.bookings-page {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px 15px;
+/* Bookings Page - Consistent with Website Design */
+.appointments-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  background-color: #fff;
+  min-height: calc(100vh - 160px);
+  font-family: "Inter", sans-serif;
+}
+
+/* Page Header */
+.appointments-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.appointments-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #00415e;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.025em;
+}
+
+.appointments-subtitle {
+  color: #444;
+  font-size: 1.1rem;
+  font-weight: 400;
+  margin-bottom: 0;
+}
+
+/* Tab Container */
+.appointment-tabs-wrapper {
+  background: white;
+  border-radius: 0.8rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 0.1rem solid #b9daf1;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+/* Tab Content Area */
+.appointment-tab-content {
+  padding: 2rem;
+  background: white;
+  min-height: 400px;
+}
+
+/* Modern Appointment Cards */
+.appointment-item {
+  background: white;
+  border-radius: 0.8rem;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 0.1rem solid #b9daf1;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.appointment-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(71, 204, 222, 0.15);
+  border-color: #00415e;
+}
+
+.appointment-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 4px;
+  background: #00415e;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.appointment-item:hover::before {
+  opacity: 1;
+}
+
+/* Card Content Layout */
+.appointment-content {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* Profile Image Section */
+.profile-image-section {
+  flex-shrink: 0;
+}
+
+.profile-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 0.8rem;
+  object-fit: cover;
+  border: 2px solid #b9daf1;
+  transition: transform 0.2s ease;
+}
+
+.profile-avatar:hover {
+  transform: scale(1.05);
+  border-color: #00415e;
+}
+
+.profile-placeholder {
+  width: 80px;
+  height: 80px;
+  border-radius: 0.8rem;
+  background: linear-gradient(135deg, #00415e 0%, #00415e 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 600;
+  border: 2px solid #b9daf1;
+}
+
+/* Appointment Information */
+.appointment-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.appointment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+  gap: 1rem;
+}
+
+.person-name {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #00415e;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.specialty-badge {
+  background: #00415e;
+  color: white;
+  padding: 0.4rem 1rem;
+  border-radius: 1.5rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  margin-bottom: 1rem;
+  display: inline-block;
+}
+
+.appointment-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #444;
+  font-size: 0.95rem;
+}
+
+.meta-icon {
+  width: 16px;
+  height: 16px;
+  color: #00415e;
+}
+
+.meta-label {
+  font-weight: 500;
+  color: #00415e;
+}
+
+.meta-value {
+  color: #444;
+  font-weight: 600;
+}
+
+/* Status Badge */
+.status-indicator {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 1.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.status-upcoming {
+  background: #00415e;
+  color: white;
+}
+
+.status-completed {
+  background: #00415e;
+  color: white;
+}
+
+.status-other {
+  background: #b9daf1;
+  color: #00415e;
+}
+
+/* Empty State */
+.empty-appointments {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #444;
+}
+
+.empty-icon {
+  font-size: 4rem;
+  color: #b9daf1;
+  margin-bottom: 1.5rem;
+}
+
+.empty-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #00415e;
+  margin-bottom: 0.75rem;
+}
+
+.empty-subtitle {
+  font-size: 1rem;
+  color: #444;
+  line-height: 1.5;
+}
+
+/* Custom MUI Tab Overrides - Match Website Style */
+.MuiTabs-flexContainer {
+  gap: 0;
+}
+
+.MuiTab-root {
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  text-transform: none;
+  font-size: 1rem;
+  color: #444;
+  min-height: 60px;
+  transition: color 0.3s ease;
+}
+
+.MuiTab-root:hover {
+  color: #00415e;
+}
+
+.MuiTab-root.Mui-selected {
+  color: #00415e;
+}
+
+.MuiTabs-indicator {
+  background: #00415e;
+  height: 3px;
+  border-radius: 2px;
+}
+
+/* Loading States */
+.appointment-skeleton {
+  background: linear-gradient(90deg, #f8f9fa 25%, #e9ecef 50%, #f8f9fa 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+  border-radius: 0.8rem;
+  height: 120px;
+  margin-bottom: 1.5rem;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
   }
-  
-  /* Customize the MUI Tabs for a clean, modern look */
-  .MuiTabs-flexContainer {
-    gap: 20px; /* Spacing between tabs */
+  100% {
+    background-position: -200% 0;
   }
-  
-  /* Card container styling */
-  .booking-card {
-    border: none;
-    margin-bottom: 1rem;
-    transition: box-shadow 0.2s ease-in-out;
+}
+
+/* Additional Utility Classes matching website */
+.mt-20 {
+  margin-top: 20px;
+}
+
+.mb-20 {
+  margin-bottom: 20px;
+}
+
+.mt-30 {
+  margin-top: 30px;
+}
+
+.mb-30 {
+  margin-bottom: 30px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* Card hover effects similar to other components */
+.appointment-item:hover .meta-icon {
+  color: #00415e;
+}
+
+.appointment-item:hover .person-name {
+  color: #00415e;
+}
+
+/* Smooth transitions for interactive elements */
+.specialty-badge {
+  transition: all 0.3s ease;
+}
+
+.appointment-item:hover .specialty-badge {
+  background: #00415e;
+  transform: scale(1.05);
+}
+
+/* ==================== RESPONSIVE DESIGN ==================== */
+
+/* Large Desktop - 1200px and above */
+@media only screen and (min-width: 1200px) {
+  .appointments-container {
+    padding: 3rem 2rem;
   }
-  
-  .booking-card:hover {
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+  .appointment-item {
+    padding: 2rem;
   }
-  
-  /* Card body content */
-  .booking-card .card-body {
-    display: flex;
-    align-items: center;
-    background-color: #ffffff;
+
+  .profile-avatar,
+  .profile-placeholder {
+    width: 90px;
+    height: 90px;
   }
-  
-  /* Circle avatar placeholder with an icon */
-  .booking-card .avatar {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    background-color: #eaeaea;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 28px;
-    color: #888;
-    margin-right: 16px;
+}
+
+/* Desktop - 992px to 1199px */
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+  .appointments-container {
+    padding: 2.5rem 1.5rem;
   }
-  
-  /* Main info container */
-  .booking-card .booking-info {
-    flex: 1;
-    display: flex;
+
+  .appointments-title {
+    font-size: 2.3rem;
+  }
+}
+
+/* Tablet Landscape - 768px to 991px */
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+  .appointments-container {
+    padding: 2rem 1rem;
+  }
+
+  .appointments-title {
+    font-size: 2.2rem;
+  }
+
+  .appointment-tab-content {
+    padding: 1.5rem;
+  }
+
+  .appointment-meta {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .profile-avatar,
+  .profile-placeholder {
+    width: 70px;
+    height: 70px;
+  }
+
+  .person-name {
+    font-size: 1.25rem;
+  }
+}
+
+/* Tablet Portrait - 481px to 767px */
+@media only screen and (min-width: 481px) and (max-width: 767px) {
+  .appointments-container {
+    padding: 1.5rem 0.75rem;
+  }
+
+  .appointments-title {
+    font-size: 2rem;
+  }
+
+  .appointments-subtitle {
+    font-size: 1rem;
+  }
+
+  .appointment-tab-content {
+    padding: 1.25rem;
+  }
+
+  .appointment-item {
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .appointment-content {
     flex-direction: column;
-    gap: 4px;
+    align-items: flex-start;
+    gap: 1rem;
   }
-  
-  /* Doctor or User Name */
-  .booking-card .doctor-name {
-    margin: 0;
-    font-weight: 600;
-    color: #333;
+
+  .appointment-header {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
   }
-  
-  /* Date & Time styling */
-  .booking-card .time-slot {
-    color: #666;
-    font-size: 0.95rem;
+
+  .appointment-meta {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    width: 100%;
   }
-  
-  /* Status Badge */
-  .status-badge {
-    display: inline-block;
-    padding: 4px 8px;
+
+  .status-indicator {
+    position: static;
+    margin-top: 1rem;
+    align-self: flex-start;
+  }
+
+  .profile-avatar,
+  .profile-placeholder {
+    width: 60px;
+    height: 60px;
+  }
+
+  .person-name {
+    font-size: 1.2rem;
+  }
+
+  .specialty-badge {
+    font-size: 0.75rem;
+    padding: 0.3rem 0.8rem;
+  }
+
+  .empty-appointments {
+    padding: 3rem 1rem;
+  }
+
+  .empty-icon {
+    font-size: 3rem;
+  }
+
+  .empty-title {
+    font-size: 1.3rem;
+  }
+
+  .MuiTab-root {
+    font-size: 0.9rem;
+    min-height: 50px;
+  }
+}
+
+/* Mobile - 320px to 480px */
+@media only screen and (min-width: 320px) and (max-width: 480px) {
+  .appointments-container {
+    padding: 1rem 0.5rem;
+  }
+
+  .appointments-header {
+    margin-bottom: 2rem;
+  }
+
+  .appointments-title {
+    font-size: 1.8rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .appointments-subtitle {
+    font-size: 0.9rem;
+    padding: 0 1rem;
+  }
+
+  .appointment-tabs-wrapper {
+    margin-bottom: 1.5rem;
+    border-radius: 0.5rem;
+  }
+
+  .appointment-tab-content {
+    padding: 1rem;
+    min-height: 300px;
+  }
+
+  .appointment-item {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 0.5rem;
+  }
+
+  .appointment-content {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    text-align: center;
+  }
+
+  .appointment-details {
+    width: 100%;
+  }
+
+  .appointment-header {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .appointment-meta {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .meta-item {
+    justify-content: center;
+    font-size: 0.85rem;
+  }
+
+  .status-indicator {
+    position: static;
+    margin-top: 0.75rem;
+    align-self: center;
+    font-size: 0.7rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .profile-avatar,
+  .profile-placeholder {
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+  }
+
+  .person-name {
+    font-size: 1.1rem;
+    text-align: center;
+  }
+
+  .specialty-badge {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.6rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .empty-appointments {
+    padding: 2rem 1rem;
+  }
+
+  .empty-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .empty-title {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .empty-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .MuiTab-root {
     font-size: 0.8rem;
-    border-radius: 12px;
-    margin-left: 10px;
-    font-weight: 500;
+    min-height: 45px;
+    padding: 0.5rem;
   }
-  
-  /* Example color for 'Upcoming' */
-  .status-upcoming {
-    background-color: #ffe791;
-    color: #7d6000;
+
+  .MuiTabs-indicator {
+    height: 2px;
   }
-  
-  /* Example color for 'Completed' */
-  .status-completed {
-    background-color: #d4edda;
-    color: #155724;
+}
+
+/* Extra Small Mobile - below 320px */
+@media only screen and (max-width: 319px) {
+  .appointments-container {
+    padding: 0.75rem 0.25rem;
   }
-  
+
+  .appointments-title {
+    font-size: 1.5rem;
+  }
+
+  .appointments-subtitle {
+    font-size: 0.8rem;
+  }
+
+  .appointment-tab-content {
+    padding: 0.75rem;
+  }
+
+  .appointment-item {
+    padding: 0.75rem;
+  }
+
+  .profile-avatar,
+  .profile-placeholder {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+
+  .person-name {
+    font-size: 1rem;
+  }
+
+  .meta-item {
+    font-size: 0.8rem;
+  }
+
+  .specialty-badge {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.5rem;
+  }
+
+  .MuiTab-root {
+    font-size: 0.75rem;
+    min-height: 40px;
+  }
+}
+
+/* Landscape orientation for mobile devices */
+@media only screen and (max-height: 500px) and (orientation: landscape) {
+  .appointments-container {
+    padding: 1rem;
+  }
+
+  .appointments-header {
+    margin-bottom: 1rem;
+  }
+
+  .appointments-title {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .appointment-tab-content {
+    padding: 1rem;
+    min-height: 200px;
+  }
+
+  .appointment-item {
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .empty-appointments {
+    padding: 2rem 1rem;
+  }
+
+  .empty-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* High DPI/Retina display adjustments */
+@media only screen and (-webkit-min-device-pixel-ratio: 2),
+  only screen and (min-resolution: 192dpi) {
+  .profile-avatar,
+  .profile-placeholder {
+    border-width: 1px;
+  }
+
+  .appointment-item {
+    border-width: 1px;
+  }
+}
+
+/* Print styles */
+@media print {
+  .appointments-container {
+    background: white;
+    box-shadow: none;
+    padding: 1rem;
+  }
+
+  .appointment-item {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #ccc;
+    margin-bottom: 1rem;
+  }
+
+  .status-indicator {
+    background: white !important;
+    color: black !important;
+    border: 1px solid #ccc;
+  }
+
+  .appointment-tabs-wrapper {
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+}
