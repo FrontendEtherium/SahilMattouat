@@ -72,7 +72,7 @@ function DoctorConnectSearch({ changeSpeciality, speciality }) {
               onChange={(e) => setSearchName(e.target.value)}
               className="input-field"
             />
-            <button
+            <div
               onClick={handleSearchByName}
               disabled={searchName.trim().length < 3}
               className={`input-button ${
@@ -82,7 +82,7 @@ function DoctorConnectSearch({ changeSpeciality, speciality }) {
               }`}
             >
               <SearchIcon />
-            </button>
+            </div>
           </div>
         </div>
 
@@ -100,7 +100,7 @@ function DoctorConnectSearch({ changeSpeciality, speciality }) {
               onChange={(e) => setSearchCity(e.target.value)}
               className="input-field"
             />
-            <button
+            <div
               onClick={handleSearchByCity}
               disabled={searchCity.trim().length < 3}
               className={`input-button ${
@@ -110,7 +110,7 @@ function DoctorConnectSearch({ changeSpeciality, speciality }) {
               }`}
             >
               <SearchIcon />
-            </button>
+            </div>
           </div>
         </div>
 

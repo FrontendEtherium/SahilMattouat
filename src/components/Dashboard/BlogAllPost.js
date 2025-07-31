@@ -21,7 +21,10 @@ function App() {
       name: <h5>ARTICLE ID</h5>,
 
       selector: (row) => (
-        <Link to={`/cure/${row.article_id}`} className="lg">
+        <Link
+          to={`/cure/${row.article_id}-${row.title.replace(/\s+/g, "-")}`}
+          className="lg"
+        >
           <h6 className="col">{row.article_id}</h6>
         </Link>
       ),
@@ -32,7 +35,7 @@ function App() {
       name: <h5>ARTICLE TITLE</h5>,
 
       selector: (row) => (
-        <Link to={`/cure/${row.article_id}`}>
+        <Link to={`/cure/${row.article_id}-${row.title.replace(/\s+/g, "-")}`}>
           <h6 className="col"> {row.title}</h6>
         </Link>
       ),
@@ -149,7 +152,7 @@ function App() {
       name: <h5>ARTICLE ID</h5>,
 
       selector: (row) => (
-        <Link to={`/cure/${row.article_id}`} className="lg">
+        <Link to={`/cure/${row.article_id}-${row.title.replace(/\s+/g, "-")}`} className="lg">
           <h6 className="col">{row.article_id}</h6>
         </Link>
       ),
@@ -160,7 +163,7 @@ function App() {
       name: <h5>ARTICLE TITLE</h5>,
 
       selector: (row) => (
-        <Link to={`/cure/${row.article_id}`}>
+        <Link to={`/cure/${row.article_id}-${row.title.replace(/\s+/g, "-")}`}>
           <h6 className="col"> {row.title}</h6>
         </Link>
       ),
@@ -202,7 +205,7 @@ function App() {
         ) : parseInt(row.published_by) === 51 ? (
           <h6 className="chip symptoms mr-2 col">AMANDEEP KOUR</h6>
         ) : parseInt(row.published_by) === 50 ? (
-          <h6 className="chip cure mr-2 col">PRATEEK  </h6>
+          <h6 className="chip cure mr-2 col">PRATEEK </h6>
         ) : null,
       sortable: true,
     },

@@ -42,7 +42,6 @@ function CarouselArticle({ diseaseConditionId, carouselItems, id }) {
   const [region, setRegion] = useState([]);
   const location = useLocation();
   // console.log("carousel article re rendered");
-  
 
   // Fetch regions once when the component mounts
   useEffect(() => {
@@ -157,7 +156,7 @@ function CarouselArticle({ diseaseConditionId, carouselItems, id }) {
                           }}
                         >
                           <Link
-                            to={`/cure/${j.article_id}`}
+                            to={`/cure/${j.article_id}-${j.title.replace(/\s+/g, "-")}`}
                             className="d-flex justify-content-between align-items-center mr-2 w-100"
                             style={{
                               textDecoration: "none",
@@ -191,7 +190,7 @@ function CarouselArticle({ diseaseConditionId, carouselItems, id }) {
 
         <div>
           <FacebookShareButton
-            url={encodeURI(`https://all-cures.com${location.pathname}`)}
+            url={encodeURI(`https://www.all-cures.com${location.pathname}`)}
             quote={`All-Cures`}
             hashtag={`#allCures`}
             className="socialMediaButton"
@@ -199,7 +198,7 @@ function CarouselArticle({ diseaseConditionId, carouselItems, id }) {
             <FacebookIcon size={36} />
           </FacebookShareButton>
           <TwitterShareButton
-            url={encodeURI(`https://all-cures.com${location.pathname}`)}
+            url={encodeURI(`https://www.all-cures.com${location.pathname}`)}
             title={`All-Cures`}
             hashtag={`#allCures`}
             className="socialMediaButton"
@@ -207,7 +206,7 @@ function CarouselArticle({ diseaseConditionId, carouselItems, id }) {
             <TwitterIcon size={36} />
           </TwitterShareButton>
           <WhatsappShareButton
-            url={encodeURI(`https://all-cures.com${location.pathname}`)}
+            url={encodeURI(`https://www.all-cures.com${location.pathname}`)}
             title={`All Cures`}
             separator=": "
             className="socialMediaButton"

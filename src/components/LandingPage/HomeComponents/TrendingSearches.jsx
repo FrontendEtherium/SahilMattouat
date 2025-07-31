@@ -50,9 +50,7 @@ const TrendingSearches = memo(({ items, onSelect }) => {
   }, [fetchTrendingCategories]);
 
   const createDiseaseSlug = (category) => {
-    return `${category.dc_id}-${category.category
-      .toLowerCase()
-      .replace(/\s+/g, "-")}`;
+    return `${category.dc_id}-${category.category.replace(/\s+/g, "-")}`;
   };
 
   if (error) {

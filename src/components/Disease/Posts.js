@@ -9,7 +9,7 @@ const Post = ({id, title, content, f_title, w_title, history, type, country, pub
                         
                             <div className="justify-content-between align-items-center mb-2">
                                 <div className="card">
-                                    <button onClick={(e) => history.push(`/cure/${id}`)} className="btn d-flex justify-content-between align-items-center">
+                                    <button onClick={(e) => history.push(`/cure/${id}-${title.replace(/\s+/g, "-")}`)} className="btn d-flex justify-content-between align-items-center">
                                         <div>
                                             <div className="card-title h6 mb-1 font-weight-bold text-capitalize">{title}</div>
                                             <div className="h7 text-muted">{w_title}</div>

@@ -27,10 +27,10 @@ const AppBanner = () => {
     const userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
     if (/android/i.test(userAgent)) {
-      window.location.href = "https://all-cures.com/appRedirect";
+      window.location.href = "https://www.all-cures.com/appRedirect";
     }
     if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-      window.location.href = "https://all-cures.com/appRedirect";
+      window.location.href = "https://www.all-cures.com/appRedirect";
     }
 
     // Close the popup

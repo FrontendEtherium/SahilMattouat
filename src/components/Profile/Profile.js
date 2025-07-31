@@ -540,48 +540,7 @@ class Profile extends Component {
     this.allPosts();
     // this.getImg();
 
-    const canonicalLink = document.createElement("link");
-    canonicalLink.rel = "canonical";
-
-    const currentURL = window.location.href;
-    // Remove "www" from the URL if it's present
-    const canonicalURL = currentURL.replace(/(https?:\/\/)?www\./, "$1");
-
-    if (canonicalURL.match(/\/profile\/\d+-[a-zA-Z0-9-]+/)) {
-      canonicalLink.href = canonicalURL;
-      // Log the constructed canonical link to the console
-      console.log("Canonical Link:", canonicalLink.outerHTML);
-    } else if (canonicalURL.match(/\/profile\/\d+/)) {
-      // If URL contains only ID
-      const id = this.props.match.params.id.split("-")[0];
-
-      // Fetch the first name and last name based on the ID
-      fetch(`${backendHost}/DoctorsActionController?DocID=${id}&cmd=getProfile`)
-        .then((res) => res.json())
-        .then((json) => {
-          // Use the first name and last name directly from the API response
-          const firstName = json.firstName;
-          const lastName = json.lastName;
-
-          canonicalLink.href = `${window.location.origin}/profile/${id}-${firstName}-${lastName}`;
-          document.head.appendChild(canonicalLink);
-
-          // Log the constructed canonical link to the console
-          console.log("Canonical Link:", canonicalLink.outerHTML);
-        })
-        .catch((err) => {
-          // Handle the error or use a default name
-          canonicalLink.href = canonicalURL;
-          document.head.appendChild(canonicalLink);
-
-          // Log the constructed canonical link to the console
-          console.log("Canonical Link:", canonicalLink.outerHTML);
-        });
-    } else {
-      canonicalLink.href = canonicalURL;
-      // Log the constructed canonical link to the console
-      console.log("Canonical Link:", canonicalLink.outerHTML);
-    }
+    // Canonical tag is now handled by HelmetMetaData component
   }
 
   setModalShow = (action) => {
@@ -716,6 +675,7 @@ class Profile extends Component {
             title={items.prefix + " " + items.firstName + " " + items.lastName}
             description={items.about}
             image={`${imagePath}/cures_articleimages/doctors/${items.docID}.png`}
+            canonicalUrl={`https://www.all-cures.com/profile/${items.docID}-${items.firstName}-${items.lastName}`}
             keywords={
               items.firstName +
               " " +
@@ -867,7 +827,7 @@ class Profile extends Component {
                               />
                             )}
 
-                             {/* <div
+                            {/* <div
                               className="modal"
                               id="exampleModal"
                               tabindex="0"
@@ -875,26 +835,26 @@ class Profile extends Component {
                               aria-labelledby="exampleModalLabel"
                               aria-hidden="true"
                             >  */}
-                              {userId && (
-                                <AppointmentModal
-                                  show={this.state.showAppointmentModal}
-                                  onHide={() =>
-                                    this.setState({
-                                      showAppointmentModal: false,
-                                    })
-                                  }
-                                  unbookedSlots={this.state.unbookedSlots}
-                                  disableDate={this.disableDate}
-                                  onDateChange={this.handleDatesChange}
-                                  onBookAppointment={(timeSlot) =>
-                                    this.handleTimeSlot(timeSlot)
-                                  }
-                                  bookingLoading={this.state.bookingLoading}
-                                  alertBooking={this.state.alertBooking}
-                                  docId={this.state.docid}
-                                  userId={userId}
-                                />
-                              )}
+                            {userId && (
+                              <AppointmentModal
+                                show={this.state.showAppointmentModal}
+                                onHide={() =>
+                                  this.setState({
+                                    showAppointmentModal: false,
+                                  })
+                                }
+                                unbookedSlots={this.state.unbookedSlots}
+                                disableDate={this.disableDate}
+                                onDateChange={this.handleDatesChange}
+                                onBookAppointment={(timeSlot) =>
+                                  this.handleTimeSlot(timeSlot)
+                                }
+                                bookingLoading={this.state.bookingLoading}
+                                alertBooking={this.state.alertBooking}
+                                docId={this.state.docid}
+                                userId={userId}
+                              />
+                            )}
                             {/* </div> */}
 
                             <EditProfile

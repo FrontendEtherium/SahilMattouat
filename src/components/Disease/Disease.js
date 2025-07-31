@@ -57,6 +57,19 @@ const Disease = () => {
   const [diseaseConditionId, setDiseaseConditionId] = useState();
   const [regDocId, setRegDocId] = useState("");
   const [videoURL, setVideoURL] = useState();
+
+  // Function to generate canonical URL for the article
+  const getCanonicalUrl = () => {
+    if (state.items && state.items.title) {
+      const articleId = id.split("-")[0];
+      const cleanTitle = state.items.title.replace(/\s+/g, "-");
+      return `https://www.all-cures.com/cure/${articleId}-${cleanTitle}`;
+    }
+    // Fallback to current URL if article data not loaded yet
+    const currentURL = window.location.href;
+    return currentURL.replace(/(https?:\/\/)?www\./, "$1");
+  };
+
   useEffect(() => {
     const loadData = async () => {
       await fetchBlog();
@@ -73,35 +86,6 @@ const Disease = () => {
       top: isMobileView ? 650 : 0,
       behavior: "smooth",
     });
-
-    const canonicalLink = document.createElement("link");
-    canonicalLink.rel = "canonical";
-
-    const currentURL = window.location.href.toLowerCase();
-    const canonicalURL = currentURL.replace(/(https?:\/\/)?www\./, "$1");
-
-    if (canonicalURL.match(/\/cure\/\d+/)) {
-      const articleId = id.split("-")[0];
-      fetch(`${backendHost}/article/${articleId}`, {
-        method: "GET",
-        headers,
-      })
-        .then((res) => res.json())
-        .then((json) => {
-          const title = json.title;
-          canonicalLink.href = `${
-            window.location.origin
-          }/cure/${articleId}-${title.replace(/\s+/g, "-")}`;
-          document.head.appendChild(canonicalLink);
-        })
-        .catch(() => {
-          canonicalLink.href = canonicalURL;
-          document.head.appendChild(canonicalLink);
-        });
-    } else {
-      canonicalLink.href = canonicalURL;
-      document.head.appendChild(canonicalLink);
-    }
   }, [id]);
   const fetchVideoURL = async (id) => {
     console.log("id", id);
@@ -317,6 +301,7 @@ const Disease = () => {
             .split("/webapps/")[1]
         }
         publishedDate={state.items.published_date}
+        canonicalUrl={getCanonicalUrl()}
       />
       <div className="ad-spac" ref={adSpacRef}>
         <button
@@ -344,7 +329,7 @@ const Disease = () => {
               <div className="d-flex justify-content-center">
                 <img
                   className="mt-5"
-                  style={{marginTop:"20px"}}
+                  style={{ marginTop: "20px" }}
                   id="left-menu-ad"
                   src={state.ads}
                   alt="adjjjj"
@@ -357,7 +342,7 @@ const Disease = () => {
                 id="left-menu-ad"
                 data-toggle="modal"
                 data-target=".bd-example-modal-lg"
-                style={{marginTop:"100px"}}
+                style={{ marginTop: "100px" }}
               >
                 <img
                   className="pl-4"

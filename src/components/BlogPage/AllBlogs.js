@@ -172,7 +172,7 @@ export default function AllBlogs() {
           content="Discover expert-written health and wellness articles, cures, and medical advice from qualified healthcare professionals."
         />
         <meta property="og:type" content="website" />
-        <link rel="canonical" href={window.location.href} />
+        <link rel="canonical" href="https://www.all-cures.com/cures" />
       </Helmet>
       <UpdatedHeader />
       {loaded ? (

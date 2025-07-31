@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom";
 export default function HelmetMetaData(props) {
   let location = useLocation();
 
-  let currentUrl = "https://all-cures.com" + location.pathname;
+  let currentUrl = "https://www.all-cures.com" + location.pathname;
 
   let quote = props.quote !== undefined ? props.quote : "";
   let publishedDate = props.publishedDate;
@@ -18,7 +18,7 @@ export default function HelmetMetaData(props) {
   let image =
     props.image !== undefined
       ? props.image
-      : "https://all-cures.com/static/media/Banner2.6d179203.jpg";
+      : "https://www.all-cures.com/static/media/Banner2.6d179203.jpg";
 
   let description =
     props.description !== undefined
@@ -26,6 +26,9 @@ export default function HelmetMetaData(props) {
       : "Now a centralized, user powered platform for bringing information on Alternate Systems of medicine from across the world. Covering Ayurveda, Unani, Persian & other systems of medicine, it focuses on your health and well being";
 
   let hashtag = props.hashtag !== undefined ? props.hashtag : "#allcures";
+
+  // Add canonical URL with fallback to current URL
+  let canonicalUrl = props.canonicalUrl || currentUrl;
 
   let keywords = props.keywords
     ? props.keywords +
@@ -36,6 +39,7 @@ export default function HelmetMetaData(props) {
   return (
     <Helmet>
       <title>{title}</title>
+      <link rel="canonical" href={canonicalUrl} />
       <meta charset="utf-8" />
       <meta http-equiv="X-UA-Compatible" content="IE=edge" />
       <meta name="csrf_token" content="" />
@@ -76,7 +80,7 @@ export default function HelmetMetaData(props) {
       "author": {
         "@type": "Organization",
         "name": "All Cures",
-        "url": "https://all-cures.com"
+        "url": "https://www.all-cures.com"
       },
       "publisher": {
         "@type": "Organization",

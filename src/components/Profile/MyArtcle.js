@@ -146,7 +146,7 @@ const ArticlePreview = (props) => {
                                     <Link to={`/doctor/${i.docID}`}>{i.authors_name}</Link> 
                                     : i.authors_name
                                 }{" "}▪️ {<Date dateString={i.published_date} />}</h6>
-                            <h5 className="card-title text-capitalize"><Link to={`/cure/${i.article_id}-${title}`}>{i.title.toLowerCase()}</Link></h5>
+                            <h5 className="card-title text-capitalize"><Link to={`/cure/${i.article_id}-${title}`}>{i.title}</Link></h5>
                             
                             <div className="card-info">
                                 {/* <h6 className="card-subtitle mb-2 text-muted text-capitalize">

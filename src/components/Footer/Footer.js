@@ -23,7 +23,7 @@ const CuresData = [
 
 // Helper function to create SEO-friendly URL slug
 const createUrlSlug = (medicineType, title) => {
-  const titleSlug = title.toLowerCase().replace(/\s+/g, "-");
+  const titleSlug = title.replace(/\s+/g, "-");
   return `${medicineType}-${titleSlug}`;
 };
 

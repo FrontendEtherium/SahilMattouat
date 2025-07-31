@@ -110,11 +110,11 @@ const ArticleDetails = React.memo(
             <div className="d-flex justify-content-center mt-2 mb-2">
               <div>
                 <Link
-                  to={`/cure/${carouselItems[currentIndex]?.article_id}-${carouselItems[currentIndex]?.title}`}
+                  to={`/cure/${carouselItems[currentIndex]?.article_id}-${carouselItems[currentIndex]?.title?.replace(/\s+/g, "-")}`}
                   className="fs-08"
                   onClick={() =>
                     handleLinkClick(
-                      `/cure/${carouselItems[currentIndex]?.article_id}-${carouselItems[currentIndex]?.title}`
+                      `/cure/${carouselItems[currentIndex]?.article_id}-${carouselItems[currentIndex]?.title?.replace(/\s+/g, "-")}`
                     )
                   }
                 >
