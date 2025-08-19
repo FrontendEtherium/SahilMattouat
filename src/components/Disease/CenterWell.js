@@ -21,11 +21,45 @@ const CenterWell = ({
   props,
   link,
 }) => {
+  const createSlug = (rawTitle) =>
+    (rawTitle || "")
+      .toString()
+      .trim()
+      .replace(/[^A-Za-z0-9\s-]/g, "")
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-");
+
+  const normalizeCureHref = (href) => {
+    try {
+      if (!href) return href;
+      const urlObj = new URL(href, "https://www.all-cures.com");
+      const hostMatches = /(^|\.)all-cures\.com$/i.test(urlObj.hostname);
+      if (!hostMatches) return href;
+      const cureIndex = urlObj.pathname.indexOf("/cure/");
+      if (cureIndex === -1) return href;
+      const after = urlObj.pathname.slice(cureIndex + 6); // after '/cure/'
+      if (!after) return href;
+      // Extract numeric id and slug (allow cases with or without '-')
+      const idMatch = after.match(/^(\d+)/);
+      if (!idMatch) return href;
+      const articleId = idMatch[1];
+      const remainder = after.slice(
+        articleId.length + (after[articleId.length] === "-" ? 1 : 1)
+      );
+      const normalizedSlug = createSlug(remainder || "");
+      const normalizedPath = `/cure/${articleId}${
+        normalizedSlug ? `-${normalizedSlug}` : ""
+      }`;
+      const normalized = `https://www.all-cures.com${normalizedPath}${urlObj.search}${urlObj.hash}`;
+      return normalized;
+    } catch (_) {
+      return href;
+    }
+  };
   var list;
   var rows;
   var textContent;
   if (typeof text === "string") {
- 
     textContent = level === 2 ? `<h2>${text}</h2>` : text;
     textContent = parse(textContent);
   }
@@ -168,8 +202,12 @@ const CenterWell = ({
             linkTool: (
               <div className="ce-block py-2">
                 <div className="ce-block__content">
-                  <a target="_blank" href={`${link}`}>
-                    {link}
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href={normalizeCureHref(link)}
+                  >
+                    {normalizeCureHref(link)}
                   </a>
                 </div>
               </div>

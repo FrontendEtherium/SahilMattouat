@@ -44,7 +44,7 @@ export default function HelmetMetaData(props) {
       <meta http-equiv="X-UA-Compatible" content="IE=edge" />
       <meta name="csrf_token" content="" />
       <meta property="type" content="website" />
-      <meta property="url" content={currentUrl} />
+      <meta property="url" content={canonicalUrl} />
       <meta name="keywords" content={keywords} />
 
       <meta
@@ -66,7 +66,7 @@ export default function HelmetMetaData(props) {
       <meta property="og:hashtag" content={hashtag} />
       <meta property="og:image" content={image} />
       <meta content="image/*" property="og:image:type" />
-      <meta property="og:url" content={currentUrl} />
+      <meta property="og:url" content={canonicalUrl} />
       <meta property="og:site_name" content="AllCures" />
       <meta property="og:description" content={description} />
       <script type="application/ld+json">
@@ -93,7 +93,7 @@ export default function HelmetMetaData(props) {
       "datePublished": "${publishedDate}",
       "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": "${currentUrl}"
+        "@id": "${canonicalUrl}"
       }
     }
     `}

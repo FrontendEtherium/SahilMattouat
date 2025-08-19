@@ -58,11 +58,20 @@ const Disease = () => {
   const [regDocId, setRegDocId] = useState("");
   const [videoURL, setVideoURL] = useState();
 
+  // Helper to create a normalized hyphenated slug (remove non-alphanumerics, collapse spaces/hyphens)
+  const createSlug = (rawTitle) =>
+    (rawTitle || "")
+      .toString()
+      .trim()
+      .replace(/[^A-Za-z0-9\s-]/g, "")
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-");
+
   // Function to generate canonical URL for the article
   const getCanonicalUrl = () => {
     if (state.items && state.items.title) {
       const articleId = id.split("-")[0];
-      const cleanTitle = state.items.title.replace(/\s+/g, "-");
+      const cleanTitle = createSlug(state.items.title);
       return `https://www.all-cures.com/cure/${articleId}-${cleanTitle}`;
     }
     // Fallback to current URL if article data not loaded yet
@@ -87,6 +96,19 @@ const Disease = () => {
       behavior: "smooth",
     });
   }, [id]);
+
+  // Normalize URL to enforce hyphenated slug in the path
+  useEffect(() => {
+    if (state.items && state.items.title) {
+      const articleId = id.split("-")[0];
+      const cleanTitle = createSlug(state.items.title);
+      const expectedPath = `/cure/${articleId}-${cleanTitle}`;
+      if (location.pathname !== expectedPath) {
+        history.replace(`${expectedPath}${location.search || ""}`);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.items.title, id]);
   const fetchVideoURL = async (id) => {
     console.log("id", id);
 
