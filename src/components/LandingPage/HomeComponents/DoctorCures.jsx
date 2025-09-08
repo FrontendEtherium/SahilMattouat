@@ -10,6 +10,7 @@ import Slider from "react-slick";
 import { Link } from "react-router-dom";
 import "./DoctorCures.css";
 import { imageUrl, imgKitImagePath } from "../../../image-path";
+import { createArticlePath } from "../../../utils/slugUtils";
 
 function DoctorCures({ blogPage }) {
   const [items, setItems] = useState([]);
@@ -102,8 +103,8 @@ function DoctorCures({ blogPage }) {
               contentObj?.blocks?.[0]?.data?.text?.slice(0, 50) ||
               "No preview available.";
 
-            // Format title for URL
-            const articleTitle = item.title.replace(new RegExp(" ", "g"), "-");
+            // Create article path with slug
+            const articlePath = createArticlePath(item.article_id, item.title);
 
             return (
               <div key={item.id} className="doctor-cures__item">
@@ -121,7 +122,7 @@ function DoctorCures({ blogPage }) {
                     className="doctor-cures_docImg"
                   />
                 </div>
-                <Link to={`/cure/${item.article_id}-${articleTitle}`}>
+                <Link to={articlePath}>
                   <div className="doctor-cures__content">
                     <h2 className="doctor-cures__headline">{item.title}</h2>
                     <h2 className="doctor-cures__docName">
@@ -160,8 +161,8 @@ function DoctorCures({ blogPage }) {
               contentObj?.blocks?.[0]?.data?.text?.slice(0, 40) ||
               "No preview available.";
 
-            // Format title for URL
-            const articleTitle = item.title.replace(new RegExp(" ", "g"), "-");
+            // Create article path with slug
+            const articlePath = createArticlePath(item.article_id, item.title);
 
             return (
               <div key={item.id} className="doctor-cures__item">
@@ -178,7 +179,7 @@ function DoctorCures({ blogPage }) {
                     className="doctor-cures_docImg"
                   />
                 </div>
-                <Link to={`/cure/${item.article_id}-${articleTitle}`}>
+                <Link to={articlePath}>
                   <div className="doctor-cures__content">
                     <h2 className="doctor-cures__headline">{item.title}</h2>
                     <h6 className="doctor-cures__docName">

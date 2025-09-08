@@ -1,5 +1,6 @@
 import React from "react";
 import parse from "html-react-parser";
+import { createSlug } from "../../utils/slugUtils";
 
 const CenterWell = ({
   pageTitle,
@@ -21,37 +22,25 @@ const CenterWell = ({
   props,
   link,
 }) => {
-  const createSlug = (rawTitle) =>
-    (rawTitle || "")
-      .toString()
-      .trim()
-      .replace(/[^A-Za-z0-9\s-]/g, "")
-      .replace(/\s+/g, "-")
-      .replace(/-+/g, "-");
-
   const normalizeCureHref = (href) => {
     try {
       if (!href) return href;
       const urlObj = new URL(href, "https://www.all-cures.com");
-      const hostMatches = /(^|\.)all-cures\.com$/i.test(urlObj.hostname);
-      if (!hostMatches) return href;
-      const cureIndex = urlObj.pathname.indexOf("/cure/");
-      if (cureIndex === -1) return href;
-      const after = urlObj.pathname.slice(cureIndex + 6); // after '/cure/'
-      if (!after) return href;
-      // Extract numeric id and slug (allow cases with or without '-')
-      const idMatch = after.match(/^(\d+)/);
-      if (!idMatch) return href;
-      const articleId = idMatch[1];
-      const remainder = after.slice(
-        articleId.length + (after[articleId.length] === "-" ? 1 : 1)
-      );
-      const normalizedSlug = createSlug(remainder || "");
+
+      // Only process all-cures.com URLs
+      if (!/(^|\.)all-cures\.com$/i.test(urlObj.hostname)) return href;
+
+      // Only process /cure/ paths
+      const cureMatch = urlObj.pathname.match(/\/cure\/(\d+)(?:-(.*))?/);
+      if (!cureMatch) return href;
+
+      const [, articleId, existingSlug] = cureMatch;
+      const normalizedSlug = createSlug(existingSlug || "");
       const normalizedPath = `/cure/${articleId}${
         normalizedSlug ? `-${normalizedSlug}` : ""
       }`;
-      const normalized = `https://www.all-cures.com${normalizedPath}${urlObj.search}${urlObj.hash}`;
-      return normalized;
+
+      return `https://www.all-cures.com${normalizedPath}${urlObj.search}${urlObj.hash}`;
     } catch (_) {
       return href;
     }

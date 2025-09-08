@@ -6,6 +6,7 @@ import Favourite from "../../favourite";
 import Favourites from "../../UpdateFavourite";
 import { backendHost } from "../../../api-config";
 import { userId } from "../../UserId";
+import { createArticlePath } from "../../../utils/slugUtils";
 const ArticleDetails = React.memo(
   ({
     title,
@@ -40,7 +41,6 @@ const ArticleDetails = React.memo(
           `${backendHost}/rating/target/${articleId}/targettype/2/avg`
         );
         const data = await response.json();
-
 
         setState((prev) => ({ ...prev, ratingValue: data }));
       } catch (error) {
@@ -110,11 +110,17 @@ const ArticleDetails = React.memo(
             <div className="d-flex justify-content-center mt-2 mb-2">
               <div>
                 <Link
-                  to={`/cure/${carouselItems[currentIndex]?.article_id}-${carouselItems[currentIndex]?.title?.replace(/\s+/g, "-")}`}
+                  to={createArticlePath(
+                    carouselItems[currentIndex]?.article_id,
+                    carouselItems[currentIndex]?.title
+                  )}
                   className="fs-08"
                   onClick={() =>
                     handleLinkClick(
-                      `/cure/${carouselItems[currentIndex]?.article_id}-${carouselItems[currentIndex]?.title?.replace(/\s+/g, "-")}`
+                      createArticlePath(
+                        carouselItems[currentIndex]?.article_id,
+                        carouselItems[currentIndex]?.title
+                      )
                     )
                   }
                 >

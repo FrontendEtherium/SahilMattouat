@@ -11,6 +11,7 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import CopyrightIcon from "@mui/icons-material/Copyright";
 import WhiteHeart from "../../assets/icon/whiteheart.svg";
+import { createCategorySlug } from "../../utils/slugUtils";
 
 const CuresData = [
   { title: "Ayurveda", medicineType: 1, img: "ayurveda04.png" },
@@ -23,8 +24,7 @@ const CuresData = [
 
 // Helper function to create SEO-friendly URL slug
 const createUrlSlug = (medicineType, title) => {
-  const titleSlug = title.replace(/\s+/g, "-");
-  return `${medicineType}-${titleSlug}`;
+  return createCategorySlug(medicineType, title);
 };
 
 // Social media data moved outside component
@@ -258,7 +258,11 @@ const Footer = () => (
           <div className="row">
             {/* left col */}
             <div className="col-4 text-center footer-mobile-left ml-4">
-              <a href="/" className="d-flex flex-column mb-3" aria-label="All Cures Home">
+              <a
+                href="/"
+                className="d-flex flex-column mb-3"
+                aria-label="All Cures Home"
+              >
                 <img
                   src={WhiteHeart}
                   style={{

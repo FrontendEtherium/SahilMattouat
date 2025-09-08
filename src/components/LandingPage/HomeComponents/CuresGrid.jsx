@@ -7,6 +7,7 @@ import Heart from "../../../assets/img/heart.png";
 import { Link } from "react-router-dom";
 import "./CuresGrid.css";
 import { imagePath, imageUrl } from "../../../image-path";
+import { createArticlePath } from "../../../utils/slugUtils";
 
 const CuresGrid = memo(({ title = "Cures", blogPage }) => {
   const [items, setItems] = useState([]);
@@ -108,9 +109,9 @@ const CuresGrid = memo(({ title = "Cures", blogPage }) => {
                 : "https://ik.imagekit.io/qi0xxmh2w/productimages/tr:h-100,w-300,f-webp/cures_articleimages//299/default.png";
 
               // Format title for URL
-              const articleTitle = item.title.replace(
-                new RegExp(" ", "g"),
-                "-"
+              const articlePath = createArticlePath(
+                item.article_id,
+                item.title
               );
 
               return (
@@ -120,7 +121,7 @@ const CuresGrid = memo(({ title = "Cures", blogPage }) => {
                   style={{ backgroundImage: `url(${imageLoc})` }}
                 >
                   <Link
-                    to={`/cure/${item.article_id}-${articleTitle}`}
+                    to={articlePath}
                     className="cures-grid__link"
                     aria-label={`Read article: ${item.title}`}
                   >

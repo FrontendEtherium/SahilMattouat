@@ -7,6 +7,7 @@ import AllPost from "./Allpost";
 
 import axiosInstance from "../../axiosInstance";
 import { userId } from "../UserId";
+import { createArticlePath } from "../../utils/slugUtils";
 
 function App() {
   const [article, setArticle] = useState({});
@@ -21,10 +22,7 @@ function App() {
       name: <h5>ARTICLE ID</h5>,
 
       selector: (row) => (
-        <Link
-          to={`/cure/${row.article_id}-${row.title.replace(/\s+/g, "-")}`}
-          className="lg"
-        >
+        <Link to={createArticlePath(row.article_id, row.title)} className="lg">
           <h6 className="col">{row.article_id}</h6>
         </Link>
       ),
@@ -35,7 +33,7 @@ function App() {
       name: <h5>ARTICLE TITLE</h5>,
 
       selector: (row) => (
-        <Link to={`/cure/${row.article_id}-${row.title.replace(/\s+/g, "-")}`}>
+        <Link to={createArticlePath(row.article_id, row.title)}>
           <h6 className="col"> {row.title}</h6>
         </Link>
       ),
@@ -152,7 +150,7 @@ function App() {
       name: <h5>ARTICLE ID</h5>,
 
       selector: (row) => (
-        <Link to={`/cure/${row.article_id}-${row.title.replace(/\s+/g, "-")}`} className="lg">
+        <Link to={createArticlePath(row.article_id, row.title)} className="lg">
           <h6 className="col">{row.article_id}</h6>
         </Link>
       ),
@@ -163,7 +161,7 @@ function App() {
       name: <h5>ARTICLE TITLE</h5>,
 
       selector: (row) => (
-        <Link to={`/cure/${row.article_id}-${row.title.replace(/\s+/g, "-")}`}>
+        <Link to={createArticlePath(row.article_id, row.title)}>
           <h6 className="col"> {row.title}</h6>
         </Link>
       ),

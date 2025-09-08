@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import CenterWell from "../Disease/CenterWell";
 import Date from "../Date";
 import { imagePath } from "../../image-path";
+import { createArticlePath } from "../../utils/slugUtils";
 
 const AllPost = ({
   id,
@@ -38,12 +39,7 @@ const AllPost = ({
     imageLoc = "${imagePath}cures_articleimages//299/default.png";
   }
 
-  var articleTitle = title;
-  var regex = new RegExp(" ", "g");
-  // var regexDr = new RegExp('Dr. ', 'g');
-
-  //replace via regex
-  articleTitle = articleTitle.replace(regex, "-");
+  const articlePath = createArticlePath(id, title);
 
   return (
     <>
@@ -52,7 +48,7 @@ const AllPost = ({
         className="d-flex cures-search-tab w-100 card mb-5"
       >
         <div className="col-md-3 cures-tab-img rounded px-0">
-          <img src={`${imageLoc}`} alt={articleTitle} />
+          <img src={`${imageLoc}`} alt={title} />
           {/* {
                                     over_allrating !== 0?
                                     <div className='checked'id="starMob"><span class="fa fa-star checked mr-1"></span>{Math.round(over_allrating * 10) / 10}</div>
@@ -65,7 +61,7 @@ const AllPost = ({
           <div className="d-flex justify-content-between align-items-center mt-3">
             <div>
               <Link
-                to={`/cure/${id}-${articleTitle}`}
+                to={articlePath}
                 className="d-flex justify-content-between align-items-center"
               >
                 <div className="card-title h5 text-capitalize">

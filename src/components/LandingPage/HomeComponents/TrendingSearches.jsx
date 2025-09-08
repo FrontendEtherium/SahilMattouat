@@ -3,6 +3,7 @@ import "./TrendingSearches.css";
 import axios from "axios";
 import { backendHost } from "../../../api-config";
 import { Link } from "react-router-dom";
+import { createCategorySlug } from "../../../utils/slugUtils";
 
 const TrendingSearches = memo(({ items, onSelect }) => {
   const [trending, setTrending] = useState([]);
@@ -50,7 +51,7 @@ const TrendingSearches = memo(({ items, onSelect }) => {
   }, [fetchTrendingCategories]);
 
   const createDiseaseSlug = (category) => {
-    return `${category.dc_id}-${category.category.replace(/\s+/g, "-")}`;
+    return createCategorySlug(category.dc_id, category.category);
   };
 
   if (error) {

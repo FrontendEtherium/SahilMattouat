@@ -1,7 +1,8 @@
 import React, { memo, lazy, Suspense } from "react";
 import "./TrendingCures.css";
 import { imgKitImagePath } from "../../../image-path";
-import { Link } from "react-router-dom";
+
+import { createSlug } from "../../../utils/slugUtils";
 
 // Dynamically import Slider to reduce initial bundle size
 const Slider = lazy(() => import("react-slick"));
@@ -63,7 +64,7 @@ const preloadImages = () => {
 
 // Helper function to create SEO-friendly URL slug
 const createUrlSlug = (medicineType, title) => {
-  const titleSlug = title.replace(new RegExp(" ", "g"), "-");
+  const titleSlug = createSlug(title);
   return `${medicineType}-${titleSlug}`;
 };
 

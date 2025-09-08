@@ -7,6 +7,7 @@ import "./FeaturedBlogs.css";
 import Slider from "react-slick";
 import { Link } from "react-router-dom";
 import { imagePath, imageUrl } from "../../../image-path";
+import { createArticlePath } from "../../../utils/slugUtils";
 
 function FeaturedBlogs({ isMobile }) {
   const [items, setItems] = useState([]);
@@ -90,15 +91,15 @@ function FeaturedBlogs({ isMobile }) {
               contentObj?.blocks?.[0]?.data?.text?.slice(0, 58) ||
               "No preview available.";
 
-            // Format title for URL
-            const articleTitle = item.title.replace(new RegExp(" ", "g"), "-");
+            // Create article path with slug
+            const articlePath = createArticlePath(item.article_id, item.title);
 
             return (
               <div key={item.id} className="featured-blogs__item">
                 <div className="featured-blogs__image">
                   <img src={imageLoc} alt={item.title} loading="lazy" />
                 </div>
-                <Link to={`/cure/${item.article_id}-${articleTitle}`}>
+                <Link to={articlePath}>
                   <div className="featured-blogs__content">
                     <h2 className="featured-blogs__headline">{item.title}</h2>
                     <p className="featured-blogs__paragraph">
@@ -136,15 +137,15 @@ function FeaturedBlogs({ isMobile }) {
               contentObj?.blocks?.[0]?.data?.text?.slice(0, 50) ||
               "No preview available.";
 
-            // Format title for URL
-            const articleTitle = item.title.replace(new RegExp(" ", "g"), "-");
+            // Create article path with slug
+            const articlePath = createArticlePath(item.article_id, item.title);
 
             return (
               <div key={item.id} className="featured-blogs__item">
                 <div className="featured-blogs__image">
                   <img src={imageLoc} alt={item.title} loading="lazy" />
                 </div>
-                <Link to={`/cure/${item.article_id}-${articleTitle}`}>
+                <Link to={articlePath}>
                   <div className="featured-blogs__content">
                     <h2 className="featured-blogs__headline">{item.title}</h2>
                     <p className="featured-blogs__paragraph">

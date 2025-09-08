@@ -4,6 +4,7 @@ import axios from "axios";
 import { backendHost } from "../../api-config";
 import headers from "../../api-fetch";
 import { Link } from "react-router-dom";
+
 import "./AllBlogs.css";
 import SubscriberComponent from "../LandingPage/HomeComponents/SubscriberComponent";
 import Footer from "../Footer/Footer";
@@ -12,6 +13,7 @@ import Heart from "../../assets/img/heart.png";
 import CuresGrid from "../LandingPage/HomeComponents/CuresGrid";
 import DoctorCures from "../LandingPage/HomeComponents/DoctorCures";
 import { Helmet } from "react-helmet";
+import { createArticlePath } from "../../utils/slugUtils";
 
 function CureGrid({ items, isMobile, onNext, onPrev, hasPrev }) {
   const displayItem = isMobile ? items.slice(0, 6) : items;
@@ -29,8 +31,8 @@ function CureGrid({ items, isMobile, onNext, onPrev, hasPrev }) {
               }`
             : `${imageUrl}/tr:h-400,w-250,f-webp/cures_articleimages//299/default.png`;
 
-          // Format title for URL
-          const articleTitle = item.title.replace(new RegExp(" ", "g"), "-");
+          // Create article path with slug
+          const articlePath = createArticlePath(item.article_id, item.title);
 
           return (
             <div className="curesGrid__container">
@@ -39,11 +41,7 @@ function CureGrid({ items, isMobile, onNext, onPrev, hasPrev }) {
                 className="curesGrid__image"
               >
                 <div className="cure-card__info">
-                  <Link
-                    key={item.id}
-                    to={`/cure/${item.article_id}-${articleTitle}`}
-                    className="cure-card"
-                  >
+                  <Link key={item.id} to={articlePath} className="cure-card">
                     <p className="expert-card__meta">
                       {item.authors_name} · {formatDate(item.published_date)}
                     </p>

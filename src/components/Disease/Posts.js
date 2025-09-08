@@ -1,20 +1,36 @@
-import React from 'react';
-import CenterWell from './CenterWell'
-const Post = ({id, title, content, f_title, w_title, history, type, country, published_date}) => {
-        return (
-            <>
-            <div style={{width:"95%"}} >
-                <div className="ml-3" >
-                    {/* <div className="card-body"> */}
-                        
-                            <div className="justify-content-between align-items-center mb-2">
-                                <div className="card">
-                                    <button onClick={(e) => history.push(`/cure/${id}-${title.replace(/\s+/g, "-")}`)} className="btn d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <div className="card-title h6 mb-1 font-weight-bold text-capitalize">{title}</div>
-                                            <div className="h7 text-muted">{w_title}</div>
-                                            <div id='right-menu-card-article-content-preview'>
-                                            {/* {
+import React from "react";
+import CenterWell from "./CenterWell";
+import { createArticlePath } from "../../utils/slugUtils";
+const Post = ({
+  id,
+  title,
+  content,
+  f_title,
+  w_title,
+  history,
+  type,
+  country,
+  published_date,
+}) => {
+  return (
+    <>
+      <div style={{ width: "95%" }}>
+        <div className="ml-3">
+          {/* <div className="card-body"> */}
+
+          <div className="justify-content-between align-items-center mb-2">
+            <div className="card">
+              <button
+                onClick={(e) => history.push(createArticlePath(id, title))}
+                className="btn d-flex justify-content-between align-items-center"
+              >
+                <div>
+                  <div className="card-title h6 mb-1 font-weight-bold text-capitalize">
+                    {title}
+                  </div>
+                  <div className="h7 text-muted">{w_title}</div>
+                  <div id="right-menu-card-article-content-preview">
+                    {/* {
                                     content && JSON.parse(content) ?
                                     JSON.parse(content).blocks.map((j, idx) => idx<1 && (
                                         <CenterWell
@@ -33,10 +49,12 @@ const Post = ({id, title, content, f_title, w_title, history, type, country, pub
                                     ))
                                     : null
                                 } */}
-                                            </div>
-                                            <div className="h7 text-muted text-left">Published on: {published_date}</div>
-                                        </div>
-                                         {/* <div>
+                  </div>
+                  <div className="h7 text-muted text-left">
+                    Published on: {published_date}
+                  </div>
+                </div>
+                {/* <div>
                                         {
                                 type === '1'?
                                     <div className="chip overview mr-2">Overview</div>
@@ -47,7 +65,7 @@ const Post = ({id, title, content, f_title, w_title, history, type, country, pub
                                 : null
                             }
                             </div> */}
-                            {/*
+                {/*
                             {   
                                 country !== 0?
                                     country === 9?
@@ -58,19 +76,17 @@ const Post = ({id, title, content, f_title, w_title, history, type, country, pub
                                         : null
                             }
                                         </div> */}
-                                    </button>
-                                </div>
-                            </div>
-                        
-                        {/* <div className="card-info">
+              </button>
+            </div>
+          </div>
+
+          {/* <div className="card-info">
                             <hr/>
                         </div> */}
-                    {/* </div> */}
-                </div>
-            </div>
-        
-            </>
-        )    
-
-}
+          {/* </div> */}
+        </div>
+      </div>
+    </>
+  );
+};
 export default Post;

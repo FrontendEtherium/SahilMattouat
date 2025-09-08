@@ -13,6 +13,7 @@ import { backendHost } from "../../../api-config";
 import OwlCarousel from "react-owl-carousel";
 import "owl.carousel/dist/assets/owl.carousel.css";
 import "owl.carousel/dist/assets/owl.theme.default.css";
+import { createArticlePath } from "../../../utils/slugUtils";
 import { PreviewTab } from "../PreviewTab";
 const options = {
   responsiveClass: true,
@@ -156,7 +157,7 @@ function CarouselArticle({ diseaseConditionId, carouselItems, id }) {
                           }}
                         >
                           <Link
-                            to={`/cure/${j.article_id}-${j.title.replace(/\s+/g, "-")}`}
+                            to={createArticlePath(j.article_id, j.title)}
                             className="d-flex justify-content-between align-items-center mr-2 w-100"
                             style={{
                               textDecoration: "none",

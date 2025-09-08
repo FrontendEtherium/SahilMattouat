@@ -4,6 +4,7 @@ import { withRouter } from "react-router";
 import { Link } from "react-router-dom";
 import "./style.css";
 import { backendHost } from "../../api-config";
+import { createArticlePath } from "../../utils/slugUtils";
 
 const Side = ({ diseaseId, id, name }) => {
   const [items, setItems] = useState([]);
@@ -43,8 +44,11 @@ const Side = ({ diseaseId, id, name }) => {
       // Extract overview article
       const overview = data.find((post) => post.type.includes(1));
       if (overview) {
-        const titleSlug = overview.title.replace(/\s+/g, "-");
-        setOverviewArticle(`${overview.article_id}-${titleSlug}`);
+        const overviewPath = createArticlePath(
+          overview.article_id,
+          overview.title
+        );
+        setOverviewArticle(overviewPath.split("/").pop());
       }
     } catch (error) {
       console.error("Error fetching regional posts:", error);

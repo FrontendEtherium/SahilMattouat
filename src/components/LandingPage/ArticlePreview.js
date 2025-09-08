@@ -2,11 +2,10 @@ import React, { useState, useEffect } from "react";
 import { backendHost } from "../../api-config";
 import { Link } from "react-router-dom";
 import CenterWell from "../Disease/CenterWell";
+import { createArticlePath } from "../../utils/slugUtils";
 import Heart from "../../assets/img/heart.png";
 import Date from "../Date";
 import { useHistory } from "react-router";
-
-
 
 const ArticlePreview = (props) => {
   const [items, setItems] = useState([]);
@@ -388,11 +387,10 @@ const ArticlePreview = (props) => {
                           " https://ik.imagekit.io/hg4fpytvry/product-images/tr:h-250,w-300,f-webp/cures_articleimages//299/default.png";
                       }
 
-                      var title = i.title;
-                      var regex = new RegExp(" ", "g");
-
-                      //replace via regex
-                      title = title.replace(regex, "-");
+                      const articlePath = createArticlePath(
+                        i.article_id,
+                        i.title
+                      );
                       return (
                         <div className="col-4" key={i.article_id.toString()}>
                           <div className="card my-2 w-100">
@@ -411,7 +409,7 @@ const ArticlePreview = (props) => {
                                 ▪️ {<Date dateString={i.published_date} />}
                               </h6>
                               <h5 className="card-title text-capitalize">
-                                <Link to={`/cure/${i.article_id}-${title}`}>
+                                <Link to={articlePath}>
                                   {i.title.toLowerCase()}
                                 </Link>
                               </h5>
