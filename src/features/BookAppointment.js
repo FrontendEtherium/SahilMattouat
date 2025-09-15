@@ -12,6 +12,7 @@ import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
+import { userId } from "../components/UserId";
 
 // Professional medical styling with mobile responsiveness
 const medicalStyles = `
@@ -227,7 +228,7 @@ const CustomDay = styled(PickersDay)(
   })
 );
 
-const AppointmentModal = ({ show, onHide, alertBooking, docId, userId }) => {
+const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
   const today = dayjs();
   const [selectedTimeSlot, setSelectedTimeSlot] = useState("");
   const [bookingLoading, setBookingLoading] = useState(false);
@@ -271,7 +272,7 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId, userId }) => {
       }
     }, 400); // Increased delay to ensure DOM updates are complete
   }, []);
-
+  const [currency, setCurrency] = useState("₹");
   const disableDate = useCallback(
     (date) => {
       const currentDate = dayjs().startOf("day");
@@ -293,13 +294,14 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId, userId }) => {
 
       try {
         const response = await fetch(
-          `${backendHost}/appointments/get/Slots/${docId}`
+          `${backendHost}/appointments/get/Slots/${docId}/${userId}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch appointment slots");
         }
 
         const json = await response.json();
+        setCurrency(json.currency_symbol);
 
         const highlightedDate = json.completelyBookedDates || [];
         setHighlightedDays(highlightedDate);
@@ -774,7 +776,7 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId, userId }) => {
                               color: "white",
                             }}
                           >
-                            ₹
+                            {currency}
                           </div>
                           <div className="ml-2">
                             <div
@@ -787,7 +789,8 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId, userId }) => {
                               className="font-weight-bold appointment-summary-fee"
                               style={{ fontSize: "1.1rem", color: "#f57c00" }}
                             >
-                              ₹{amount}
+                              {currency}
+                              {amount}
                             </div>
                           </div>
                         </div>
