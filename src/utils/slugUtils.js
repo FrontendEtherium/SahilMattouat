@@ -8,7 +8,7 @@
 export const createSlug = (title) => {
   if (!title) return "";
 
-  let slug = title.toString().trim().toLowerCase();
+  let slug = title.toString().trim();
 
   // Replace spaces, &, and : with hyphens
   slug = slug.replace(/[\s&,:]+/g, "-");
@@ -28,7 +28,7 @@ export const createSlug = (title) => {
   // Capitalize first letter of each word (separated by hyphens)
   slug = slug.replace(
     /(^|-)([a-z])/g,
-    (match, separator, letter) => separator + letter.toUpperCase()
+    (match, separator, letter) => separator + letter
   );
 
   return slug;

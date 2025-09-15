@@ -175,3 +175,37 @@ input {
   margin-bottom: 5px;
   margin-top: -25px;
 }
+
+/* Phone Input Styles */
+.phone-input-container {
+  width: 100%;
+  margin: 8px 0;
+}
+
+.phone-input-container .PhoneInput {
+  background-color: #f8f5f5;
+  border: 1px solid #000;
+  border-radius: 4px;
+  width: 100%;
+}
+
+.phone-input-container .PhoneInputInput {
+  background-color: #f8f5f5;
+  border: none;
+  padding: 12px 15px;
+  margin: 0;
+  width: 100%;
+  outline: none;
+}
+
+.phone-input-container .PhoneInputCountrySelect {
+  background-color: #f8f5f5;
+  border: none;
+  padding: 12px 8px;
+  margin: 0;
+  outline: none;
+}
+
+.phone-input-container .PhoneInputCountryIcon {
+  margin-right: 8px;
+}

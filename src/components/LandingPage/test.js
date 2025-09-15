@@ -15,9 +15,10 @@ import {
 } from "@material-ui/core";
 import { usePasswordValidation } from "../hooks/usePasswordValidation";
 import { backendHost } from "../../api-config";
-
+import PhoneInput from "react-phone-number-input";
+import { isValidPhoneNumber } from "react-phone-number-input";
+import { parsePhoneNumber } from "libphonenumber-js";
 import "./test.css";
-import ErrorBoundary from "../ErrorBoundary";
 
 const Test = (props) => {
   const [click, setClick] = useState(true);
@@ -54,12 +55,38 @@ const Test = (props) => {
   const setSecond = (event) => {
     setPassword({ ...password, secondPassword: event.target.value });
   };
+  const [phoneError, setPhoneError] = useState(false);
 
   const SignUpForm = async (e, props) => {
     e.preventDefault();
     setSignUpClicked(1);
+
+    // Validate phone number
+    if (phoneNumber && !isValidPhoneNumber(phoneNumber)) {
+      setPhoneError(true);
+      return;
+    } else {
+      setPhoneError(false);
+    }
+
     if (validEmail && upperCase && lowerCase && match) {
       axios.defaults.withCredentials = true;
+
+      // Parse phone number to get country ISO code and national number
+      let countryCode = "";
+      let nationalNumber = number; // fallback to old number field
+
+      if (phoneNumber) {
+        try {
+          const parsedPhone = parsePhoneNumber(phoneNumber);
+          countryCode = parsedPhone.country; // This gives us "IN", "US", etc.
+          nationalNumber = parsedPhone.nationalNumber;
+        } catch (error) {
+          console.error("Error parsing phone number:", error);
+          setPhoneError(true);
+          return;
+        }
+      }
 
       const params = {
         firstname: firstName,
@@ -71,7 +98,8 @@ const Test = (props) => {
         rempwd: "1",
         doc_patient: userType,
         acceptTnc: "1",
-        number: number,
+        number: nationalNumber,
+        country_code: countryCode,
         Age: null,
       };
       axios
@@ -80,29 +108,81 @@ const Test = (props) => {
         })
         .then((response) => {
           if (response.data === "Email Address already Exists in the System") {
-            // setExists(true);
-            setTimeout(() => {
-              setSignUpClicked(3);
-            }, 5000);
             document.getElementById("signup-msg").innerText =
               "Email already exists!";
-          }
-          // else if(response.data.registration_id){
-          //   // setSuccess(true);
-          //   Cookies.set('uName', response.data.first_name, {expires: 365})
-          //   setTimeout(() => {
-          //     window.location.reload()
-          //   }, 500);
-          // }
-
-          if (response.data.registration_id) {
-            // setExists(true);
+          } else if (response.data.registration_id) {
+            // Registration successful - now log the user in automatically
             setAlert("Registered Successfully!!!");
+
+            // Set user cookies and localStorage for registration response
+            Cookies.set("uName", response.data.first_name, { expires: 365 });
+            if (response.data.docID) {
+              localStorage.setItem("doctorid", response.data.docID);
+            }
+            if (response.data.value) {
+              localStorage.setItem("token", response.data.value);
+            }
+
+            // Now perform automatic login to set proper authentication cookies
+            setTimeout(() => {
+              axios.defaults.withCredentials = true;
+              axios
+                .post(
+                  `${backendHost}/login?cmd=login&email=${email}&psw=${password.firstPassword}&rempwd=1`
+                )
+                .then((loginResponse) => {
+                  if (loginResponse.data.registration_id) {
+                    // Login successful - authentication cookies should now be set by server
+                    console.log(
+                      "Auto-login after registration successful:",
+                      loginResponse.data
+                    );
+
+                    // Update any additional data from login response
+                    Cookies.set("uName", loginResponse.data.first_name, {
+                      expires: 365,
+                    });
+                    if (loginResponse.data.docID) {
+                      localStorage.setItem(
+                        "doctorid",
+                        loginResponse.data.docID
+                      );
+                    }
+                    if (loginResponse.data.value) {
+                      localStorage.setItem("token", loginResponse.data.value);
+                    }
+
+                    // Redirect to homepage with proper authentication
+                    setTimeout(() => {
+                      window.location.reload();
+                    }, 500);
+                  } else {
+                    console.error("Auto-login failed after registration");
+                    // Still redirect, user can login manually if needed
+                    setTimeout(() => {
+                      window.location.reload();
+                    }, 500);
+                  }
+                })
+                .catch((loginError) => {
+                  console.error(
+                    "Auto-login error after registration:",
+                    loginError
+                  );
+                  // Still redirect, user can login manually if needed
+                  setTimeout(() => {
+                    window.location.reload();
+                  }, 500);
+                });
+            }, 1000); // Wait 1 second to show success message
           }
 
-          setTimeout(() => {
-            setAlert("");
-          }, 5000); // Hide alert after 3 seconds
+          // Clear alert after some time if registration wasn't successful
+          if (!response.data.registration_id) {
+            setTimeout(() => {
+              setAlert("");
+            }, 5000);
+          }
         })
         .catch((err) => {
           setTimeout(() => {
@@ -135,7 +215,7 @@ const Test = (props) => {
         .classList.remove("right-panel-active");
     }
   };
-
+  const [phoneNumber, setPhoneNumber] = useState("");
   const loginForm = async (e) => {
     e.preventDefault();
     setClicked(1);
@@ -188,21 +268,13 @@ const Test = (props) => {
           aria-labelledby="contained-modal-title-vcenter"
           centered
         >
-    
           <Modal.Body>
             <div className="container sign" id="container">
               <div className="form-container sign-up-container">
                 <form className="sign" onSubmit={SignUpForm}>
                   <div className="h2 py-0 my-1">Create Account</div>
                   <span>or use your email for registration</span>
-                  {/* <GoogleLogin
-        clientId="529398297055-37e0rfns77ig0nih2moffq1pdp533329.apps.googleusercontent.com"
-        buttonText="Register"
-        onSuccess={responseGoogle}
-        onFailure={responseGoogle}
-        cookiePolicy={'single_host_origin'}
-        className="text-dark"
-      /> */}
+            
                   {parseInt(buttonSignUpClick) === 1 ? (
                     <div
                       id="signup-msg"
@@ -230,13 +302,24 @@ const Test = (props) => {
                     onChange={(e) => handleEmail(e)}
                     required
                   />
-                  <input
-                    className="px-2 py-1 rounded border-dark border"
-                    type="number"
-                    placeholder="Mobile Number"
-                    onChange={(e) => setMname(e.target.value)}
-                    required
-                  />
+                  <div className="phone-input-container">
+                    <PhoneInput
+                      placeholder="Mobile Number"
+                      value={phoneNumber}
+                      onChange={setPhoneNumber}
+                      defaultCountry="IN"
+                      style={{ paddingLeft: "10px" }}
+                    />
+
+                    {phoneError && (
+                      <div
+                        className="text-danger mt-1"
+                        style={{ fontSize: "12px" }}
+                      >
+                        Please enter a valid phone number
+                      </div>
+                    )}
+                  </div>
                   <input
                     className="px-2 py-1 rounded border-dark border"
                     type="password"
