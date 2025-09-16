@@ -89,6 +89,7 @@ import DoctorConnect from "./LandingPage/DoctorConnect.js";
 import DoctorLandingPage from "./LandingPage/DoctorLandingPage.js";
 import Bookings from "./Profile/Bookings.js";
 import AllBlogs from "./BlogPage/AllBlogs.js";
+import BookingSuccessful from "./BookingSuccessful.js";
 
 function Main(props) {
   const history = useHistory();
@@ -203,6 +204,7 @@ const Routes = (props) => {
         <Route exact path="/alldisease-Z" component={Z} />
         <Route exact path="/allcategory" component={All} />
         <Route exact path="/allcures" component={AllBlogs} />
+        <Route exact path="/booking-successful" component={BookingSuccessful} />
 
         {/* Doctor search page */}
         <Route exact path="/search/:city" component={Search} />

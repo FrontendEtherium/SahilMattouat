@@ -372,9 +372,11 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
       console.log("responseObject", responseObject);
       localStorage.setItem("encKey", responseObject.encRequest);
       localStorage.setItem("apiResponse", JSON.stringify(response.data));
-      let res = localStorage.getItem("apiResponse");
 
-      console.log("res", res);
+      if (responseObject.Count == 0) {
+        window.location.href = '/booking-successful';
+        return;
+      }
 
       const redirectURL = `https://www.all-cures.com/paymentRedirection?encRequest=${responseObject.encRequest}&accessCode=AVWN42KL59BP42NWPB`;
       window.location.href = redirectURL;
