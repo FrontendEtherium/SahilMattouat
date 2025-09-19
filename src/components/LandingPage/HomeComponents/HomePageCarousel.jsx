@@ -32,17 +32,17 @@ const HomePageCarousel = memo(() => {
         title: "Online Doctor Consultation",
       },
     ],
-    mobile: [ {
-      src:`${imageUrl}/tr:f-webp/assets/img/Mobile-banner003.jpg`,
-      alt: "Mobile Healthcare",
-      title: "Mobile Doctor Consultation",
-    },
+    mobile: [
+      {
+        src: `${imageUrl}/tr:f-webp/assets/img/Mobile-banner003.jpg`,
+        alt: "Mobile Healthcare",
+        title: "Mobile Doctor Consultation",
+      },
       {
         src: `${imageUrl}/tr:f-webp/assets/img/Mobile-banner004.jpg`,
         alt: "Mobile Healthcare ",
         title: "Mobile Healthcare Services",
       },
-      
     ],
   };
 
@@ -90,9 +90,10 @@ const HomePageCarousel = memo(() => {
               <Carousel.Caption>
                 <button
                   className="doctor-patient-banner-btn"
-                  onClick={() => {
+                  onClick={async () => {
+                    await clickCounter();
                     window.location.href = "/doctor";
-                    clickCounter();
+                    
                   }}
                   aria-label="Start Online Doctor Consultation"
                 >
