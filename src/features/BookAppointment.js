@@ -273,6 +273,7 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
     }, 400); // Increased delay to ensure DOM updates are complete
   }, []);
   const [currency, setCurrency] = useState("₹");
+  const [paid, setPaid] = useState(false);
   const disableDate = useCallback(
     (date) => {
       const currentDate = dayjs().startOf("day");
@@ -302,7 +303,7 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
 
         const json = await response.json();
         setCurrency(json.currency_symbol);
-
+        setPaid(json.isPaid);
         const highlightedDate = json.completelyBookedDates || [];
         setHighlightedDays(highlightedDate);
 
@@ -374,7 +375,7 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
       localStorage.setItem("apiResponse", JSON.stringify(response.data));
 
       if (responseObject.Count == 0) {
-        window.location.href = '/booking-successful';
+        window.location.href = "/booking-successful";
         return;
       }
 
@@ -789,10 +790,25 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
                             </div>
                             <div
                               className="font-weight-bold appointment-summary-fee"
-                              style={{ fontSize: "1.1rem", color: "#f57c00" }}
+                              style={{ fontSize: "0.85rem", color: "#f57c00" }}
                             >
-                              {currency}
-                              {amount}
+                              {paid ? (
+                                `${currency} ${amount}`
+                              ) : (
+                                <>
+                                  <span>
+                                    Free{" "}
+                                    <span
+                                      style={{
+                                        fontSize: "0.55rem",
+                                        color: "#6c757d",
+                                      }}
+                                    >
+                                      (First two consultations are free)
+                                    </span>
+                                  </span>
+                                </>
+                              )}
                             </div>
                           </div>
                         </div>
