@@ -43,7 +43,7 @@ export default class Editorial extends Component{
 <div className="container my-4">
     <h3>Contact Us</h3>
 <h5 className='mt-3' style={{textTransform:"none"}}>Email id: <a href="mailto:info@etheriumtech.com">info@etheriumtech.com</a></h5>
-<h5>Phone No.: <a href="tel:+91 191 295 9035">+91 191 295 9035</a></h5>
+<h5>Phone No.: <a href="tel:0091 191 295 9035">0091 191 295 9035</a></h5>
 <div class="container my-10"><h3><a href="/feedback"><button id=""
           className="article-search btn btn-dark mt-10">Submit Your Feedback</button></a></h3></div>
           
