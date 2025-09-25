@@ -339,7 +339,7 @@ const Disease = () => {
               name={state.items.dc_name}
             />
           </div>
-          {state.ads &&
+          {/* {state.ads &&
             (state.ads !== "https://all-cures.com:444All Ads are Served" ? (
               <div className="d-flex justify-content-center">
                 <img
@@ -365,7 +365,7 @@ const Disease = () => {
                   alt="adhhh"
                 />
               </button>
-            ))}
+            ))} */}
         </div>
         <Col md={7} id="page-content-wrapper" className="col-xs-12 pb-5">
           <div id="center-well" ref={containerRef}>
