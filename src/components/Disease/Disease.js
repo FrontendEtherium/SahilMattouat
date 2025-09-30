@@ -22,10 +22,7 @@ import DiseaseModal from "./DiseasePageComponent/DiseaseModal.js";
 import { userId } from "../UserId.js";
 import VideoPopover from "./DiseasePageComponent/VideoPopover.js";
 import InlineVideoPlayer from "./DiseasePageComponent/Video.js";
-import {
-  createCanonicalUrl,
-  createArticlePath,
-} from "../../utils/slugUtils";
+import { createCanonicalUrl, createArticlePath } from "../../utils/slugUtils";
 const Disease = () => {
   const [state, setState] = useState({
     items: [],
@@ -306,8 +303,11 @@ const Disease = () => {
   return (
     <div>
       <Header history={history} />
-      <HelmetMetaData
+      {/* <HelmetMetaData
         title={state.items.title}
+        description={
+          parsedContent?.blocks?.[0]?.data?.text || state.items.title
+        }
         keywords={state.items.keywords}
         image={
           `${imagePath}` +
@@ -317,7 +317,7 @@ const Disease = () => {
         }
         publishedDate={state.items.published_date}
         canonicalUrl={getCanonicalUrl()}
-      />
+      /> */}
       <div className="ad-spac" ref={adSpacRef}>
         <button
           className="btn"

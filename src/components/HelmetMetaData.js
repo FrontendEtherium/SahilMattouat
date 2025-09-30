@@ -60,7 +60,7 @@ export default function HelmetMetaData(props) {
       <meta name="description" content={description} />
       <meta property="image" content={image} />
       <meta property="og:locale" content="en_US" />
-      <meta property="og:type" content="website" />
+      <meta property="og:type" content="article" />
       <meta property="og:title" content={title} />
       <meta property="og:quote" content={quote} />
       <meta property="og:hashtag" content={hashtag} />
@@ -90,7 +90,11 @@ export default function HelmetMetaData(props) {
           "url": "https://ik.imagekit.io/hg4fpytvry/product-images/tr:w-300,f-webp/assets/img/heart.png"
         }
       },
-      "datePublished": "${publishedDate}",
+      "datePublished": "${
+        publishedDate
+          ? new Date(publishedDate).toISOString()
+          : new Date().toISOString()
+      }",
       "mainEntityOfPage": {
         "@type": "WebPage",
         "@id": "${canonicalUrl}"
