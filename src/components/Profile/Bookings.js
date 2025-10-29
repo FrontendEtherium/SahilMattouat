@@ -8,7 +8,7 @@ import { Box, Tab, Tabs, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 
 import "./Bookings.css";
-import { imagePath, imgKitImagePath } from "../../image-path";
+import {  imgKitImagePath } from "../../image-path";
 
 const Bookings = () => {
   const history = useHistory();

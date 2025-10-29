@@ -9,12 +9,12 @@ const AppRedirect = () => {
     if (/android/i.test(userAgent)) {
       // Redirect to Play Store if the app didn't open in a reasonable time
       window.location.href =
-        "https://play.google.com/store/apps/details?id=com.allcures&hl=en&gl=US";
+        "https://play.google.com/store/apps/details?id=com.etherium.allcures&hl=en&gl=US";
     }
     if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
       // Redirect to App Store if the app didn't open in a reasonable time
       window.location.href =
-        "https://apps.apple.com/in/app/all-cures/id1659590351";
+        "https://apps.apple.com/in/app/all-cures/id6748640097";
     }
   };
 
@@ -26,12 +26,12 @@ const AppRedirect = () => {
     if (/android/i.test(userAgent)) {
       // Redirect to Play Store if the app didn't open in a reasonable time
       window.location.href =
-        "https://play.google.com/store/apps/details?id=com.allcures&hl=en&gl=US";
+        "https://play.google.com/store/apps/details?id=com.etherium.allcures&hl=en&gl=US";
     }
     if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
       // Redirect to App Store if the app didn't open in a reasonable time
       window.location.href =
-        "https://apps.apple.com/in/app/all-cures/id1659590351";
+        "https://apps.apple.com/in/app/all-cures/id6748640097";
     }
   }, []);
 

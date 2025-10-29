@@ -3,7 +3,7 @@ import React, { memo } from "react";
 import { Link } from "react-router-dom";
 import GooglePlay from "../../assets/icon/googleplay.png";
 import AppStore from "../../assets/icon/appstore.png";
-import { imgKitImagePath } from "../../image-path";
+
 import "./Footer.css";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
@@ -170,7 +170,7 @@ const Footer = () => (
               <p className="download-heading">Download the All-Cures App:</p>
               <div className="app-badges mb-3">
                 <a
-                  href="https://play.google.com/store/apps/details?id=com.allcures"
+                  href="https://play.google.com/store/apps/details?id=com.etherium.allcures"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Download All Cures from Google Play Store"
@@ -183,7 +183,7 @@ const Footer = () => (
                   />
                 </a>
                 <a
-                  href="https://apps.apple.com/in/app/all-cures/id1659590351"
+                  href="https://apps.apple.com/in/app/all-cures/id6748640097"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Download All Cures from Apple App Store"
@@ -364,7 +364,7 @@ const Footer = () => (
               </p>
               <div className="app-badges mb-2">
                 <a
-                  href="https://play.google.com/store/apps/details?id=com.allcures"
+                  href="https://play.google.com/store/apps/details?id=com.etherium.allcures"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Download All Cures from Google Play Store"
@@ -377,7 +377,7 @@ const Footer = () => (
                   />
                 </a>
                 <a
-                  href="https://apps.apple.com/in/app/all-cures/id1659590351"
+                  href="https://apps.apple.com/in/app/all-cures/id6748640097"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Download All Cures from Apple App Store"
