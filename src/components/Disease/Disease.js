@@ -63,7 +63,9 @@ const Disease = () => {
   const getCanonicalUrl = () => {
     if (state.items && state.items.title) {
       const articleId = id.split("-")[0];
-      return createCanonicalUrl(articleId, state.items.title);
+      let url = createArticlePath(articleId, state.items.title);
+      console.log("url", url);
+      return url
     }
     // Fallback to current URL if article data not loaded yet
     const currentURL = window.location.href;
@@ -303,7 +305,7 @@ const Disease = () => {
   return (
     <div>
       <Header history={history} />
-      {/* <HelmetMetaData
+      <HelmetMetaData
         title={state.items.title}
         description={
           parsedContent?.blocks?.[0]?.data?.text || state.items.title
@@ -317,7 +319,7 @@ const Disease = () => {
         }
         publishedDate={state.items.published_date}
         canonicalUrl={getCanonicalUrl()}
-      /> */}
+      />
       <div className="ad-spac" ref={adSpacRef}>
         <button
           className="btn"
