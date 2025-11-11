@@ -147,7 +147,7 @@ function Feedback() {
                   className="col-md-6 float-left"
                   style={{ zIndex: 2 }}
                 >
-                  <Form.Label>Enter Your Phone Number (Optional)</Form.Label>
+                  <Form.Label>Enter Your Phone Number </Form.Label>
                   <PhoneInput
                     international
                     defaultCountry="IN"

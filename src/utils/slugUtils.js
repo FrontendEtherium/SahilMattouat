@@ -10,6 +10,12 @@ export const createSlug = (title) => {
 
   let slug = title.toString().trim();
 
+  try {
+    slug = decodeURIComponent(slug);
+  } catch (_err) {
+    // keep the original value if decoding fails
+  }
+
   // Replace spaces, &, and : with hyphens
   slug = slug.replace(/[\s&,:]+/g, "-");
 

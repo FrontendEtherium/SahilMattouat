@@ -35,7 +35,17 @@ const CenterWell = ({
       if (!cureMatch) return href;
 
       const [, articleId, existingSlug] = cureMatch;
-      const normalizedSlug = createSlug(existingSlug || "");
+
+      let slugSegment = existingSlug || "";
+      if (slugSegment) {
+        try {
+          slugSegment = decodeURIComponent(slugSegment);
+        } catch (_err) {
+          // ignore decode issues and keep the original segment
+        }
+      }
+
+      const normalizedSlug = createSlug(slugSegment);
       const normalizedPath = `/cure/${articleId}${
         normalizedSlug ? `-${normalizedSlug}` : ""
       }`;

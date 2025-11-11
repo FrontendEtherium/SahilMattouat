@@ -29,11 +29,9 @@ function DoctorConnectCard({ doc, onConsult }) {
 
   const consult = () => {
     if (doc.videoService === 1) {
-      if (userAccess && userId) {
+    
         onConsult(doc.docID);
-      } else {
-        setShowModal(true);
-      }
+     
     } else {
       DoctorNotAvailable();
     }

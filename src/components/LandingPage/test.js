@@ -18,7 +18,9 @@ import { backendHost } from "../../api-config";
 import PhoneInput from "react-phone-number-input";
 import { isValidPhoneNumber } from "react-phone-number-input";
 import { parsePhoneNumber } from "libphonenumber-js";
+
 import "./test.css";
+import ErrorBoundary from "../ErrorBoundary";
 
 const Test = (props) => {
   const [click, setClick] = useState(true);
@@ -27,22 +29,21 @@ const Test = (props) => {
   const [signInpassword, setPass] = useState("");
   const [buttonClick, setClicked] = useState("");
 
-  // Sign up form's states
-
   const [firstName, setFname] = useState("");
   const [lastName, setLname] = useState("");
   const [password, setPassword] = useState({
     firstPassword: "",
     secondPassword: "",
   });
-  const [terms, setTerms] = useState("");
   const [userType, setUserType] = useState("other");
   const [buttonSignUpClick, setSignUpClicked] = useState("");
   const [number, setMname] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [validEmail, setValidEmail] = useState();
   const [hasError, sethasError] = useState(false);
   const [loginSuccess, setLoginSuccess] = useState(true);
   const [alert, setAlert] = useState("");
+  const [phoneError, setPhoneError] = useState(false);
 
   const [validLength, upperCase, lowerCase, match] = usePasswordValidation({
     firstPassword: password.firstPassword,
@@ -55,7 +56,6 @@ const Test = (props) => {
   const setSecond = (event) => {
     setPassword({ ...password, secondPassword: event.target.value });
   };
-  const [phoneError, setPhoneError] = useState(false);
 
   const SignUpForm = async (e, props) => {
     e.preventDefault();
@@ -215,7 +215,7 @@ const Test = (props) => {
         .classList.remove("right-panel-active");
     }
   };
-  const [phoneNumber, setPhoneNumber] = useState("");
+
   const loginForm = async (e) => {
     e.preventDefault();
     setClicked(1);
@@ -223,11 +223,12 @@ const Test = (props) => {
     axios.defaults.withCredentials = true;
     axios
       .post(
-        `${backendHost}/login?cmd=login&email=${email}&psw=${signInpassword}&rempwd=${rememberMe}`,
-        { headers: { "Access-Control-Allow-Credentials": true } }
+        `${backendHost}/login?cmd=login&email=${email}&psw=${signInpassword}&rempwd=${rememberMe}`
       )
       .then((response) => {
         if (response.data.registration_id) {
+          console.log("response login", response.data);
+
           Cookies.set("uName", response.data.first_name, { expires: 365 });
           localStorage.setItem("doctorid", response.data.docID);
           localStorage.setItem("token", response.data.value);
@@ -261,220 +262,232 @@ const Test = (props) => {
 
   return (
     <>
-      <div className="sign" style={{ zIndex: 1000 }}>
-        <Modal
-          {...props}
-          size="lg"
-          aria-labelledby="contained-modal-title-vcenter"
-          centered
-        >
-          <Modal.Body>
-            <div className="container sign" id="container">
-              <div className="form-container sign-up-container">
-                <form className="sign" onSubmit={SignUpForm}>
-                  <div className="h2 py-0 my-1">Create Account</div>
-                  <span>or use your email for registration</span>
-            
-                  {parseInt(buttonSignUpClick) === 1 ? (
-                    <div
-                      id="signup-msg"
-                      className="alert alert-danger mt-2 py-1 px-3 border border-dark"
-                    ></div>
-                  ) : null}
-                  <input
-                    className="px-2 py-1 rounded border-dark border"
-                    type="text"
-                    placeholder="First Name"
-                    onChange={(e) => setFname(e.target.value)}
-                    required
-                  />
-                  <input
-                    className="px-2 py-1 rounded border-dark border"
-                    type="text"
-                    placeholder="Last Name"
-                    onChange={(e) => setLname(e.target.value)}
-                    required
-                  />
-                  <input
-                    className="px-2 py-1 rounded border-dark border"
-                    type="email"
-                    placeholder="Email"
-                    onChange={(e) => handleEmail(e)}
-                    required
-                  />
-                  <div className="phone-input-container">
-                    <PhoneInput
-                      placeholder="Mobile Number"
-                      value={phoneNumber}
-                      onChange={setPhoneNumber}
-                      defaultCountry="IN"
-                      style={{ paddingLeft: "10px" }}
-                    />
+      {hasError && <ErrorBoundary></ErrorBoundary>}
 
-                    {phoneError && (
+      {!hasError && (
+        <div className="sign">
+          <Modal
+            {...props}
+            size="lg"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+          >
+            <Modal.Body>
+              <div className="container sign" id="container">
+                <div className="form-container sign-up-container">
+                  <form className="sign" onSubmit={SignUpForm}>
+                    <div className="h2 py-0 my-1">Create Account</div>
+                    <span>or use your email for registration</span>
+
+                    {parseInt(buttonSignUpClick) === 1 ? (
                       <div
-                        className="text-danger mt-1"
-                        style={{ fontSize: "12px" }}
-                      >
-                        Please enter a valid phone number
-                      </div>
-                    )}
-                  </div>
-                  <input
-                    className="px-2 py-1 rounded border-dark border"
-                    type="password"
-                    placeholder="Password"
-                    onChange={(e) => setFirst(e)}
-                    required
-                  />
-                  {buttonSignUpClick === 1 ? (
-                    <div className="rounded alert-danger">
-                      <div className="alert-msg">
-                        {!validEmail && <div>◼ Enter Valid Email! </div>}
-                        {!validLength && (
-                          <div>
-                            ◼ Password should contain at least 8 characters!{" "}
-                          </div>
-                        )}
-                        {!upperCase && (
-                          <div>
-                            ◼ Password should contain at least 1 uppercase
-                            character!{" "}
-                          </div>
-                        )}
-                        {!lowerCase && (
-                          <div>
-                            ◼ Password should contain at least 1 lowercase
-                            character!{" "}
-                          </div>
-                        )}
-                        {!match && <div>◼ Passwords don't match! </div>}
-                      </div>
-                    </div>
-                  ) : null}
-                  <input
-                    className="px-2 py-1 rounded border-dark border"
-                    type="password"
-                    placeholder="Confirm Password"
-                    onChange={(e) => setSecond(e)}
-                    autoComplete="off"
-                    required
-                  />
-
-                  <FormControl className="mb-4 w-75">
-                    <InputLabel id="demo-simple-select-label">
-                      User Type
-                    </InputLabel>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={userType}
-                      onChange={(e) => setUserType(e.target.value)}
+                        id="signup-msg"
+                        className="alert alert-danger mt-2 py-1 px-3 border border-dark"
+                      ></div>
+                    ) : null}
+                    <input
+                      className="px-2 py-1 rounded border-dark border"
+                      type="text"
+                      placeholder="First Name"
+                      onChange={(e) => setFname(e.target.value)}
                       required
-                    >
-                      <MenuItem value="doctor">Doctor</MenuItem>
-                      <MenuItem value="other">Other</MenuItem>
-                    </Select>
-                  </FormControl>
-                  <button type="submit" className="ghost">
-                    Sign Up
-                  </button>
-                </form>
-              </div>
-              <div className="form-container sign-in-container">
-                <form className="sign" onSubmit={loginForm}>
-                  <h1 id="headSign">Sign in</h1>
-                  <span id="accText">or use your account</span>
-
-                  {buttonClick === 1 && !loginSuccess && (
-                    <div
-                      id="login-msg"
-                      className="alert alert-danger mt-2 py-1 px-3 border border-dark"
-                    >
-                      Some Error Occured
-                    </div>
-                  )}
-
-                  <input
-                    className="p-2 rounded border-dark border"
-                    type="email"
-                    placeholder="Email"
-                    autoComplete="off"
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                  <input
-                    className="p-2 rounded border-dark border"
-                    type="password"
-                    placeholder="Password"
-                    onChange={(e) => setPass(e.target.value)}
-                  />
-                  <Link
-                    className="text-dark"
-                    to="/loginForm/verify"
-                    id="forgetPass"
-                  >
-                    Forgot your password?
-                  </Link>
-                  <FormGroup>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          name="Terms"
-                          value={rememberMe}
-                          onClick={(e) =>
-                            e.target.value === "off"
-                              ? setRememberMe("on")
-                              : setRememberMe("off")
-                          }
-                        />
-                      }
-                      label="Remember Me"
                     />
-                  </FormGroup>
-                  <button className="ghost" id="btn1">
-                    Sign In
-                  </button>
-                </form>
-              </div>
-              <div className="overlay-container">
-                <div className="overlay">
-                  <div className="overlay-panel overlay-left">
-                    <h1>Welcome Back!</h1>
-                    <p className="text-center">
-                      To keep connected with us please login with your personal
-                      info or
-                    </p>
-                    <button
-                      onClick={(e) => handleClick(setClick(true))}
-                      className="ghost"
-                      id="signIn"
-                    >
-                      Sign In
-                    </button>
-                  </div>
-                  <div className="overlay-panel overlay-right" id="rightPanel">
-                    <h1 id="headSign">Hello, Friend!</h1>
-                    <p>Enter your personal details and start journey with us</p>
-                    <button
-                      onClick={(e) => handleClick(setClick(false))}
-                      className="ghost"
-                      id="signUp"
-                    >
+                    <input
+                      className="px-2 py-1 rounded border-dark border"
+                      type="text"
+                      placeholder="Last Name"
+                      onChange={(e) => setLname(e.target.value)}
+                      required
+                    />
+                    <input
+                      className="px-2 py-1 rounded border-dark border"
+                      type="email"
+                      placeholder="Email"
+                      onChange={(e) => handleEmail(e)}
+                      required
+                    />
+                    <div className="phone-input-container">
+                      <PhoneInput
+                        placeholder="Mobile Number"
+                        value={phoneNumber}
+                        onChange={setPhoneNumber}
+                        defaultCountry="IN"
+                        style={{ paddingLeft: "10px" }}
+                      />
+
+                      {phoneError && (
+                        <div
+                          className="text-danger mt-1"
+                          style={{ fontSize: "12px" }}
+                        >
+                          Please enter a valid phone number
+                        </div>
+                      )}
+                    </div>
+                    <input
+                      className="px-2 py-1 rounded border-dark border"
+                      type="password"
+                      placeholder="Password"
+                      onChange={(e) => setFirst(e)}
+                      required
+                    />
+                    {buttonSignUpClick === 1 ? (
+                      <div className="rounded alert-danger">
+                        <div className="alert-msg">
+                          {!validEmail && <div>◼ Enter Valid Email! </div>}
+                          {phoneError && (
+                            <div>◼ Enter Valid Phone Number! </div>
+                          )}
+                          {!validLength && (
+                            <div>
+                              ◼ Password should contain at least 8 characters!{" "}
+                            </div>
+                          )}
+                          {!upperCase && (
+                            <div>
+                              ◼ Password should contain at least 1 uppercase
+                              character!{" "}
+                            </div>
+                          )}
+                          {!lowerCase && (
+                            <div>
+                              ◼ Password should contain at least 1 lowercase
+                              character!{" "}
+                            </div>
+                          )}
+                          {!match && <div>◼ Passwords don't match! </div>}
+                        </div>
+                      </div>
+                    ) : null}
+                    <input
+                      className="px-2 py-1 rounded border-dark border"
+                      type="password"
+                      placeholder="Confirm Password"
+                      onChange={(e) => setSecond(e)}
+                      autoComplete="off"
+                      required
+                    />
+
+                    <FormControl className="mb-4 w-75">
+                      <InputLabel id="demo-simple-select-label">
+                        User Type
+                      </InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={userType}
+                        onChange={(e) => setUserType(e.target.value)}
+                        required
+                      >
+                        <MenuItem value="doctor">Doctor</MenuItem>
+                        <MenuItem value="other">Other</MenuItem>
+                      </Select>
+                    </FormControl>
+                    <button type="submit" className="ghost">
                       Sign Up
                     </button>
-                  </div>
+                  </form>
+                </div>
+                <div className="form-container sign-in-container">
+                  <form className="sign" onSubmit={loginForm}>
+                    <h1 id="headSign">Sign in</h1>
+                    <span id="accText">or use your account</span>
 
-                  {alert && (
-                    <Alert variant="success" className="h6 mx-3">
-                      {alert}
-                    </Alert>
-                  )}
+                    {buttonClick === 1 && !loginSuccess && (
+                      <div
+                        id="login-msg"
+                        className="alert alert-danger mt-2 py-1 px-3 border border-dark"
+                      >
+                        Some Error Occured
+                      </div>
+                    )}
+
+                    <input
+                      className="p-2 rounded border-dark border"
+                      type="email"
+                      placeholder="Email"
+                      autoComplete="off"
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                    <input
+                      className="p-2 rounded border-dark border"
+                      type="password"
+                      placeholder="Password"
+                      onChange={(e) => setPass(e.target.value)}
+                    />
+                    <Link
+                      className="text-dark"
+                      to="/loginForm/verify"
+                      id="forgetPass"
+                    >
+                      Forgot your password?
+                    </Link>
+                    <FormGroup>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            name="Terms"
+                            value={rememberMe}
+                            onClick={(e) =>
+                              e.target.value === "off"
+                                ? setRememberMe("on")
+                                : setRememberMe("off")
+                            }
+                          />
+                        }
+                        label="Remember Me"
+                      />
+                    </FormGroup>
+                    <button className="ghost" id="btn1">
+                      Sign In
+                    </button>
+                  </form>
+                </div>
+                <div className="overlay-container">
+                  <div className="overlay">
+                    <div className="overlay-panel overlay-left">
+                      <h1>Welcome Back!</h1>
+                      <p className="text-center">
+                        To keep connected with us please login with your
+                        personal info or
+                      </p>
+                      <button
+                        onClick={(e) => handleClick(setClick(true))}
+                        className="ghost"
+                        id="signIn"
+                      >
+                        Sign In
+                      </button>
+                    </div>
+                    <div
+                      className="overlay-panel overlay-right"
+                      id="rightPanel"
+                    >
+                      <h1 id="headSign">Hello, Friend!</h1>
+                      <p>
+                        Enter your personal details and start journey with us
+                      </p>
+                      <button
+                        onClick={(e) => handleClick(setClick(false))}
+                        className="ghost"
+                        id="signUp"
+                      >
+                        Sign Up
+                      </button>
+                    </div>
+
+                    {alert && (
+                      <Alert variant="success" className="h6 mx-3">
+                        {alert}
+                      </Alert>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          </Modal.Body>
-        </Modal>
-      </div>
+            </Modal.Body>
+          </Modal>
+        </div>
+      )}
     </>
   );
 };
