@@ -5,9 +5,14 @@ import AppBanner from "./components/LandingPage/AppBanner";
 import { Link } from "react-router-dom";
 import "./cookie.css";
 import clarity from "@microsoft/clarity";
+import mixpanel from "mixpanel-browser";
 const App = () => {
   useEffect(() => {
     clarity.init("q9o6f2uidb");
+    mixpanel.init("5fdfc7dc0140b64a9e77ea2783ef69d9", {
+      autocapture: true,
+      record_sessions_percent: 100,
+    });
   }, []);
   return (
     <div>
