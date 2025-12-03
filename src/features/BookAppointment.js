@@ -856,7 +856,7 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
         appointmentDate: selectedDate,
         startTime: selectedTimeSlot,
         paymentStatus: 0,
-        amount: amount,
+        amount: amount.totalFee,
         currency: "INR",
       });
 
