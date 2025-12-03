@@ -115,38 +115,39 @@ function DoctorConnect() {
 
       <div className="doctor-connect-container">
         <div className="doctor-connect-content">
-          <img
-            src={`${imgKitImagePath}/assets/img/docchartdp.jpg`}
-            alt="Doctor Connect Banner"
-            className="doc-banner"
-          />
-
-          <div className="doc-search-section">
-            <DoctorConnectSearch
-              speciality={medicineType}
-              changeSpeciality={changeSpeciality}
-            />
-          </div>
-
-          <div className="doc-text-container">
-            <div className="doc-text-item">
-              {/* <img src="/assets/icon/check.svg" alt="check" /> */}
-              <div>
-                Book appointments with minimum wait-time & verified doctor
-                details
-              </div>
-            </div>
-          </div>
-
           <div className="doc-grid">
-            <div className="doc-list-section">
-              {docList.map((doc) => (
-                <DoctorConnectCard
-                  key={doc.id}
-                  doc={doc}
-                  onConsult={handleConsultClick}
-                />
-              ))}
+            <section className="doc-list-section">
+              <div className="doc-hero doc-hero-inline">
+                <p className="doc-hero-subtitle">Available Doctors</p>
+                <h1 className="doc-hero-title">
+                  Consult The Right Expert For You
+                </h1>
+              </div>
+
+              {docList.length === 0 ? (
+                <div className="doc-list-empty">
+                  <h3>No doctors found for this filter.</h3>
+                  <p>
+                    Try exploring another speciality or search by city & name
+                    using the smart filters.
+                  </p>
+                  <button
+                    type="button"
+                    className="doc-hero-button doc-list-empty-button"
+                    onClick={() => changeSpeciality("")}
+                  >
+                    View all doctors
+                  </button>
+                </div>
+              ) : (
+                docList.map((doc) => (
+                  <DoctorConnectCard
+                    key={doc.docID || doc.id}
+                    doc={doc}
+                    onConsult={handleConsultClick}
+                  />
+                ))
+              )}
 
               <nav className="pagination-container" aria-label="Pagination">
                 <button
@@ -171,7 +172,34 @@ function DoctorConnect() {
                   <NavigateNextIcon />
                 </button>
               </nav>
-            </div>
+            </section>
+
+            <aside className="doc-sidebar">
+              
+                <img
+                  src={`${imgKitImagePath}/assets/img/banner02.jpg`}
+                  alt="Consult with expert doctors"
+                  className="doc-sidebar-banner-image"
+                />
+          
+
+              <div className="doc-sidebar-card doc-sidebar-search">
+                <div className="doc-sidebar-search-heading">
+                  <p>Smart Filters</p>
+                 
+                  <span>
+                    Search by doctor name, city, or refine by speciality below.
+                    Press enter to run a search instantly.
+                  </span>
+                </div>
+                <div className="doc-search-section">
+                  <DoctorConnectSearch
+                    speciality={medicineType}
+                    changeSpeciality={changeSpeciality}
+                  />
+                </div>
+              </div>
+            </aside>
           </div>
         </div>
 

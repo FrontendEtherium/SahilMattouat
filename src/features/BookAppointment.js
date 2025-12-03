@@ -18,6 +18,7 @@ import PhoneInput from "react-phone-number-input";
 import { isValidPhoneNumber } from "react-phone-number-input";
 import { parsePhoneNumber } from "libphonenumber-js";
 import Cookies from "js-cookie";
+import RateTooltip from "../ui/Tooltip";
 
 // Professional medical styling with mobile responsiveness
 const medicalStyles = `
@@ -400,9 +401,7 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
 
       const { autoSelect } = options;
       const shouldAutoSelect =
-        typeof autoSelect === "boolean"
-          ? autoSelect
-          : (!date && !selectedDate);
+        typeof autoSelect === "boolean" ? autoSelect : !date && !selectedDate;
 
       setLoadingSlots(true);
       setError(null);
@@ -446,9 +445,9 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
         );
         setUnavailableDates(missingDates);
 
-        const availableEntries = Object.entries(json.unbookedSlots || {}).filter(
-          ([, slots]) => Array.isArray(slots) && slots.length > 0
-        );
+        const availableEntries = Object.entries(
+          json.unbookedSlots || {}
+        ).filter(([, slots]) => Array.isArray(slots) && slots.length > 0);
 
         if (shouldAutoSelect && availableEntries.length > 0) {
           const sortedEntries = [...availableEntries].sort(
@@ -670,9 +669,9 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
 
         const isEmailDuplicate =
           typeof responseMessage === "string" &&
-          responseMessage.toLowerCase().includes(
-            "email address already exists"
-          );
+          responseMessage
+            .toLowerCase()
+            .includes("email address already exists");
 
         const isExplicitFailure =
           typeof data === "object" &&
@@ -766,7 +765,10 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
               setActiveUserId(loginData.registration_id);
             }
           } catch (autoLoginError) {
-            console.warn("Auto-login after registration failed:", autoLoginError);
+            console.warn(
+              "Auto-login after registration failed:",
+              autoLoginError
+            );
           }
         }
 
@@ -784,9 +786,9 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
             : "";
         const duplicateEmail =
           typeof responseMessage === "string" &&
-          responseMessage.toLowerCase().includes(
-            "email address already exists"
-          );
+          responseMessage
+            .toLowerCase()
+            .includes("email address already exists");
 
         if (duplicateEmail) {
           setShowExistingAccountPrompt(true);
@@ -1166,9 +1168,7 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
                           />
                         </div>
                         <div className="col-12 col-md-6">
-                          <label className="text-muted small mb-1">
-                            Email
-                          </label>
+                          <label className="text-muted small mb-1">Email</label>
                           <input
                             type="email"
                             className="form-control"
@@ -1263,7 +1263,8 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
                         <span>{registrationSuccessMessage}</span>
                       </div>
                       <div className="mt-3 mt-md-0 text-muted small">
-                        We’ve emailed your login details. You can now pick a slot.
+                        We’ve emailed your login details. You can now pick a
+                        slot.
                       </div>
                     </Alert>
                   )}
@@ -1396,7 +1397,8 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
                                 className="mb-2 appointment-info-text"
                               >
                                 {unbookedSlots.length} slot
-                                {unbookedSlots.length !== 1 ? "s" : ""} available
+                                {unbookedSlots.length !== 1 ? "s" : ""}{" "}
+                                available
                               </Badge>
                             </div>
                             <div
@@ -1550,7 +1552,9 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
                                   color: "white",
                                 }}
                               >
-                                <AccessTimeIcon style={{ fontSize: "1.1rem" }} />
+                                <AccessTimeIcon
+                                  style={{ fontSize: "1.1rem" }}
+                                />
                               </div>
                               <div className="ml-2">
                                 <div
@@ -1606,10 +1610,27 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
                                 </div>
                                 <div
                                   className="font-weight-bold appointment-summary-fee"
-                                  style={{ fontSize: "0.85rem", color: "#f57c00" }}
+                                  style={{
+                                    fontSize: "0.85rem",
+                                    color: "#f57c00",
+                                  }}
                                 >
-                                  {!paid ? (
-                                    `${currency} ${amount}`
+                                  {paid ? (
+                                    <>
+                                      {currency} {amount.totalFee}
+                                      <RateTooltip
+                                        title={
+                                          <>
+                                            <strong>Base Fee:</strong> ₹
+                                            {amount?.baseFee} <br />
+                                            <strong>Platform Fee:</strong> ₹
+                                            {amount?.etheriumPart} <br />
+                                            <strong>GST:</strong> ₹{amount?.gst}{" "}
+                                            <br />
+                                          </>
+                                        }
+                                      />
+                                    </>
                                   ) : (
                                     <>
                                       <span>
@@ -1743,8 +1764,7 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
           </div>
         </div>
       </div>
-    </div>
-  ,
+    </div>,
     document.body
   );
 };

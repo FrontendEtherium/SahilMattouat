@@ -1,0 +1,37 @@
+.doctor-connect-mobile-filter {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .doctor-connect-mobile-filter {
+    display: block;
+    margin-top: 1.5rem;
+    background: #ffffff;
+    border-radius: 1rem;
+    padding: 1rem;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.1);
+  }
+
+  .doctor-connect-mobile-filter label {
+    display: block;
+    font-weight: 600;
+    color: #0f172a;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+  }
+
+  .doctor-connect-mobile-select-wrapper {
+    border: 1px solid #d1d5db;
+    border-radius: 0.75rem;
+    padding: 0.35rem 0.5rem;
+    background: #f8fbff;
+  }
+
+  .doctor-connect-mobile-select-wrapper select {
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-size: 0.95rem;
+    color: #0f172a;
+  }
+}

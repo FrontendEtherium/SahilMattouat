@@ -4,12 +4,13 @@ import LocalPharmacyIcon from "@mui/icons-material/LocalPharmacy";
 import DummyDoc from "../../../assets/healthcare/img/images/defaultDoc1.png";
 import { userId } from "../../UserId";
 import Test from "../test";
-import { userAccess } from "../../UserAccess";
+
 import axios from "axios";
 import { backendHost } from "../../../api-config";
 import "./DoctorConnectCard.css";
 import { imgKitImagePath } from "../../../image-path";
 import { Link } from "react-router-dom";
+import RateTooltip from "../../../ui/Tooltip";
 
 function DoctorConnectCard({ doc, onConsult }) {
   const imgLoc = doc.imgLoc ? `${imgKitImagePath}/${doc.imgLoc}` : DummyDoc;
@@ -73,6 +74,21 @@ function DoctorConnectCard({ doc, onConsult }) {
               <div className="doctor-location">
                 {doc.cityName}, {doc.addressCountry}
               </div>
+                 {doc?.fee?.totalFee && (
+                <span className="doctor-pill doctor-pill-fee">
+                  ₹{doc?.fee?.totalFee}
+                  <RateTooltip
+                    title={
+                      <>
+                        <strong>Base Fee:</strong> ₹{doc?.fee?.baseFee} <br />
+                        <strong>Platform Fee:</strong> ₹{doc?.fee?.etheriumPart}{" "}
+                        <br />
+                        <strong>GST:</strong> ₹{doc?.fee?.gst} <br />
+                      </>
+                    }
+                  />
+                </span>
+              )}
               <div className="doctor-hospital">{doc.hospitalAffiliated}</div>
               <div className="doctor-separator"></div>
             </div>
