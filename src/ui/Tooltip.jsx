@@ -4,8 +4,14 @@ import IconButton from "@mui/material/IconButton";
 
 export default function RateTooltip({ title }) {
   return (
-    <Tooltip title={title} arrow placement="top">
-      <IconButton size="small">
+    <Tooltip
+      title={title}
+      arrow
+      placement="top"
+      enterTouchDelay={0}
+      leaveTouchDelay={2500}
+    >
+      <IconButton size="small" aria-label="Fee breakdown">
         <InfoIcon fontSize="small" />
       </IconButton>
     </Tooltip>

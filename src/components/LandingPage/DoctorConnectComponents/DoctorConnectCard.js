@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import LocalPharmacyIcon from "@mui/icons-material/LocalPharmacy";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import DummyDoc from "../../../assets/healthcare/img/images/defaultDoc1.png";
 import { userId } from "../../UserId";
 import Test from "../test";
@@ -9,13 +10,17 @@ import axios from "axios";
 import { backendHost } from "../../../api-config";
 import "./DoctorConnectCard.css";
 import { imgKitImagePath } from "../../../image-path";
-import { Link } from "react-router-dom";
 import RateTooltip from "../../../ui/Tooltip";
 
 function DoctorConnectCard({ doc, onConsult }) {
   const imgLoc = doc.imgLoc ? `${imgKitImagePath}/${doc.imgLoc}` : DummyDoc;
   const [showModal, setShowModal] = useState(false);
   const [notAvailable, setNotAvailable] = useState(false);
+  const showFee =
+    !!doc?.fee &&
+    [doc.fee.totalFee, doc.fee.baseFee, doc.fee.etheriumPart, doc.fee.gst].some(
+      (val) => Number(val) > 0
+    );
 
   const DoctorNotAvailable = async () => {
     setNotAvailable(true);
@@ -53,55 +58,65 @@ function DoctorConnectCard({ doc, onConsult }) {
   return (
     <>
       <div className="doctor-card">
-        <Link
-          to={`/doctor/${doc.docID}-${doc.firstName}-${doc.lastName}`}
-          id="profile"
-        >
-          <div className="doctor-card-main">
-            <div className="doctor-image-container">
-              <img
-                src={imgLoc}
-                alt={`Dr.${doc.firstName} ${doc.lastName}`}
-                className="doctor-image"
-              />
-            </div>
-            <div className="doctor-details">
-              <div className="doctor-name">
-                Dr. {doc.firstName} {doc.lastName}{" "}
-                <VerifiedIcon color="success" style={{ fontSize: "12px" }} />
-              </div>
-              <div className="doctor-specialty">{doc.medicineTypeName}</div>
-              <div className="doctor-location">
-                {doc.cityName}, {doc.addressCountry}
-              </div>
-                 {doc?.fee?.totalFee && (
-                <span className="doctor-pill doctor-pill-fee">
-                  ₹{doc?.fee?.totalFee}
-                  <RateTooltip
-                    title={
-                      <>
-                        <strong>Base Fee:</strong> ₹{doc?.fee?.baseFee} <br />
-                        <strong>Platform Fee:</strong> ₹{doc?.fee?.etheriumPart}{" "}
-                        <br />
-                        <strong>GST:</strong> ₹{doc?.fee?.gst} <br />
-                      </>
-                    }
-                  />
-                </span>
-              )}
-              <div className="doctor-hospital">{doc.hospitalAffiliated}</div>
-              <div className="doctor-separator"></div>
-            </div>
+        <div className="doctor-card-main">
+          <div className="doctor-image-container">
+            <img
+              src={imgLoc}
+              alt={`Dr.${doc.firstName} ${doc.lastName}`}
+              className="doctor-image"
+            />
           </div>
-        </Link>
+          <div className="doctor-details">
+            <div className="doctor-name">
+              Dr. {doc.firstName} {doc.lastName}{" "}
+              <VerifiedIcon color="success" style={{ fontSize: "12px" }} />
+            </div>
+            <div className="doctor-specialty">{doc.medicineTypeName}</div>
+            <div className="doctor-location">
+              {doc.cityName}, {doc.addressCountry}
+            </div>
+            {showFee && (
+              <div className="doctor-fee" aria-label="Consultation fee">
+                <div className="doctor-fee-text">
+                  <span className="doctor-fee-label">Consultation fee</span>
+                  <span className="doctor-fee-amount">
+                    <span className="doctor-fee-currency">₹</span>
+                    <span className="doctor-fee-value">{doc?.fee?.totalFee}</span>
+                    <span className="doctor-fee-note">incl. taxes</span>
+                  </span>
+                </div>
+                <RateTooltip
+                  title={
+                    <>
+                      <strong>Base Fee:</strong> ₹{doc?.fee?.baseFee} <br />
+                      <strong>Platform Fee:</strong> ₹{doc?.fee?.etheriumPart}{" "}
+                      <br />
+                      <strong>GST:</strong> ₹{doc?.fee?.gst} <br />
+                    </>
+                  }
+                />
+              </div>
+            )}
+            <div className="doctor-hospital">{doc.hospitalAffiliated}</div>
+            <div className="doctor-separator"></div>
+          </div>
+        </div>
         <div className="book-button-container">
           {doc.videoService === 1 && (
-            <div className="book-availability">Available</div>
+            <div className="book-availability" aria-label="Doctor available">
+              <CheckCircleIcon className="book-availability-icon" />
+              Available
+            </div>
           )}
-          <button className="book-button" onClick={consult}>
-            <LocalPharmacyIcon className="book-button-icon" />
-            Consult
-          </button>
+          <div className="book-button-row">
+            <button className="book-button" onClick={consult}>
+              <LocalPharmacyIcon className="book-button-icon" />
+              Consult
+            </button>
+            <button className="profile-button" onClick={handleProfileVisit}>
+              Visit Profile
+            </button>
+          </div>
         </div>
       </div>
       <Test show={showModal} onHide={() => setShowModal(false)} />

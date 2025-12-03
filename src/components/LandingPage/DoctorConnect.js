@@ -23,6 +23,16 @@ const MED_TYPE_MAP = {
   chinese: 4,
 };
 
+const SPECIALITY_FILTERS = [
+  { slug: "", label: "All Specialities" },
+  { slug: "ayurveda", label: "Ayurveda" },
+  { slug: "homeopathy", label: "Homeopathy" },
+  { slug: "persian", label: "Persian" },
+  { slug: "naturopathy", label: "Naturopathy" },
+  { slug: "unani", label: "Unani" },
+  { slug: "chinese", label: "Chinese" },
+];
+
 function DoctorConnect() {
   const { medicineType } = useParams(); // slug or undefined
   const history = useHistory();
@@ -122,6 +132,20 @@ function DoctorConnect() {
                 <h1 className="doc-hero-title">
                   Consult The Right Expert For You
                 </h1>
+              </div>
+              <div className="doc-inline-filter" aria-label="Filter doctors">
+                <div className="doc-inline-filter-label">Speciality</div>
+                <select
+                  className="doc-inline-filter-select"
+                  value={medicineType || ""}
+                  onChange={(e) => changeSpeciality(e.target.value)}
+                >
+                  {SPECIALITY_FILTERS.map((option) => (
+                    <option key={option.slug || "all"} value={option.slug}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               {docList.length === 0 ? (

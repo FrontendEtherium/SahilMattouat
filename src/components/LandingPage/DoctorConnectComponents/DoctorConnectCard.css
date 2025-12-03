@@ -99,6 +99,84 @@
   margin-top: 0.5rem;
 }
 
+.doctor-fee {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.6rem;
+  padding: 0.3rem 0.7rem;
+  background: #f6f7f9;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  color: #334155;
+  font-weight: 600;
+  width: fit-content;
+}
+
+.doctor-fee-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.doctor-fee-label {
+  font-size: 0.65rem;
+  color: #6b7280;
+  font-weight: 700;
+}
+
+.doctor-fee-amount {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.15rem;
+  color: #1f2937;
+  font-weight: 700;
+}
+
+.doctor-fee-currency {
+  font-size: 0.75rem;
+  opacity: 0.75;
+}
+
+.doctor-fee-value {
+  font-size: 1rem;
+}
+
+.doctor-fee-note {
+  font-size: 0.5rem;
+  color: #6b7280;
+  font-weight: 600;
+}
+
+.doctor-fee .MuiIconButton-root {
+  padding: 4px;
+  color: #64748b;
+}
+
+@media (max-width: 768px) {
+  .doctor-fee {
+    width: 100%;
+    justify-content: space-between;
+    padding: 0.35rem 0.6rem;
+  }
+
+  .doctor-fee-text {
+    gap: 0.05rem;
+  }
+
+  .doctor-fee-label {
+    font-size: 0.65rem;
+  }
+
+  .doctor-fee-value {
+    font-size: 0.65rem;
+  }
+
+  .doctor-fee .MuiIconButton-root {
+    margin-left: auto;
+  }
+}
+
 .doctor-hospital {
   color: #374151;
   font-size: 0.65rem;
@@ -178,11 +256,22 @@
   }
 }
 .book-availability {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
   text-align: center;
-  font-weight: bold;
-  font-size: 0.875rem;
-  color: #16a34a;
+  font-weight: 600;
+  font-size: 0.7rem;
+  color: #166534;
+  background: #ecfdf3;
+  border: 1px solid #bbf7d0;
+  padding: 0.14rem 0.45rem;
+  border-radius: 999px;
   margin-bottom: 0.25rem;
+}
+
+.book-availability-icon {
+  font-size: 0.8rem;
 }
 
 .book-button {
@@ -197,6 +286,13 @@
   font-weight: 500;
 }
 
+.book-button-row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
 .book-button:hover {
   background-color: #00334c;
 }
@@ -204,6 +300,35 @@
 .book-button-icon {
   font-size: 1rem;
   margin-right: 0.25rem;
+}
+
+.profile-button {
+  background-color: #ffffff;
+  color: #00415e;
+  padding: 0.25rem 1rem;
+  border-radius: 0.375rem;
+  border: 1px solid #cbd5e1;
+  font-size: 0.875rem;
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.profile-button:hover {
+  background-color: #f8fafc;
+  border-color: #94a3b8;
+}
+
+@media (max-width: 768px) {
+  .book-button-row {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .book-button,
+  .profile-button {
+    flex: 1 1 45%;
+    text-align: center;
+  }
 }
 
 /* Modal Backdrop */

@@ -57,6 +57,24 @@ function DoctorConnectSearch({ changeSpeciality, speciality }) {
 
   return (
     <div className="search-container">
+      <div className="mobile-speciality-filter">
+        <label className="search-input-label">Filter by speciality</label>
+        <div className="input-wrapper">
+          <select
+            className="input-field"
+            value={selectedSpeciality}
+            onChange={handleSpecialityChange}
+            aria-label="Filter doctor by speciality"
+          >
+            <option value="">All Specialities</option>
+            {fields.map((field) => (
+              <option key={field.slug} value={field.slug}>
+                {field.title}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
       <div className="search-input-group">
         {/* Search by Name */}
         <div>
@@ -115,7 +133,7 @@ function DoctorConnectSearch({ changeSpeciality, speciality }) {
         </div>
 
         {/* Filter by Speciality */}
-        <div>
+        <div className="desktop-speciality-filter">
           <label className="search-input-label">
             Filter Doctor by Speciality
           </label>
@@ -124,6 +142,7 @@ function DoctorConnectSearch({ changeSpeciality, speciality }) {
               className="input-field"
               value={selectedSpeciality}
               onChange={handleSpecialityChange}
+              aria-label="Filter doctor by speciality"
             >
               <option value="">All Specialities</option>
               {fields.map((field) => (

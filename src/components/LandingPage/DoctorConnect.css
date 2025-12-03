@@ -79,6 +79,41 @@
   margin: 0;
 }
 
+.doc-inline-filter {
+  display: none;
+  align-items: center;
+  gap: 0.5rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 0.5rem 0.75rem;
+  width: 100%;
+  max-width: 360px;
+  box-shadow: 0 10px 30px -22px rgba(15, 23, 42, 0.4);
+}
+
+.doc-inline-filter-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #475569;
+  white-space: nowrap;
+}
+
+.doc-inline-filter-select {
+  flex: 1;
+  border: none;
+  background: #fff;
+  padding: 0.55rem 0.6rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  color: #0f172a;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.doc-inline-filter-select:focus {
+  outline: 2px solid rgba(14, 165, 233, 0.25);
+}
+
 .doc-hero-button {
   background-color: #0f766e;
   color: #ffffff;
@@ -131,6 +166,16 @@
     gap: 1rem;
     width: 100%;
       padding: 1rem;
+  }
+
+  .doc-inline-filter {
+    display: flex;
+    max-width: 100%;
+    padding: 0.45rem 0.6rem;
+  }
+
+  .doc-inline-filter-select {
+    font-size: 0.85rem;
   }
 }
 
