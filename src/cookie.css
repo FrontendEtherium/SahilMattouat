@@ -22,7 +22,7 @@
 }
 
 .cookie-consent-text {
-    font-size: 9px;
+    font-size: 12px;
     padding:5px;
      text-align:center !important
   }
@@ -30,7 +30,7 @@
   /* Media query for desktops */
   @media (min-width: 768px) {
     .cookie-consent-text {
-      font-size: 14px;
+      font-size: 12px;
          text-align:center !important
     }
   }

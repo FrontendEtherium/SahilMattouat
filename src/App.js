@@ -9,7 +9,7 @@ import mixpanel from "mixpanel-browser";
 const App = () => {
   useEffect(() => {
     clarity.init("q9o6f2uidb");
-    mixpanel.init("5fdfc7dc0140b64a9e77ea2783ef69d9", {
+    mixpanel.init("047d6b10864d2362fffce2f47e14a31a", {
       autocapture: true,
       record_sessions_percent: 100,
     });
@@ -37,7 +37,7 @@ const App = () => {
             background: "#4585FF",
             color: "white",
 
-            fontSize: "12px",
+            fontSize: "10px",
             borderRadius: "5px",
 
             border: "none",

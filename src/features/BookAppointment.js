@@ -19,6 +19,7 @@ import { isValidPhoneNumber } from "react-phone-number-input";
 import { parsePhoneNumber } from "libphonenumber-js";
 import Cookies from "js-cookie";
 import RateTooltip from "../ui/Tooltip";
+import mixpanel from "mixpanel-browser";
 
 // Professional medical styling with mobile responsiveness
 const medicalStyles = `
@@ -336,6 +337,22 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
   const modalRef = useRef(null);
   const bookingButtonRef = useRef(null);
   const calendarSectionRef = useRef(null);
+  const modalOpenedRef = useRef(false);
+
+  const trackEvent = useCallback(
+    (eventName, props = {}) => {
+      try {
+        mixpanel?.track?.(eventName, {
+          docId,
+          userId: activeUserId || null,
+          ...props,
+        });
+      } catch (trackingError) {
+        console.warn("Mixpanel tracking failed:", trackingError);
+      }
+    },
+    [docId, activeUserId]
+  );
 
   const requiresRegistration = !registrationCompleted;
   const showRegistrationCard =
@@ -352,6 +369,10 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
 
       setSelectedTimeSlot(time);
       setError(null); // Clear any previous errors when selecting a new time slot
+      trackEvent("Appointment Time Selected", {
+        selectedTimeSlot: time,
+        selectedDate,
+      });
 
       // Auto-scroll to show booking button after time selection
       setTimeout(() => {
@@ -378,7 +399,7 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
         }
       }, 400); // Increased delay to ensure DOM updates are complete
     },
-    [registrationCompleted]
+    [registrationCompleted, selectedDate, trackEvent]
   );
   const [currency, setCurrency] = useState("₹");
   const [paid, setPaid] = useState(false);
@@ -512,6 +533,9 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
       try {
         setExistingAccountLoading(true);
         axios.defaults.withCredentials = true;
+        trackEvent("Appointment Login Attempt", {
+          emailDomain: email ? email.split("@")[1] || "" : "",
+        });
         const loginResponse = await axios.post(
           `${backendHost}/login?cmd=login&email=${encodeURIComponent(
             email.trim()
@@ -533,6 +557,9 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
           }
 
           setActiveUserId(loggedInUserId);
+          trackEvent("Appointment Login Success", {
+            registrationId: loggedInUserId,
+          });
           setRegistrationCompleted(true);
           setShowExistingAccountPrompt(false);
           setExistingAccountPassword("");
@@ -547,6 +574,9 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
           setExistingAccountError(
             "Incorrect email or password. Please try again."
           );
+          trackEvent("Appointment Login Failed", {
+            reason: "invalid-credentials",
+          });
         }
       } catch (loginException) {
         console.error("Existing account login error:", loginException);
@@ -557,6 +587,13 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
             ? "Incorrect email or password. Please try again."
             : "Sign-in failed. Please try again.";
         setExistingAccountError(msg);
+        trackEvent("Appointment Login Failed", {
+          reason: "api-error",
+          message:
+            typeof loginException?.response?.data === "string"
+              ? loginException.response.data
+              : "",
+        });
       } finally {
         setExistingAccountLoading(false);
       }
@@ -567,6 +604,7 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
       existingAccountPassword,
       fetchAppointmentDetails,
       selectedDate,
+      trackEvent,
     ]
   );
 
@@ -594,23 +632,36 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
       const trimmedFirstName = firstName.trim();
       const trimmedLastName = lastName.trim();
       const trimmedEmail = email.trim();
+      const emailDomain = trimmedEmail.split("@")[1] || "";
 
       if (!trimmedFirstName || !trimmedLastName || !trimmedEmail || !phone) {
         setRegistrationError("Please fill in all required fields.");
+        trackEvent("Appointment Registration Failed", {
+          reason: "missing-fields",
+        });
         return;
       }
 
       if (!emailRegex.test(trimmedEmail)) {
         setRegistrationError("Please enter a valid email address.");
+        trackEvent("Appointment Registration Failed", {
+          reason: "invalid-email",
+        });
         return;
       }
 
       if (!isValidPhoneNumber(phone)) {
         setRegistrationError("Please enter a valid phone number.");
+        trackEvent("Appointment Registration Failed", {
+          reason: "invalid-phone",
+        });
         return;
       }
 
       setRegistrationLoading(true);
+      trackEvent("Appointment Registration Started", {
+        emailDomain,
+      });
 
       let countryDialCode = "";
       let nationalNumber = "";
@@ -685,10 +736,20 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
             setExistingAccountPassword("");
             setExistingAccountError(null);
             setRegistrationError(null);
+            trackEvent("Appointment Registration Failed", {
+              reason: "duplicate-email",
+            });
           } else if (responseMessage) {
             setRegistrationError(responseMessage);
+            trackEvent("Appointment Registration Failed", {
+              reason: "api-error",
+              message: responseMessage,
+            });
           } else {
             setRegistrationError("Registration failed. Please try again.");
+            trackEvent("Appointment Registration Failed", {
+              reason: "unknown-error",
+            });
           }
           return;
         }
@@ -709,6 +770,9 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
           setRegistrationError(
             "Registration failed. Please try again in a moment."
           );
+          trackEvent("Appointment Registration Failed", {
+            reason: "missing-registration-id",
+          });
           return;
         }
 
@@ -720,6 +784,10 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
 
         setShowExistingAccountPrompt(false);
         setActiveUserId(newUserId);
+        trackEvent("Appointment Registration Success", {
+          registrationId: newUserId,
+          autoLoggedIn: Boolean(userPayload.pass_word),
+        });
         setRegistrationCompleted(true);
         setRegistrationSuccessMessage(successMessage);
 
@@ -795,12 +863,22 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
           setExistingAccountPassword("");
           setExistingAccountError(null);
           setRegistrationError(null);
+          trackEvent("Appointment Registration Failed", {
+            reason: "duplicate-email",
+          });
         } else if (responseMessage) {
           setRegistrationError(responseMessage);
+          trackEvent("Appointment Registration Failed", {
+            reason: "api-error",
+            message: responseMessage,
+          });
         } else {
           setRegistrationError(
             "Something went wrong while registering. Please try again."
           );
+          trackEvent("Appointment Registration Failed", {
+            reason: "unknown-error",
+          });
         }
       } finally {
         setRegistrationLoading(false);
@@ -814,6 +892,7 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
       phone,
       fetchAppointmentDetails,
       selectedDate,
+      trackEvent,
     ]
   );
 
@@ -838,17 +917,29 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
 
     if (!activeUserId) {
       setError("Please complete registration before booking an appointment.");
+      trackEvent("Appointment Booking Blocked", {
+        reason: "missing-user",
+      });
       setBookingLoading(false);
       return;
     }
 
     if (!selectedDate || !selectedTimeSlot) {
       setError("Please select both a date and a time slot to continue.");
+      trackEvent("Appointment Booking Blocked", {
+        reason: "missing-date-or-time",
+      });
       setBookingLoading(false);
       return;
     }
 
     try {
+      trackEvent("Appointment Booking Initiated", {
+        selectedDate,
+        selectedTimeSlot,
+        amount: amount?.totalFee,
+        currency,
+      });
       const numericUserId = parseInt(activeUserId, 10);
       const response = await axios.post(`${backendHost}/appointments/create`, {
         docID: docId,
@@ -866,14 +957,32 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
       localStorage.setItem("apiResponse", JSON.stringify(response.data));
 
       if (responseObject.Count == 0) {
+        trackEvent("Appointment Booking Success", {
+          selectedDate,
+          selectedTimeSlot,
+          paymentStatus: "not-required",
+        });
         window.location.href = "/booking-successful";
         return;
       }
 
+      trackEvent("Appointment Booking Redirecting", {
+        selectedDate,
+        selectedTimeSlot,
+        paymentStatus: "gateway",
+      });
       const redirectURL = `https://www.all-cures.com/paymentRedirection?encRequest=${responseObject.encRequest}&accessCode=AVWN42KL59BP42NWPB`;
       window.location.href = redirectURL;
     } catch (error) {
       console.error("Error while booking appointment:", error);
+      trackEvent("Appointment Booking Failed", {
+        selectedDate,
+        selectedTimeSlot,
+        message:
+          typeof error?.response?.data === "string"
+            ? error.response.data
+            : "request-error",
+      });
       setError("Failed to book the appointment. Please try again.");
     } finally {
       setBookingLoading(false);
@@ -891,8 +1000,11 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
       setSelectedDate(formattedDate);
       setSelectedTimeSlot(""); // Reset time slot when date changes
       setError(null); // Clear errors when date changes
+      trackEvent("Appointment Date Selected", {
+        selectedDate: formattedDate,
+      });
     },
-    [registrationCompleted]
+    [registrationCompleted, trackEvent]
   );
 
   const formatTimeSlot = useCallback((time) => {
@@ -903,6 +1015,8 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
   }, []);
 
   const handleModalClose = useCallback(() => {
+    trackEvent("Appointment Modal Closed");
+    modalOpenedRef.current = false;
     setSelectedDate(null);
     setSelectedTimeSlot("");
     setError(null);
@@ -920,7 +1034,7 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
     setExistingAccountError(null);
     setExistingAccountLoading(false);
     onHide();
-  }, [onHide]);
+  }, [onHide, trackEvent]);
 
   // Handle escape key and backdrop click
   useEffect(() => {
@@ -940,6 +1054,15 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
       document.body.style.overflow = "unset";
     };
   }, [show, handleModalClose]);
+
+  useEffect(() => {
+    if (show && !modalOpenedRef.current) {
+      trackEvent("Appointment Modal Opened");
+      modalOpenedRef.current = true;
+    } else if (!show) {
+      modalOpenedRef.current = false;
+    }
+  }, [show, trackEvent]);
 
   return createPortal(
     <div

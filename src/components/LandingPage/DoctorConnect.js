@@ -13,6 +13,7 @@ import { imgKitImagePath } from "../../image-path";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import "./DoctorConnect.css";
+import mixpanel from "mixpanel-browser";
 
 const MED_TYPE_MAP = {
   ayurveda: 1,
@@ -42,6 +43,22 @@ function DoctorConnect() {
   const [showAppointmentModal, setShowAppointmentModal] = useState(false);
   const [selectedDocId, setSelectedDocId] = useState(null);
 
+  const trackEvent = React.useCallback(
+    (eventName, props = {}) => {
+      try {
+        mixpanel?.track?.(eventName, {
+          userId: userId || null,
+          medicineType: medicineType || "all",
+          currentPage,
+          ...props,
+        });
+      } catch (trackingError) {
+        console.warn("Mixpanel tracking failed:", trackingError);
+      }
+    },
+    [medicineType, currentPage]
+  );
+
   // reset page when filter changes
   useEffect(() => {
     setCurrentPage(1);
@@ -52,6 +69,14 @@ function DoctorConnect() {
     window.scrollTo({ top: 0, behavior: "smooth" });
     fetchDoctors();
   }, [medicineType, currentPage]);
+
+  useEffect(() => {
+    trackEvent("DoctorConnect Viewed");
+  }, [medicineType, trackEvent]);
+
+  useEffect(() => {
+    trackEvent("DoctorConnect Pagination Changed", { page: currentPage });
+  }, [currentPage, trackEvent]);
 
   async function fetchDoctors() {
     const offset = (currentPage - 1) * 10;
@@ -74,6 +99,10 @@ function DoctorConnect() {
 
   // passed down to <DoctorConnectSearch>
   const changeSpeciality = (slug) => {
+    trackEvent("DoctorConnect Filter Changed", {
+      previousSpeciality: medicineType || "all",
+      nextSpeciality: slug || "all",
+    });
     if (slug) {
       history.push(`/doctor-connect/${slug}`);
     } else {
@@ -82,6 +111,18 @@ function DoctorConnect() {
   };
 
   const handleConsultClick = (docId) => {
+    const doctor =
+      docList.find((entry) => entry?.docID === docId || entry?.id === docId) ||
+      {};
+    trackEvent("DoctorConnect Consult Clicked", {
+      docId,
+      docName:
+        doctor.firstName && doctor.lastName
+          ? `${doctor.firstName} ${doctor.lastName}`
+          : undefined,
+      speciality: doctor.medicineTypeName,
+      city: doctor.cityName,
+    });
     setSelectedDocId(docId);
     setShowAppointmentModal(true);
   };
