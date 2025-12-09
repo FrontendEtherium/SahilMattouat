@@ -38,7 +38,7 @@ function DoctorLandingPage() {
       >
         <img
           src={`${imgKitImagePath}/assets/img/ConsultationBanner.jpg`}
-          alt="3 Step Image"
+          alt="consultation banner"
           style={{ width: "100%", height: "auto" }}
         />
       </div>
@@ -65,7 +65,7 @@ function DoctorLandingPage() {
         >
           <img
             src="https://ik.imagekit.io/qi0xxmh2w/productimages/assets/img/3step.jpg"
-            alt="3 Step Image"
+            alt="consultation banner"
             style={{ width: "100%", height: "auto" }}
           />
         </div>

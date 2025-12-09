@@ -7,7 +7,6 @@ import {Select, MenuItem , InputLabel, FormControl, Checkbox, FormGroup, FormCon
 import { usePasswordValidation } from '../hooks/usePasswordValidation';
 import { backendHost } from '../../api-config';
 import { useHistory } from 'react-router-dom';
-import Test from '../LandingPage/test'
 
 import './test.css'
 import ErrorBoundary from '../ErrorBoundary';
