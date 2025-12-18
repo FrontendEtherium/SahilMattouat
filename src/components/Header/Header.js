@@ -21,7 +21,7 @@ import { userAccess } from "../UserAccess";
 import { useHistory } from "react-router-dom";
 const NAV_ITEMS = [
   { to: "/AboutUs", label: "About Us" },
-  { to: "/doctor", label: "Consult Now" },
+  { to: "/doctor-connect", label: "Consult Now" },
   {
     label: "Natural Treatments",
     children: [
@@ -38,7 +38,7 @@ const NAV_ITEMS = [
 const NAV_ITEMS_DESKTOP = [
   { to: "/", label: "Home" },
   { to: "/AboutUs", label: "About Us" },
-  { to: "/doctor", label: "Consult Now" },
+  { to: "/doctor-connect", label: "Consult Now" },
   {
     label: "Natural Treatments",
     children: [
