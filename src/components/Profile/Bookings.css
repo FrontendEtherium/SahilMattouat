@@ -684,6 +684,672 @@
   }
 }
 
+/* ==================== PRESCRIPTION STYLES ==================== */
+
+/* Prescription Action Buttons */
+.prescription-actions {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.prescription-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.prescription-btn i {
+  font-size: 0.85rem;
+}
+
+.prescription-btn.view-btn {
+  background: linear-gradient(135deg, #00415e 0%, #006080 100%);
+  color: white;
+}
+
+.prescription-btn.view-btn:hover {
+  background: linear-gradient(135deg, #003348 0%, #00415e 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 65, 94, 0.3);
+}
+
+.prescription-btn.upload-btn {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+}
+
+.prescription-btn.upload-btn:hover {
+  background: linear-gradient(135deg, #1e7e34 0%, #17a589 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+/* Prescription Pending State */
+.prescription-pending {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #f8f9fa;
+  border: 1px dashed #b9daf1;
+  border-radius: 0.5rem;
+  color: #666;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.prescription-pending i {
+  color: #ffc107;
+  font-size: 0.9rem;
+}
+
+/* Prescription Modal Styles */
+.prescription-modal .modal-dialog {
+  max-width: 600px;
+  max-height: 90vh;
+  margin: 1.75rem auto;
+}
+
+.prescription-modal .modal-dialog-scrollable {
+  max-height: calc(100% - 3.5rem);
+}
+
+.prescription-modal-content {
+  border-radius: 1rem !important;
+  border: none !important;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.prescription-modal .modal-content {
+  border-radius: 1rem;
+  border: none;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Custom Modal Header - Full bleed design */
+.prescription-modal-header {
+  background: linear-gradient(135deg, #00415e 0%, #006a8e 50%, #008bb3 100%);
+  padding: 1.75rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative;
+}
+
+.prescription-modal-header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  opacity: 0.5;
+}
+
+.modal-header-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.modal-header-icon {
+  width: 56px;
+  height: 56px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.modal-header-icon i {
+  font-size: 1.5rem;
+  color: white;
+}
+
+.modal-header-text {
+  color: white;
+}
+
+.modal-header-text h4 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.modal-header-text p {
+  margin: 0;
+  font-size: 0.9rem;
+  opacity: 0.85;
+  font-weight: 400;
+}
+
+.modal-close-btn {
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.modal-close-btn i {
+  color: white;
+  font-size: 1rem;
+}
+
+.modal-close-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: rotate(90deg);
+}
+
+/* Hide default bootstrap modal header */
+.prescription-modal .modal-header {
+  display: none !important;
+}
+
+.prescription-modal .modal-body {
+  padding: 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+  max-height: calc(90vh - 200px);
+}
+
+.prescription-modal .modal-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #e9ecef;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+/* Patient Info Card */
+.patient-info-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid #e9ecef;
+}
+
+.patient-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00415e 0%, #006080 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.patient-details h4 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.1rem;
+  color: #00415e;
+  font-weight: 600;
+}
+
+.patient-details p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+/* Upload Mode Toggle */
+.upload-mode-toggle {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  background: #f0f4f8;
+  padding: 0.5rem;
+  border-radius: 0.75rem;
+}
+
+.mode-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: transparent;
+  color: #666;
+}
+
+.mode-btn:hover {
+  background: rgba(0, 65, 94, 0.1);
+  color: #00415e;
+}
+
+.mode-btn.active {
+  background: white;
+  color: #00415e;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.mode-btn i {
+  font-size: 1rem;
+}
+
+/* File Upload Section */
+.file-upload-section {
+  margin-bottom: 1.5rem;
+}
+
+.upload-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.upload-option-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem 1rem;
+  border: 2px dashed #b9daf1;
+  border-radius: 0.75rem;
+  background: #f8fbfd;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #00415e;
+  font-weight: 500;
+}
+
+.upload-option-btn:hover {
+  border-color: #00415e;
+  background: rgba(0, 65, 94, 0.05);
+  transform: translateY(-2px);
+}
+
+.upload-option-btn i {
+  font-size: 1.5rem;
+}
+
+/* File Preview */
+.file-preview {
+  position: relative;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 0.75rem;
+  border: 1px solid #e9ecef;
+}
+
+.preview-image {
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: 0.5rem;
+  display: block;
+  margin: 0 auto;
+}
+
+.file-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #00415e;
+}
+
+.file-info i {
+  font-size: 2rem;
+  color: #dc3545;
+}
+
+.remove-file-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: #dc3545;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.remove-file-btn:hover {
+  background: #c82333;
+  transform: scale(1.1);
+}
+
+.file-size-hint,
+.notes-hint {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #666;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.file-size-hint i,
+.notes-hint i {
+  color: #00415e;
+}
+
+/* Notes Section */
+.notes-section {
+  margin-bottom: 1.5rem;
+}
+
+.prescription-notes-input {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid #b9daf1;
+  border-radius: 0.75rem;
+  font-size: 0.95rem;
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color 0.3s ease;
+  min-height: 200px;
+}
+
+.prescription-notes-input:focus {
+  outline: none;
+  border-color: #00415e;
+}
+
+.prescription-notes-input::placeholder {
+  color: #aaa;
+}
+
+/* Follow-up Section */
+.follow-up-section {
+  margin-bottom: 1.5rem;
+}
+
+.follow-up-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: #00415e;
+  margin-bottom: 0.5rem;
+}
+
+.follow-up-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #b9daf1;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  color: #333;
+  transition: border-color 0.3s ease;
+}
+
+.follow-up-input:focus {
+  outline: none;
+  border-color: #00415e;
+}
+
+/* Error & Success Messages */
+.upload-error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: #fff5f5;
+  border: 1px solid #feb2b2;
+  border-radius: 0.5rem;
+  color: #c53030;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+}
+
+.upload-success {
+  text-align: center;
+  padding: 2rem;
+}
+
+.upload-success i {
+  font-size: 4rem;
+  color: #28a745;
+  margin-bottom: 1rem;
+}
+
+.upload-success h4 {
+  color: #00415e;
+  margin-bottom: 0.5rem;
+}
+
+.upload-success p {
+  color: #666;
+}
+
+/* Modal Buttons */
+.modal-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.modal-btn.cancel-btn {
+  background: #f0f4f8;
+  color: #666;
+}
+
+.modal-btn.cancel-btn:hover {
+  background: #e2e8f0;
+  color: #333;
+}
+
+.modal-btn.submit-btn {
+  background: linear-gradient(135deg, #00415e 0%, #006080 100%);
+  color: white;
+}
+
+.modal-btn.submit-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #003348 0%, #00415e 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 65, 94, 0.3);
+}
+
+.modal-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Spinner Animation */
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ==================== PRESCRIPTION RESPONSIVE STYLES ==================== */
+
+/* Tablet */
+@media only screen and (max-width: 768px) {
+  .upload-mode-toggle {
+    flex-direction: column;
+  }
+
+  .upload-buttons {
+    flex-direction: column;
+  }
+
+  .upload-option-btn {
+    flex-direction: row;
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  .prescription-modal .modal-dialog {
+    margin: 0.5rem;
+  }
+
+  .prescription-modal .modal-body {
+    padding: 1rem;
+  }
+
+  .patient-info-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .prescription-modal-header {
+    padding: 1.25rem 1rem;
+  }
+
+  .modal-header-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .modal-header-icon i {
+    font-size: 1.25rem;
+  }
+
+  .modal-header-text h4 {
+    font-size: 1.15rem;
+  }
+
+  .modal-header-text p {
+    font-size: 0.85rem;
+  }
+}
+
+/* Mobile */
+@media only screen and (max-width: 480px) {
+  .prescription-actions {
+    flex-direction: column;
+  }
+
+  .prescription-btn {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .prescription-pending {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .prescription-modal-header {
+    padding: 1rem;
+  }
+
+  .modal-header-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 0.75rem;
+  }
+
+  .modal-header-icon i {
+    font-size: 1rem;
+  }
+
+  .modal-header-text h4 {
+    font-size: 1rem;
+  }
+
+  .modal-header-text p {
+    font-size: 0.8rem;
+  }
+
+  .modal-close-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .mode-btn {
+    padding: 0.6rem 0.75rem;
+    font-size: 0.85rem;
+  }
+
+  .upload-option-btn {
+    padding: 0.75rem;
+  }
+
+  .upload-option-btn i {
+    font-size: 1.25rem;
+  }
+
+  .prescription-notes-input {
+    min-height: 150px;
+    font-size: 0.9rem;
+  }
+
+  .modal-btn {
+    padding: 0.65rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .prescription-modal .modal-footer {
+    flex-direction: column;
+  }
+
+  .prescription-modal .modal-footer .modal-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 /* Print styles */
 @media print {
   .appointments-container {

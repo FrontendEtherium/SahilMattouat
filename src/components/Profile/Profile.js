@@ -454,14 +454,14 @@ const Profile = (props) => {
                               aria-labelledby="exampleModalLabel"
                               aria-hidden="true"
                             >  */}
-                          {userId && (
+                      
                             <AppointmentModal
                               show={showAppointmentModal}
                               onHide={() => setShowAppointmentModal(false)}
                               docId={docid}
-                              userId={userId}
+                    
                             />
-                          )}
+                        
                           {/* </div> */}
 
                           <EditProfile
