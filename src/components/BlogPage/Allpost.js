@@ -29,20 +29,11 @@ const AllPost = ({
 
   const blocks = content ? parseEditorContent(content) : [];
 
-  // ✅ Take ONLY first text block (EditorJS safe)
-  const firstTextBlock = blocks.find(
-    (b) => typeof b?.data?.text === "string"
-  );
-
   // ✅ Image handling
-  let imageLoc = "";
-  if (imgLocation && imgLocation.includes("cures_articleimages")) {
-    imageLoc =
-      `${imagePath}` +
-      imgLocation.replace("json", "png").split("/webapps/")[1];
-  } else {
-    imageLoc = `${imagePath}cures_articleimages/299/default.png`;
-  }
+  const imageLoc =
+    imgLocation && imgLocation.includes("cures_articleimages")
+      ? `${imagePath}${imgLocation.replace("json", "png").split("/webapps/")[1]}`
+      : `${imagePath}cures_articleimages/299/default.png`;
 
   const articlePath = createArticlePath(id, title);
   const safeType = String(type || "");
@@ -71,31 +62,30 @@ const AllPost = ({
 
         <div className="card-info">
           <div className="card-article-content-preview">
-  {Array.isArray(previewContent) &&
-    previewContent.map(
-      (j, idx) =>
-        idx === 0 && (
-          <CenterWell
-            key={idx}
-            content={j?.data?.content}
-            type={j?.type}
-            text={
-              typeof j?.data?.text === "string"
-                ? j.data.text.substring(0, 250) + "..."
-                : ""
-            }
-            title={j?.data?.title}
-            message={j?.data?.message}
-            source={j?.data?.source}
-            embed={j?.data?.embed}
-            caption={j?.data?.caption}
-            alignment={j?.data?.alignment}
-            imageUrl={j?.data?.file?.url || null}
-            url={j?.data?.url}
-          />
-        )
-    )}
-</div>
+            {blocks.map((block, idx) => {
+              const data = block?.data || {};
+              return (
+                <CenterWell
+                  key={idx}
+                  content={data.text || ""}
+                  type={block?.type || ""}
+                  text={
+                    typeof data.text === "string"
+                      ? data.text.substring(0, 250) + "..."
+                      : ""
+                  }
+                  title={data.title || ""}
+                  message={data.message || ""}
+                  source={data.source || ""}
+                  embed={data.embed || ""}
+                  caption={data.caption || ""}
+                  alignment={data.alignment || ""}
+                  imageUrl={data.file?.url || null}
+                  url={data.url || ""}
+                />
+              );
+            })}
+          </div>
 
           <div className="text-left mt-2 text-muted" id="publish-date">
             {authorName !== "All Cures Team" ? (
