@@ -10,7 +10,6 @@ const AllPost = ({
   title,
   content,
   docID,
-  f_title,
   country,
   type,
   published_date,
@@ -18,20 +17,24 @@ const AllPost = ({
   imgLocation,
   authorName,
 }) => {
-
   // ✅ Safe JSON parser
   const parseEditorContent = (str) => {
     try {
       const parsed = JSON.parse(str);
       return Array.isArray(parsed?.blocks) ? parsed.blocks : [];
-    } catch (e) {
+    } catch {
       return [];
     }
   };
 
-  const previewContent = content ? parseEditorContent(content) : [];
+  const blocks = content ? parseEditorContent(content) : [];
 
-  // ✅ Image handling (fixed default path)
+  // ✅ Take ONLY first text block (EditorJS safe)
+  const firstTextBlock = blocks.find(
+    (b) => typeof b?.data?.text === "string"
+  );
+
+  // ✅ Image handling
   let imageLoc = "";
   if (imgLocation && imgLocation.includes("cures_articleimages")) {
     imageLoc =
@@ -42,27 +45,19 @@ const AllPost = ({
   }
 
   const articlePath = createArticlePath(id, title);
-
-  // ✅ Type safety
   const safeType = String(type || "");
 
   return (
-    <div
-      key={id?.toString()}
-      className="d-flex cures-search-tab w-100 card mb-5"
-    >
+    <div className="d-flex cures-search-tab w-100 card mb-5">
       <div className="col-md-3 cures-tab-img rounded px-0">
-        <img src={imageLoc} alt={title} />
+        <img src={imageLoc} alt={title || "article"} />
       </div>
 
       <div className="col-md-9 mb-25r">
         <div className="d-flex justify-content-between align-items-center mt-3">
-          <Link
-            to={articlePath}
-            className="d-flex justify-content-between align-items-center"
-          >
+          <Link to={articlePath}>
             <div className="card-title h5 text-capitalize">
-              {title?.toLowerCase()}
+              {(title || "").toLowerCase()}
             </div>
           </Link>
 
@@ -76,30 +71,17 @@ const AllPost = ({
 
         <div className="card-info">
           <div className="card-article-content-preview">
-            {Array.isArray(previewContent) &&
-              previewContent.map(
-                (j, idx) =>
-                  idx === 0 && (
-                    <CenterWell
-                      key={idx}
-                      content={j?.data?.content}
-                      type={j?.type}
-                      text={
-                        j?.data?.text
-                          ? j.data.text.substr(0, 250) + "..."
-                          : ""
-                      }
-                      title={j?.data?.title}
-                      message={j?.data?.message}
-                      source={j?.data?.source}
-                      embed={j?.data?.embed}
-                      caption={j?.data?.caption}
-                      alignment={j?.data?.alignment}
-                      imageUrl={j?.data?.file?.url || null}
-                      url={j?.data?.url}
-                    />
-                  )
-              )}
+            {firstTextBlock && (
+              <CenterWell
+                key="preview"
+                type={firstTextBlock.type}
+                text={
+                  firstTextBlock.data.text.length > 250
+                    ? firstTextBlock.data.text.substring(0, 250) + "..."
+                    : firstTextBlock.data.text
+                }
+              />
+            )}
           </div>
 
           <div className="text-left mt-2 text-muted" id="publish-date">
@@ -113,15 +95,9 @@ const AllPost = ({
         </div>
 
         <div className="cures-tab-chips">
-          {safeType.includes("1") && (
-            <div className="chip overview">Overview</div>
-          )}
-          {safeType.includes("2") && (
-            <div className="chip cure">Cure</div>
-          )}
-          {safeType.includes("3") && (
-            <div className="chip symptoms">Symptoms</div>
-          )}
+          {safeType.includes("1") && <div className="chip overview">Overview</div>}
+          {safeType.includes("2") && <div className="chip cure">Cure</div>}
+          {safeType.includes("3") && <div className="chip symptoms">Symptoms</div>}
 
           {country === 9 && <div className="chip country ml-2 color-white">India</div>}
           {country === 10 && <div className="chip country ml-2 color-white">Iran</div>}
