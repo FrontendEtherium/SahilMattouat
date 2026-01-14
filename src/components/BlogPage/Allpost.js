@@ -71,18 +71,31 @@ const AllPost = ({
 
         <div className="card-info">
           <div className="card-article-content-preview">
-            {firstTextBlock && (
-              <CenterWell
-                key="preview"
-                type={firstTextBlock.type}
-                text={
-                  firstTextBlock.data.text.length > 250
-                    ? firstTextBlock.data.text.substring(0, 250) + "..."
-                    : firstTextBlock.data.text
-                }
-              />
-            )}
-          </div>
+  {Array.isArray(previewContent) &&
+    previewContent.map(
+      (j, idx) =>
+        idx === 0 && (
+          <CenterWell
+            key={idx}
+            content={j?.data?.content}
+            type={j?.type}
+            text={
+              typeof j?.data?.text === "string"
+                ? j.data.text.substring(0, 250) + "..."
+                : ""
+            }
+            title={j?.data?.title}
+            message={j?.data?.message}
+            source={j?.data?.source}
+            embed={j?.data?.embed}
+            caption={j?.data?.caption}
+            alignment={j?.data?.alignment}
+            imageUrl={j?.data?.file?.url || null}
+            url={j?.data?.url}
+          />
+        )
+    )}
+</div>
 
           <div className="text-left mt-2 text-muted" id="publish-date">
             {authorName !== "All Cures Team" ? (
