@@ -162,4 +162,3 @@ const AllPost = ({id, title, content, docID, f_title,  country, type, published_
 
 }
 export default AllPost;
-1
