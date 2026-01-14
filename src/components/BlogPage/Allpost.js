@@ -66,28 +66,51 @@ const AllPost = ({id, title, content, docID, f_title,  country, type, published_
                         
                         <div className="card-info">
                             {/* <div className="card-subtitle text-muted text-capitalize">{w_title.toLowerCase()}</div> */}
-                            <div className='card-article-content-preview'>
-                            {
-                                    previewContent && previewContent !== undefined?
-                                    previewContent.map((j, idx) => idx<1 && (
-                                        <CenterWell
-                                            key={idx}
-                                            content = {j.data.content}
-                                            type = {j.type}
-                                            text = {j.data.text.substr(0, 250)+'...'}
-                                            title = {j.data.title}
+{/* <div className='card-article-content-preview'>
+                           {
+                                  previewContent && previewContent !== undefined?
+                                  previewContent.map((j, idx) => idx<1 && (
+                                       <CenterWell
+                                          key={idx}
+                                         content = {j.data.content}
+                                          type = {j.type}
+                                           text = {j.data.text.substr(0, 250)+'...'}
+                                           title = {j.data.title}
                                             message = {j.data.message}
-                                            source = {j.data.source}
-                                            embed = {j.data.embed}
-                                            caption = {j.data.caption}
-                                            alignment = {j.data.alignment}
-                                            imageUrl = {j.data.file? j.data.file.url: null}
-                                            url = {j.data.url}
+                                           source = {j.data.source}
+                                           embed = {j.data.embed}
+                                           caption = {j.data.caption}
+                                           alignment = {j.data.alignment}
+                                           imageUrl = {j.data.file? j.data.file.url: null}
+                                         url = {j.data.url}
                                         />
-                                    ))
+                                   ))
                                     : null
                                 }
+                      </div> */}
+                         <div className='card-article-content-preview'>
+                           {
+                              Array.isArray(previewContent) ?
+                                previewContent.map((j, idx) => idx < 1 && (
+                                <CenterWell
+                                  key={idx}
+                                   content={j?.data?.content}
+                                    type={j?.type}
+                                      text={j?.data?.text ? j.data.text.substr(0, 250) + '...' : ''}
+                                               title={j?.data?.title}
+                                              message={j?.data?.message}
+                                      source={j?.data?.source}
+                                    embed={j?.data?.embed}
+                                 caption={j?.data?.caption}
+                                 alignment={j?.data?.alignment}
+                               imageUrl={j?.data?.file?.url || null}
+                                      url={j?.data?.url}
+                             />
+                        ))
+                         : null
+                        }
                         </div>
+
                         <div className="text-left mt-2 text-muted" id="publish-date">
                         {
                                     authorName !== "All Cures Team"?
