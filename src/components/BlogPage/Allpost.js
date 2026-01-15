@@ -36,7 +36,7 @@ const AllPost = ({
     imageLoc =
       `${imagePath}` + imgLocation.replace("json", "png").split("/webapps/")[1];
   } else {
-    imageLoc = "${imagePath}cures_articleimages//299/default.png";
+    imageLoc = "${imagePath}cures_articleimages/299/default.png";
   }
 
   const articlePath = createArticlePath(id, title);
