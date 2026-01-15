@@ -88,13 +88,11 @@ const AllPost = ({
                           key={idx}
                           content={j.data.content}
                           type={j.type}
-{/* text={j.data.text.substr(0, 250) + "..."} */} 
                           text={
                           j.data?.text
                           ? j.data.text.substring(0, 250) + "..."
                           : ""
                           }
-
                           title={j.data.title}
                           message={j.data.message}
                           source={j.data.source}
