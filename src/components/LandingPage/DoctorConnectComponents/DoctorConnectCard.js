@@ -26,6 +26,7 @@ function DoctorConnectCard({ doc, onConsult }) {
 
   const DoctorNotAvailable = async () => {
     setNotAvailable(true);
+    history.push(`/doctor/${doc.docID}`); // ← USE THIS
     try {
       await axios.post(
         `${backendHost}/video/post/leads?userID=${userId}&docID=${doc.docID}`
