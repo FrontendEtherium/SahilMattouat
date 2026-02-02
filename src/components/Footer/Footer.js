@@ -309,12 +309,15 @@ const Footer = ({ hideCuresLinks }) => (
                     Contact Us
                   </Link>
                 </li>
+              {!hideCuresLinks && (
                 <li>
                   <Link to="/cures" aria-label="Explore all cures">
                     Cures
                   </Link>
                 </li>
+                )}
               </ul>
+          {!hideCuresLinks && ( 
               <ul className="list-unstyled footer-links">
                 {CuresData.map((cure) => (
                   <li key={cure.medicineType}>
@@ -330,6 +333,7 @@ const Footer = ({ hideCuresLinks }) => (
                   </li>
                 ))}
               </ul>
+             )}
             </div>
             <div className="col-4 footer-mobile-right">
               <ul className="list-unstyled footer-links mb-3">
