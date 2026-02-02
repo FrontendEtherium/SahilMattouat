@@ -1,4 +1,6 @@
+{/*import React, { useState } from "react"; */}
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import LocalPharmacyIcon from "@mui/icons-material/LocalPharmacy";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -13,6 +15,7 @@ import { imgKitImagePath } from "../../../image-path";
 import RateTooltip from "../../../ui/Tooltip";
 
 function DoctorConnectCard({ doc, onConsult }) {
+  const history = useHistory();
   const imgLoc = doc.imgLoc ? `${imgKitImagePath}/${doc.imgLoc}` : DummyDoc;
   const [showModal, setShowModal] = useState(false);
   const [notAvailable, setNotAvailable] = useState(false);
@@ -43,7 +46,7 @@ function DoctorConnectCard({ doc, onConsult }) {
     }
   };
 
-  const handleProfileVisit = async () => {
+  {/* const handleProfileVisit = async () => {
     setNotAvailable(false);
     window.location.href = `/doctor/${doc.docID}`;
     try {
@@ -53,7 +56,21 @@ function DoctorConnectCard({ doc, onConsult }) {
     } catch (error) {
       console.error(error);
     }
-  };
+  }; */}
+  const handleProfileVisit = async () => {
+  setNotAvailable(false);
+
+  history.push(`/doctor/${doc.docID}`);
+
+  try {
+    await axios.post(
+      `${backendHost}/video/post/leads?userID=${userId}&docID=${doc.docID}`
+    );
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 
   return (
     <>
