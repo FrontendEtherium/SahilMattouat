@@ -508,3 +508,13 @@
   color: #6b7280;
   cursor: not-allowed;
 }
+.doctor-name-link {
+  cursor: pointer;
+  color: #0a58ca; /* optional link color */
+}
+
+.doctor-name-link:focus,
+.doctor-name-link:active {
+  outline: none;
+  background: transparent;
+}
