@@ -67,10 +67,20 @@ function DoctorConnectCard({ doc, onConsult }) {
             />
           </div>
           <div className="doctor-details">
-            <div className="doctor-name">
+              {/* <div className="doctor-name">
               Dr. {doc.firstName} {doc.lastName}{" "}
               <VerifiedIcon color="success" style={{ fontSize: "12px" }} />
-            </div>
+            </div> */}
+            <div
+                className="doctor-name doctor-name-link"
+                 onClick={handleProfileVisit}
+                  role="button"
+                    tabIndex={0}
+                     >
+                    Dr. {doc.firstName} {doc.lastName}{" "}
+              <VerifiedIcon color="success" style={{ fontSize: "12px" }} />
+                    </div>
+
             <div className="doctor-specialty">{doc.medicineTypeName}</div>
             <div className="doctor-location">
               {doc.cityName}, {doc.addressCountry}
@@ -113,9 +123,9 @@ function DoctorConnectCard({ doc, onConsult }) {
               <LocalPharmacyIcon className="book-button-icon" />
               Consult
             </button>
-            <button className="profile-button" onClick={handleProfileVisit}>
+{/* <button className="profile-button" onClick={handleProfileVisit}>
               Visit Profile
-            </button>
+            </button> */}
           </div>
         </div>
       </div>
