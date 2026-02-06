@@ -330,6 +330,7 @@ const Footer = ({ hideCuresLinks }) => (
                </>
                 )}
               </ul>
+
               {!hideCuresLinks && (
               <ul className="list-unstyled footer-links">
                 {CuresData.map((cure) => (
@@ -348,6 +349,7 @@ const Footer = ({ hideCuresLinks }) => (
               </ul>
               )}
             </div>
+                
             <div className="col-4 footer-mobile-right">
               <ul className="list-unstyled footer-links mb-3">
                 <li>
