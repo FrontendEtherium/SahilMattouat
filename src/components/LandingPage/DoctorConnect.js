@@ -239,7 +239,7 @@ function DoctorConnect() {
               </nav>
             </section>
 
-            <aside className="doc-sidebar">
+{/*    <aside className="doc-sidebar">
               
                 <img
                   src={`${imgKitImagePath}/assets/img/banner02.jpg`}
@@ -264,7 +264,7 @@ function DoctorConnect() {
                   />
                 </div>
               </div>
-            </aside>
+            </aside>  */}
           </div>
         </div>
 
