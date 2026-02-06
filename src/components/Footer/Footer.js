@@ -86,8 +86,6 @@ const Footer = ({ hideCuresLinks }) => (
               </a>
             </div>
 
-{!hideCuresLinks && (
-         <>
             {/* 2) About Us */}
             <div className="col-lg-2">
               <ul className="list-unstyled footer-links">
@@ -111,8 +109,7 @@ const Footer = ({ hideCuresLinks }) => (
                     Cures
                   </Link>
                 </li>
-              </>
-               )}
+
                 {/* <li className="mt-3">
                   <div
                     style={{
