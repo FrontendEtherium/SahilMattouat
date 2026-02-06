@@ -99,11 +99,13 @@ const Footer = ({ hideCuresLinks }) => (
                     Contact Us
                   </Link>
                 </li>
+              {!hideCuresLinks && (
                 <li>
                   <Link to="/allcures" aria-label="Explore all cures">
                     Cures
                   </Link>
                 </li>
+               )}
                 {/* <li className="mt-3">
                   <div
                     style={{
