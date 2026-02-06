@@ -89,7 +89,8 @@ const Footer = ({ hideCuresLinks }) => (
             {/* 2) About Us */}
             <div className="col-lg-2">
               <ul className="list-unstyled footer-links">
-      
+              {!hideCuresLinks && (
+                <>
                 <li>
                   <Link to="/AboutUs" aria-label="Learn more about All Cures">
                     About Us
@@ -126,6 +127,8 @@ const Footer = ({ hideCuresLinks }) => (
                     Jammu, Jammu and Kashmir 180020
                   </div>
                 </li> */}
+              </>
+              )}
               </ul>
             </div>
 
