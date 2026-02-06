@@ -268,7 +268,8 @@ function DoctorConnect() {
           </div>
         </div>
 
-        <Footer />
+{/* <Footer /> */}
+<Footer hideCuresLinks={true} />
       </div>
 
       {/* Modal rendered using portal to document body */}
