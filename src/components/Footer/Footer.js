@@ -89,27 +89,27 @@ const Footer = ({ hideCuresLinks }) => (
             {/* 2) About Us */}
             <div className="col-lg-2">
               <ul className="list-unstyled footer-links">
-              {!hideCuresLinks && (
+      
                 <li>
                   <Link to="/AboutUs" aria-label="Learn more about All Cures">
                     About Us
                   </Link>
                 </li>
-                )}
-              {!hideCuresLinks && (
+      
+              
                 <li>
                   <Link to="/AboutUs" aria-label="Contact All Cures team">
                     Contact Us
                   </Link>
                 </li>
-                )}
-              {!hideCuresLinks && (
+            
+              
                 <li>
                   <Link to="/allcures" aria-label="Explore all cures">
                     Cures
                   </Link>
                 </li>
-               )}
+            
                 {/* <li className="mt-3">
                   <div
                     style={{
