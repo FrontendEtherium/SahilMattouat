@@ -162,7 +162,7 @@ function DoctorConnect() {
 
   return (
     <>
-      <Header showSearch={false} />
+  {/* <Header showSearch={false} /> */}
 
       <div className="doctor-connect-container">
         <div className="doctor-connect-content">
