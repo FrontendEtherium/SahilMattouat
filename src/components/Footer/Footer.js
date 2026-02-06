@@ -51,7 +51,8 @@ const socialMediaLinks = [
   },
 ];
 
-const Footer = () => (
+{/* const Footer = () => ( */}
+const Footer = ({ hideCuresLinks }) => (
   <>
     <footer
       className="d-none d-lg-block"
@@ -123,6 +124,7 @@ const Footer = () => (
             </div>
 
             {/* 3) Ayurveda… */}
+{!hideCuresLinks && (
             <div className="col-lg-2">
               <ul className="list-unstyled footer-links">
                 {CuresData.map((cure) => (
@@ -140,7 +142,7 @@ const Footer = () => (
                 ))}
               </ul>
             </div>
-
+             )}
             {/* 4) Privacy & Feedback */}
             <div className="col-lg-2">
               <ul className="list-unstyled footer-links">
@@ -307,11 +309,13 @@ const Footer = () => (
                     Contact Us
                   </Link>
                 </li>
+              {!hideCuresLinks && (
                 <li>
                   <Link to="/allcures" aria-label="Explore all cures">
                     Cures
                   </Link>
                 </li>
+                )}
               </ul>
               <ul className="list-unstyled footer-links">
                 {CuresData.map((cure) => (
