@@ -95,6 +95,8 @@ const Footer = ({ hideCuresLinks }) => (
                     About Us
                   </Link>
                 </li>
+                )}
+              {!hideCuresLinks && (
                 <li>
                   <Link to="/AboutUs" aria-label="Contact All Cures team">
                     Contact Us
