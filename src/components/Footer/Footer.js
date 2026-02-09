@@ -89,8 +89,7 @@ const Footer = ({ hideCuresLinks }) => (
             {/* 2) About Us */}
             <div className="col-lg-2">
               <ul className="list-unstyled footer-links">
-              {!hideCuresLinks && (
-                <>
+            
                 <li>
                   <Link to="/AboutUs" aria-label="Learn more about All Cures">
                     About Us
@@ -104,7 +103,7 @@ const Footer = ({ hideCuresLinks }) => (
                   </Link>
                 </li>
             
-              
+               {!hideCuresLinks && (
                 <li>
                   <Link to="/allcures" aria-label="Explore all cures">
                     Cures
@@ -127,7 +126,6 @@ const Footer = ({ hideCuresLinks }) => (
                     Jammu, Jammu and Kashmir 180020
                   </div>
                 </li> */}
-              </>
               )}
               </ul>
             </div>
@@ -308,8 +306,8 @@ const Footer = ({ hideCuresLinks }) => (
             <div className="col-4 footer-mobile-right">
               <h5 className="quick-links-heading">Quick Links</h5>
               <ul className="list-unstyled footer-links mb-3">
-                {!hideCuresLinks && (
-                <>
+                
+                
                 <li>
                   <Link to="/AboutUs" aria-label="Learn more about All Cures">
                     About Us
@@ -321,13 +319,12 @@ const Footer = ({ hideCuresLinks }) => (
                   </Link>
                 </li>
                 
-              
+              {!hideCuresLinks && (
                 <li>
                   <Link to="/allcures" aria-label="Explore all cures">
                     Cures
                   </Link>
                 </li>
-               </>
                 )}
               </ul>
               {!hideCuresLinks && (
