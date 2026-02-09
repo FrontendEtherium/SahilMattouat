@@ -100,7 +100,7 @@ const Footer = ({ hideCuresLinks }) => (
                   </Link>
                 </li>
                {!hideCuresLinks && (
-                 </>
+                 <>
                 <li>
                   <Link to="/allcures" aria-label="Explore all cures">
                     Cures
