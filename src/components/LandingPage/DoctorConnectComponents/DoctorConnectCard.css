@@ -508,3 +508,12 @@
   color: #6b7280;
   cursor: not-allowed;
 }
+.doctor-name-link {
+  cursor: pointer;
+}
+
+.doctor-name-link:hover {
+  color: #0b5ed7;
+  text-decoration: underline;
+}
+
