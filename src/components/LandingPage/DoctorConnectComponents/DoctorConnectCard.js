@@ -83,7 +83,7 @@ function DoctorConnectCard({ doc, onConsult }) {
  
             <div className="doctor-specialty">{doc.medicineTypeName}</div>
             <div className="doctor-location">
-              {doc.cityName} {doc.addressCountry}
+              {doc.cityName}, {doc.addressCountry}
             </div>
             {showFee && (
               <div className="doctor-fee" aria-label="Consultation fee">
