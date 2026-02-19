@@ -38,6 +38,7 @@ function DoctorConnect() {
   const { medicineType } = useParams(); // slug or undefined
   const history = useHistory();
   const [docList, setDocList] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [showAppointmentModal, setShowAppointmentModal] = useState(false);
@@ -78,7 +79,7 @@ function DoctorConnect() {
     trackEvent("DoctorConnect Pagination Changed", { page: currentPage });
   }, [currentPage, trackEvent]);
 
-  async function fetchDoctors() {
+  {/* async function fetchDoctors() {
     const offset = (currentPage - 1) * 10;
     let url = `${backendHost}/video/get/doctors?offset=${offset}`;
 
@@ -95,7 +96,31 @@ function DoctorConnect() {
     } catch (err) {
       console.error("Error fetching doctors:", err);
     }
+  } */}
+  async function fetchDoctors() {
+  setLoading(true);   // 👈 yahin loading start
+
+  const offset = (currentPage - 1) * 10;
+  let url = `${backendHost}/video/get/doctors?offset=${offset}`;
+
+  const medTypeID = MED_TYPE_MAP[medicineType];
+  if (medTypeID) {
+    url += `&medTypeID=${medTypeID}`;
   }
+
+  try {
+    const res = await fetch(url);
+    const json = await res.json();
+
+    setDocList(json.data || []);
+    setTotalPages(json.totalPagesCount?.totalPages || 0);
+  } catch (err) {
+    console.error("Error fetching doctors:", err);
+    setDocList([]);
+  } finally {
+    setLoading(false);   // 👈 yahin loading end
+  }
+}
 
   // passed down to <DoctorConnectSearch>
   const changeSpeciality = (slug) => {
@@ -189,7 +214,7 @@ function DoctorConnect() {
                 </select>
               </div>
 
-              {docList.length === 0 ? (
+{/*      {docList.length === 0 ? (
                 <div className="doc-list-empty">
                   <h3>No doctors found for this filter.</h3>
                   <p>
@@ -212,7 +237,41 @@ function DoctorConnect() {
                     onConsult={handleConsultClick}
                   />
                 ))
-              )}
+              )}    */}
+           {loading ? (
+             <div
+                style={{
+                padding: "40px",
+                textAlign: "center",
+                minHeight: "40vh",
+                }}
+                >
+                <h3>Loading doctors...</h3>
+                </div>
+                ) : docList.length === 0 ? (
+                <div className="doc-list-empty">
+                <h3>No doctors found for this filter.</h3>
+                <p>
+                Try exploring another speciality or search by city & name
+                using the smart filters.
+                </p>
+               <button
+               type="button"
+               className="doc-hero-button doc-list-empty-button"
+               onClick={() => changeSpeciality("")}
+               >
+              View all doctors
+              </button>
+              </div>
+              ) : (
+              docList.map((doc) => (
+             <DoctorConnectCard
+             key={doc.docID || doc.id}
+             doc={doc}
+             onConsult={handleConsultClick}
+             />
+             ))
+             )}
 
               <nav className="pagination-container" aria-label="Pagination">
                 <button
