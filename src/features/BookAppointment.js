@@ -437,8 +437,7 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
 
         const json = await response.json();
         setCurrency(json.currency_symbol);
-        {/*  setPaid(json.isPaid); */}
-        setPaid(true);
+        setPaid(json.isPaid);
         const highlightedDate = json.completelyBookedDates || [];
         setHighlightedDays(highlightedDate);
 
@@ -943,7 +942,7 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
       });
       const numericUserId = parseInt(activeUserId, 10);
      
-      const response = await axios.post(`${backendHost}/appointments/v2/create`, {
+      const response = await axios.post(`${backendHost}/appointments/create`, {
 
         docID: docId,
         userID: numericUserId,
@@ -959,15 +958,15 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
       localStorage.setItem("encKey", responseObject.encRequest);
       localStorage.setItem("apiResponse", JSON.stringify(response.data));
 
-      //   if (responseObject.Count == 0) {
-      //  trackEvent("Appointment Booking Success", {
-      //    selectedDate,
-      //    selectedTimeSlot,
-     //     paymentStatus: "not-required",
-    //    });
-    //    window.location.href = "/booking-successful";
-   //     return;
-  //    } 
+          if (responseObject.Count == 0) {
+          trackEvent("Appointment Booking Success", {
+          selectedDate,
+          selectedTimeSlot,
+          paymentStatus: "not-required",
+        });
+          window.location.href = "/booking-successful";
+          return;
+         } 
       
 
       trackEvent("Appointment Booking Redirecting", {
