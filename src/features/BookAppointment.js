@@ -437,8 +437,7 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
 
         const json = await response.json();
         setCurrency(json.currency_symbol);
-        {/*  setPaid(json.isPaid); */}
-        setPaid(true);
+        setPaid(json.isPaid);
         const highlightedDate = json.completelyBookedDates || [];
         setHighlightedDays(highlightedDate);
 
@@ -957,7 +956,7 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
       localStorage.setItem("encKey", responseObject.encRequest);
       localStorage.setItem("apiResponse", JSON.stringify(response.data));
 
-      {/*   if (responseObject.Count == 0) {
+        if (responseObject.Count == 0) {
         trackEvent("Appointment Booking Success", {
           selectedDate,
           selectedTimeSlot,
@@ -965,7 +964,7 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
         });
         window.location.href = "/booking-successful";
         return;
-      } */}
+      } 
 
       trackEvent("Appointment Booking Redirecting", {
         selectedDate,
