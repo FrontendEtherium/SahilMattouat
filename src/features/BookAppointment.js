@@ -437,7 +437,8 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
 
         const json = await response.json();
         setCurrency(json.currency_symbol);
-        setPaid(json.isPaid);
+        {/*  setPaid(json.isPaid); */}
+        setPaid(true);
         const highlightedDate = json.completelyBookedDates || [];
         setHighlightedDays(highlightedDate);
 
@@ -956,7 +957,7 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
       localStorage.setItem("encKey", responseObject.encRequest);
       localStorage.setItem("apiResponse", JSON.stringify(response.data));
 
-      if (responseObject.Count == 0) {
+      {/*   if (responseObject.Count == 0) {
         trackEvent("Appointment Booking Success", {
           selectedDate,
           selectedTimeSlot,
@@ -964,14 +965,15 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
         });
         window.location.href = "/booking-successful";
         return;
-      }
+      } */}
 
       trackEvent("Appointment Booking Redirecting", {
         selectedDate,
         selectedTimeSlot,
         paymentStatus: "gateway",
       });
-      const redirectURL = `https://www.all-cures.com/paymentRedirection?encRequest=${responseObject.encRequest}&accessCode=AVWN42KL59BP42NWPB`;
+      {/*  const redirectURL = `https://www.all-cures.com/paymentRedirection?encRequest=${responseObject.encRequest}&accessCode=AVWN42KL59BP42NWPB`; */}
+      const redirectURL = https://www.all-cures.com/paymentRedirection?encRequest=${responseObject.encRequest}&Code=${responseObject.accessCode};
       window.location.href = redirectURL;
     } catch (error) {
       console.error("Error while booking appointment:", error);
