@@ -972,8 +972,8 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
         selectedTimeSlot,
         paymentStatus: "gateway",
       });
-      /*  const redirectURL = `https://www.all-cures.com/paymentRedirection?encRequest=${responseObject.encRequest}&accessCode=AVWN42KL59BP42NWPB`; */
-      const redirectURL = `https://www.all-cures.com/paymentRedirection?encRequest=${responseObject.encRequest}&Code=${responseObject.accessCode}`;
+       const redirectURL = `https://www.all-cures.com/paymentRedirection?encRequest=${responseObject.encRequest}&accessCode=AVWN42KL59BP42NWPB`; 
+    //  const redirectURL = `https://www.all-cures.com/paymentRedirection?encRequest=${responseObject.encRequest}&Code=${responseObject.accessCode}`; 
       window.location.href = redirectURL;
     } catch (error) {
       console.error("Error while booking appointment:", error);
