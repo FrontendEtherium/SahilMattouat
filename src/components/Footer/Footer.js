@@ -94,31 +94,19 @@ const Footer = ({ hideCuresLinks }) => (
                     About Us
                   </Link> */}
               <Link
-                to="/AboutUs"
-                aria-label="Learn more about All Cures"
-                onClick={(e) => {
-                  if (window.location.pathname === "/doctor-connect") {
-                         e.preventDefault();
-                   }
-                     }}
+               to={window.location.pathname === "/doctor-connect" ? "#" : "/AboutUs"}
                    >
-                      About Us
-                 </Link>
+                    About Us
+               </Link>
                </li>
                <li>
                 {/*      <Link to="/AboutUs" aria-label="Contact All Cures team">
                     Contact Us
                   </Link> */}
-                <Link
-                    to="/AboutUs"
-                    aria-label="Contact All Cures team"
-                   onClick={(e) => {
-                   if (window.location.pathname === "/doctor-connect") {
-                    e.preventDefault();
-                    }
-                           }}
-                             >
-                        Contact Us
+             <Link
+             to={window.location.pathname === "/doctor-connect" ? "#" : "/AboutUs"}
+                  >
+                   Contact Us
                  </Link>  
                  </li>  
                 
@@ -334,34 +322,22 @@ const Footer = ({ hideCuresLinks }) => (
             {/*    <Link to="/AboutUs" aria-label="Learn more about All Cures">
                    About Us
                   </Link> */}
-              <Link
-                    to="/AboutUs"
-                aria-label="Learn more about All Cures"
-                onClick={(e) => {
-                    if (window.location.pathname === "/doctor-connect") {
-                    e.preventDefault();
-                   }
-                         }}
-                     >
-                     About Us
-              </Link>
+                      <Link
+                      to={window.location.pathname === "/doctor-connect" ? "#" : "/AboutUs"}
+                      >
+                        About Us
+                     </Link>
               </li>
                 <li>
                 {/*   <Link to="/AboutUs" aria-label="Contact All Cures team">
                     Contact Us
                   </Link> */}
-                  <Link
-                  to="/AboutUs"
-                  aria-label="Contact All Cures team"
-                     onClick={(e) => {
-                          if (window.location.pathname === "/doctor-connect") {
-                           e.preventDefault();
-                             }
-                            }}
-                                >
-                        Contact Us
-                  </Link>
-                  </li> 
+                <Link
+                 to={window.location.pathname === "/doctor-connect" ? "#" : "/AboutUs"}
+                 >
+                   Contact Us
+                </Link>
+                </li> 
                    
                 
               {!hideCuresLinks && (
