@@ -981,7 +981,7 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
    //   window.location.href = redirectURL;
       setTimeout(() => {
 
-  const redirectURL = `https://www.all-cures.com/paymentRedirection?encRequest=${responseObject.encRequest}&access_code=AVWN42KL59BP42NWPB`;
+  const redirectURL = `https://www.all-cures.com/paymentRedirection?encRequest=${responseObject.encRequest}&accessCode=AVWN42KL59BP42NWPB`;
 
   console.log("Redirect URL:", redirectURL);
 
@@ -1908,6 +1908,7 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
 };
 
 export default AppointmentModal;
+
 
 
 
