@@ -89,16 +89,35 @@ const Footer = ({ hideCuresLinks }) => (
             {/* 2) About Us */}
             <div className="col-lg-2">
               <ul className="list-unstyled footer-links">
-                <li>
-                  <Link to="/AboutUs" aria-label="Learn more about All Cures">
-                    About Us
+         //       <li>
+         //         <Link to="/AboutUs" aria-label="Learn more about All Cures">
+         //           About Us
+         //         </Link>
+         //       </li>
+        //        <li>
+        //          <Link to="/AboutUs" aria-label="Contact All Cures team">
+       //             Contact Us
+       //           </Link>
+       //         </li>
+                   <li>
+                   <Link
+                   to="#"
+                   aria-label="Learn more about All Cures"
+                   onClick={(e) => e.preventDefault()}
+                   >
+                   About Us
                   </Link>
-                </li>
-                <li>
-                  <Link to="/AboutUs" aria-label="Contact All Cures team">
-                    Contact Us
-                  </Link>
-                </li>
+                  </li>
+
+                  <li>
+                  <Link
+                  to="#"
+                 aria-label="Contact All Cures team"
+                 onClick={(e) => e.preventDefault()}
+                 >
+                 Contact Us
+                 </Link>
+                 </li>
                {!hideCuresLinks && (
                  <>
                 <li>
@@ -306,16 +325,35 @@ const Footer = ({ hideCuresLinks }) => (
               <ul className="list-unstyled footer-links mb-3">
                 
                 
-                <li>
-                  <Link to="/AboutUs" aria-label="Learn more about All Cures">
-                    About Us
+             //   <li>
+            //    <Link to="/AboutUs" aria-label="Learn more about All Cures">
+            //       About Us
+            //      </Link>
+           //     </li>
+           //     <li>
+           //       <Link to="/AboutUs" aria-label="Contact All Cures team">
+           //         Contact Us
+           //       </Link>
+          //      </li>
+                   <li>
+                   <Link
+                   to="#"
+                   aria-label="Learn more about All Cures"
+                   onClick={(e) => e.preventDefault()}
+                   >
+                   About Us
                   </Link>
-                </li>
-                <li>
-                  <Link to="/AboutUs" aria-label="Contact All Cures team">
-                    Contact Us
+                   </li>
+
+                  <li>
+                  <Link
+                  to="#"
+                  aria-label="Contact All Cures team"
+                  onClick={(e) => e.preventDefault()}
+                  >
+                  Contact Us
                   </Link>
-                </li>
+                  </li>
                 
               {!hideCuresLinks && (
                 <li>
