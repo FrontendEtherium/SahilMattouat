@@ -104,50 +104,79 @@ class DocPatientConnect extends Component {
   }
 
   bookAppn = (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    console.log("clicked booking");
-    console.log("time", dayjs(this.state.selectedTime).format("HH:mm"));
+  axios
+    .post(`${backendHost}/appointments/v2/create`, {
+      docID: this.state.docId,
+      userID: parseInt(userId),
+      appointmentDate: this.state.selectedDate,
+      startTime: this.state.selectedTimeSlot,
+      paymentStatus: 0,
+      amount: this.state.amount,
+      currency: "INR",
+    })
+    .then((res) => {
+      const responseObject = res.data;
 
-    axios
-      .post(`${backendHost}/appointments/create`, {
-        docID: this.state.docId,
-        userID: parseInt(userId),
-        appointmentDate: this.state.selectedDate,
-        startTime: this.state.selectedTimeSlot,
-        paymentStatus: 0,
-        amount: this.state.amount,
-        currency: "INR",
-      })
-      .then((res) => {
-        let enc = res.data;
-        console.log("resppp", enc);
-        const response = JSON.stringify(enc);
+      const redirectURL =
+        "https://www.all-cures.com/paymentRedirection" +
+        `?encRequest=${responseObject.encRequest}` +
+        `&accessCode=AVWN42KL59BP42NWPB`;
 
-        const responseObject = JSON.parse(response);
-        console.log("res", responseObject.encRequest);
+      window.location.href = redirectURL;
+    })
+    .catch((err) => {
+      console.error("Booking error:", err);
+    });
+};
 
-        localStorage.setItem("encKey", responseObject.encRequest);
-        localStorage.setItem("apiResponse", JSON.stringify(res.data));
+//  bookAppn = (e) => {
+ //   e.preventDefault();
 
-        if (res.data.Count == 0) {
-          this.setState({
-            appointmentAlert: true,
-          });
-          setTimeout(() => {
-            this.setState({
-              appointmentAlert: false,
-            });
-          }, 6000);
-        } else {
-          const redirectURL =
-            "https://www.all-cures.com/paymentRedirection" +
-            `?encRequest=${responseObject.encRequest}` +
-            `&accessCode=AVWN42KL59BP42NWPB`; // Your accessCode here
+ //   console.log("clicked booking");
+ //   console.log("time", dayjs(this.state.selectedTime).format("HH:mm"));
+
+  //  axios
+  //    .post(`${backendHost}/appointments/v2/create`, {
+  //      docID: this.state.docId,
+  //      userID: parseInt(userId),
+  //      appointmentDate: this.state.selectedDate,
+  //      startTime: this.state.selectedTimeSlot,
+  //      paymentStatus: 0,
+  //      amount: this.state.amount,
+  //      currency: "INR",
+ //     })
+     // .then((res) => {
+      //  let enc = res.data;
+      //  console.log("resppp", enc);
+      //  const response = JSON.stringify(enc);
+          
+     //   const responseObject = JSON.parse(response);
+     //   console.log("res", responseObject.encRequest);
+
+     //   localStorage.setItem("encKey", responseObject.encRequest);
+    //    localStorage.setItem("apiResponse", JSON.stringify(res.data));
+
+      //  if (res.data.Count == 0) {
+      //    this.setState({
+      //      appointmentAlert: true,
+      //    });
+      //    setTimeout(() => {
+      //      this.setState({
+     //         appointmentAlert: false,
+    //        });
+    //      }, 6000);
+    //    } else {
+   //       const redirectURL =
+    //        "https://www.all-cures.com/paymentRedirection" +
+    //        `?encRequest=${responseObject.encRequest}` +
+    //        `&accessCode=AVWN42KL59BP42NWPB`; // Your accessCode here
 
           // Redirecting to the URL
-          window.location.href = redirectURL;
-        }
+   //       window.location.href = redirectURL;
+   //     }
+        
 
         // If enc is a string, parse it to an object
         // if (typeof enc === 'string') {
@@ -940,3 +969,4 @@ class DocPatientConnect extends Component {
 }
 
 export default withRouter(DocPatientConnect);
+
