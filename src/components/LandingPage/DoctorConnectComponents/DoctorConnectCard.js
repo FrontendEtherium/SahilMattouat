@@ -67,11 +67,11 @@ function DoctorConnectCard({ doc, onConsult }) {
             />
           </div>
           <div className="doctor-details">
-              {/* <div className="doctor-name">
+               <div className="doctor-name">
               Dr. {doc.firstName} {doc.lastName}{" "}
               <VerifiedIcon color="success" style={{ fontSize: "12px" }} />
-            </div> */}
-            <div
+            </div> 
+{/*   <div
                 className="doctor-name doctor-name-link"
                 onClick={handleProfileVisit}
                 role="button"
@@ -79,7 +79,7 @@ function DoctorConnectCard({ doc, onConsult }) {
                 >
                 Dr. {doc.firstName} {doc.lastName}{" "}
                 <VerifiedIcon color="success" style={{ fontSize: "12px" }} />
-            </div>
+            </div> */}
  
             <div className="doctor-specialty">{doc.medicineTypeName}</div>
             <div className="doctor-location">
