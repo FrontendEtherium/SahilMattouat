@@ -89,16 +89,16 @@ const Footer = ({ hideCuresLinks }) => (
             {/* 2) About Us */}
             <div className="col-lg-2">
               <ul className="list-unstyled footer-links">
-         //       <li>
-         //         <Link to="/AboutUs" aria-label="Learn more about All Cures">
-         //           About Us
-         //         </Link>
-         //       </li>
-        //        <li>
-        //          <Link to="/AboutUs" aria-label="Contact All Cures team">
-       //             Contact Us
-       //           </Link>
-       //         </li>
+          {/*      <li>
+                  <Link to="/AboutUs" aria-label="Learn more about All Cures">
+                    About Us
+                  </Link>
+               </li>
+               <li>
+                  <Link to="/AboutUs" aria-label="Contact All Cures team">
+                    Contact Us
+                  </Link>
+               </li>   */}
                    <li>
                    <Link
                    to="#"
@@ -325,16 +325,16 @@ const Footer = ({ hideCuresLinks }) => (
               <ul className="list-unstyled footer-links mb-3">
                 
                 
-             //   <li>
-            //    <Link to="/AboutUs" aria-label="Learn more about All Cures">
-            //       About Us
-            //      </Link>
-           //     </li>
-           //     <li>
-           //       <Link to="/AboutUs" aria-label="Contact All Cures team">
-           //         Contact Us
-           //       </Link>
-          //      </li>
+              {/*  <li>
+                <Link to="/AboutUs" aria-label="Learn more about All Cures">
+                   About Us
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/AboutUs" aria-label="Contact All Cures team">
+                    Contact Us
+                  </Link>
+                </li> */}
                    <li>
                    <Link
                    to="#"
