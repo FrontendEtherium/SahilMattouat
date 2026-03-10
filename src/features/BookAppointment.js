@@ -980,8 +980,13 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
    //   const redirectURL = `https://www.all-cures.com/paymentRedirection?encRequest=${responseObject.encRequest}&Code=AVWN42KL59BP42NWPB`;
    //   window.location.href = redirectURL;
       setTimeout(() => {
+
   const redirectURL = `https://www.all-cures.com/paymentRedirection?encRequest=${responseObject.encRequest}&access_code=AVWN42KL59BP42NWPB`;
+
+  console.log("Redirect URL:", redirectURL);
+
   window.location.href = redirectURL;
+
 }, 5000);
     } catch (error) {
       console.error("Error while booking appointment:", error);
@@ -1903,6 +1908,7 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
 };
 
 export default AppointmentModal;
+
 
 
 
