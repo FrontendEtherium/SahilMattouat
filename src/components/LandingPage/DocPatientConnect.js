@@ -129,7 +129,7 @@ class DocPatientConnect extends Component {
     .catch((err) => {
       console.error("Booking error:", err);
     });
-};
+};  
 
 //  bookAppn = (e) => {
  //   e.preventDefault();
@@ -225,7 +225,7 @@ class DocPatientConnect extends Component {
 
         // // Submit the form
         // form.submit();
-      });
+   //   });
     // .then(response => {
     //     if (!response.ok) {
     //         throw new Error('Network response was not ok');
@@ -969,4 +969,5 @@ class DocPatientConnect extends Component {
 }
 
 export default withRouter(DocPatientConnect);
+
 
