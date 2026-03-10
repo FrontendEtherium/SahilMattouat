@@ -977,8 +977,8 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
         selectedTimeSlot,
         paymentStatus: "gateway",
       });
- //     const redirectURL = `https://www.all-cures.com/paymentRedirection?encRequest=${responseObject.encRequest}&Code=AVWN42KL59BP42NWPB`;
- //     window.location.href = redirectURL;
+      const redirectURL = `https://www.all-cures.com/paymentRedirection?encRequest=${responseObject.encRequest}&Code=AVWN42KL59BP42NWPB`;
+      window.location.href = redirectURL;
     } catch (error) {
       console.error("Error while booking appointment:", error);
       trackEvent("Appointment Booking Failed", {
@@ -1899,4 +1899,5 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
 };
 
 export default AppointmentModal;
+
 
