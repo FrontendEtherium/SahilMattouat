@@ -243,3 +243,17 @@ button.active {
 
   }
 }
+.promo-banner-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+/* ONLY promo banner ke liye override */
+.promo-banner-wrapper .doctor-patient-banner-btn {
+  left: auto !important;   /* 🔥 remove old left */
+  bottom: auto !important; /* 🔥 remove old bottom */
+
+  right: 450px;             /* 👈 adjust */
+  top: 65%;                /* 👈 adjust */
+  transform: translateY(-50%);
+}
