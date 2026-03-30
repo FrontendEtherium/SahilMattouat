@@ -639,3 +639,24 @@ body.home-page {
   min-width: 200px !important;
   max-width: 90vw !important;
 }
+.about-consult-btn {
+  position: absolute;
+  right: 400px;
+  top: 20px;
+
+  background-color: #00415e;
+  color: #fff;
+
+  padding: 20px 44px;   /* 🔥 controlled size */
+  border-radius: 25px;
+  border: none;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  cursor: pointer;
+  white-space: nowrap;
+
+  width: auto;          /* 🔥 IMPORTANT (fix stretch) */
+  display: inline-block;
+}
