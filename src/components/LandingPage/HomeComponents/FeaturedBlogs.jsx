@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { backendHost } from "../../../api-config";
 import headers from "../../../api-fetch";
 import axios from "axios";
@@ -7,31 +7,26 @@ import "./FeaturedBlogs.css";
 import Slider from "react-slick";
 import { Link } from "react-router-dom";
 import { imagePath, imageUrl } from "../../../image-path";
+import ScrollableButton from "../../ScrollableButton";
 
 function FeaturedBlogs({ isMobile }) {
   const [items, setItems] = useState([]);
   const [loaded, setLoaded] = useState(false);
+  const sectionRef = useRef(null);
 
   const carouselSettings = {
     infinite: true,
-
     slidesToShow: 4,
     slidesToScroll: 1,
     autoplay: false,
     responsive: [
       {
         breakpoint: 1024,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 1,
-        },
+        settings: { slidesToShow: 3 },
       },
       {
         breakpoint: 600,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-        },
+        settings: { slidesToShow: 2 },
       },
     ],
   };
@@ -62,8 +57,9 @@ function FeaturedBlogs({ isMobile }) {
   const displayItems = isMobile ? items.slice(0, 3) : items;
 
   return (
-    <section className="container">
+    <section className="container" ref={sectionRef}>
       <h1 className="landing-page__title">Featured Cures</h1>
+
       {!isMobile ? (
         <Slider {...carouselSettings}>
           {displayItems.map((item) => {
@@ -74,33 +70,34 @@ function FeaturedBlogs({ isMobile }) {
               contentObj = null;
             }
 
-            // Build image URL
             const imgLoc = item.content_location || "";
             const hasCustom =
               imgLoc.includes("cures_articleimages") &&
               imgLoc.endsWith(".json");
+
             const imageLoc = hasCustom
               ? `${imageUrl}/tr:w-275,h-220,f-webp/${
                   imgLoc.replace("json", "png").split("/webapps/")[1]
                 }`
               : "https://ik.imagekit.io/hg4fpytvry/product-images/tr:h-220,w-275,f-webp/cures_articleimages//299/default.png";
 
-            // Preview text
             const previewText =
               contentObj?.blocks?.[0]?.data?.text?.slice(0, 58) ||
               "No preview available.";
 
-            // Format title for URL
-            const articleTitle = item.title.replace(new RegExp(" ", "g"), "-");
+            const articleTitle = item.title.replace(/ /g, "-");
 
             return (
               <div key={item.id} className="featured-blogs__item">
                 <div className="featured-blogs__image">
                   <img src={imageLoc} alt={item.title} loading="lazy" />
                 </div>
+
                 <Link to={`/cure/${item.article_id}-${articleTitle}`}>
                   <div className="featured-blogs__content">
-                    <h2 className="featured-blogs__headline">{item.title}</h2>
+                    <h2 className="featured-blogs__headline">
+                      {item.title}
+                    </h2>
                     <p className="featured-blogs__paragraph">
                       {previewText}...
                     </p>
@@ -120,33 +117,34 @@ function FeaturedBlogs({ isMobile }) {
               contentObj = null;
             }
 
-            // Build image URL
             const imgLoc = item.content_location || "";
             const hasCustom =
               imgLoc.includes("cures_articleimages") &&
               imgLoc.endsWith(".json");
+
             const imageLoc = hasCustom
               ? `${imageUrl}/tr:w-275,h-220,f-webp/${
                   imgLoc.replace("json", "png").split("/webapps/")[1]
                 }`
               : "https://ik.imagekit.io/hg4fpytvry/product-images/tr:h-250,w-300,f-webp/cures_articleimages//299/default.png";
 
-            // Preview text
             const previewText =
               contentObj?.blocks?.[0]?.data?.text?.slice(0, 50) ||
               "No preview available.";
 
-            // Format title for URL
-            const articleTitle = item.title.replace(new RegExp(" ", "g"), "-");
+            const articleTitle = item.title.replace(/ /g, "-");
 
             return (
               <div key={item.id} className="featured-blogs__item">
                 <div className="featured-blogs__image">
                   <img src={imageLoc} alt={item.title} loading="lazy" />
                 </div>
+
                 <Link to={`/cure/${item.article_id}-${articleTitle}`}>
                   <div className="featured-blogs__content">
-                    <h2 className="featured-blogs__headline">{item.title}</h2>
+                    <h2 className="featured-blogs__headline">
+                      {item.title}
+                    </h2>
                     <p className="featured-blogs__paragraph">
                       {previewText}...
                     </p>
@@ -157,9 +155,13 @@ function FeaturedBlogs({ isMobile }) {
           })}
         </div>
       )}
-      <Link to="allcures">
-        <div className="featured-blogs__all">See all {">"} </div>
-      </Link>
+
+      <div style={{ marginTop: "30px", display: "flex", justifyContent: "flex-end", alignItems: "center", gap: "40px", position: "relative", zIndex: 10, minHeight: "50px" }}>
+        <ScrollableButton linkTo="/doctor-connect">Consult Now</ScrollableButton>
+        <Link to="allcures" style={{ textDecoration: "none" }}>
+          <div className="featured-blogs__all">See all {">"} </div>
+        </Link>
+      </div>
     </section>
   );
 }
