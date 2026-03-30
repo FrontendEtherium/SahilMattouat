@@ -661,3 +661,12 @@ body.home-page {
   width: auto;          /* 🔥 IMPORTANT (fix stretch) */
   display: inline-block;
 }
+/* 📱 Mobile view fix */
+@media (max-width: 768px) {
+  .about-consult-btn {
+    position: static;          /* 🔥 important */
+    display: block;
+    width: 100%;
+    margin-top: 15px;          /* feedback ke neeche gap */
+  }
+}
