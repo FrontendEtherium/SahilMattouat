@@ -1,0 +1,64 @@
+.scrollable-button__button {
+  padding: 12px 28px;
+  background-color: #00415e;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  display: inline-block;
+  vertical-align: middle;
+  min-height: 44px;
+  min-width: fit-content;
+  
+  /* Smooth transition that feels natural with scroll */
+  transition: transform 0.3s ease, background-color 0.2s ease;
+  
+  /* Ensures button doesn't break layout during scroll */
+  transform-origin: center;
+  position: relative;
+  z-index: 11;
+  will-change: transform;
+  
+  /* Ensure button is always visible */
+  overflow: visible;
+  visibility: visible;
+  opacity: 1;
+  flex-shrink: 0;
+}
+
+.scrollable-button__button:hover {
+  background-color: #003347;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.scrollable-button__button:active {
+  background-color: #002a3f;
+}
+
+/* Responsive design for mobile */
+@media (max-width: 600px) {
+  .scrollable-button__button {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+}
+
+.scrollable-button__button:hover {
+  background-color: #b71c1c;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.scrollable-button__button:active {
+  background-color: #9a1515;
+}
+
+/* Responsive design for mobile */
+@media (max-width: 600px) {
+  .scrollable-button__button {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+}
