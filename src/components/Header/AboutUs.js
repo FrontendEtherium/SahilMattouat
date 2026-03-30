@@ -65,6 +65,12 @@ export default class AboutUs extends Component {
             <h5>
               Phone No.: <a href="tel:+91 191 295 9035">+91 191 295 9035</a>
             </h5>
+            <button
+                className="about-consult-btn"
+                onClick={() => (window.location.href = "/doctor-connect")}
+                >
+                Consult Now
+           </button>
             <div class="container my-3">
               <h3>
                 <a href="/feedback">
