@@ -253,8 +253,8 @@ button.active {
   left: auto !important;   /* 🔥 remove old left */
   bottom: auto !important; /* 🔥 remove old bottom */
 
-  right: 450px;             /* 👈 adjust */
-  top: 65%;                /* 👈 adjust */
+  right: 350px;             /* 👈 adjust */
+  top: 70%;                /* 👈 adjust */
   transform: translateY(-50%);
 }
 @media (max-width: 768px) {
