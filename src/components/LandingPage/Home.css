@@ -249,7 +249,7 @@ button.active {
 }
 
 /* ONLY promo banner ke liye override */
-.promo-banner-wrapper .doctor-patient-banner-btn {
+.promo-banner-wrapper .doctor-patient-banner-btn-bannersdestop-mobiles-06 {
   left: auto !important;   /* 🔥 remove old left */
   bottom: auto !important; /* 🔥 remove old bottom */
 
@@ -258,7 +258,7 @@ button.active {
   transform: translateY(-50%);
 }
 @media (max-width: 768px) {
-  .promo-banner-wrapper .doctor-patient-banner-btn {
+  .promo-banner-wrapper .doctor-patient-banner-btn-bannersdestop-mobiles-06 {
     right: 20px;  /* Adjust for mobile */
     top: 65%;     /* Center vertically */
     transform: translateY(-50%);
