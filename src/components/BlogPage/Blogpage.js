@@ -4,7 +4,6 @@ import Footer from "../Footer/Footer";
 import AllPost from "./Allpost.js";
 import { backendHost } from "../../api-config";
 import { Link } from "react-router-dom";
-import ScrollableButton from "../ScrollableButton";
 import Heart from "../../assets/img/heart.png";
 import headers from "../../api-fetch.js";
 
@@ -251,14 +250,12 @@ const Blogpage = (props) => {
         <div className="container cures-search my-4">
           {props.match.params.type ? (
             <>
-              <div className="mb-2 text-center">
-                <h1 className="h3 text-capitalize font-weight-bold">
-                  Cures Related to "{props.match.params.type.toLowerCase()}"
-                </h1>
-                <h2 className="h5 mb-0">
-                  Explore Proven Natural Remedies from Trusted Healing Systems
-                </h2>
-              </div>
+              <h1 className="h3 text-capitalize text-center font-weight-bold ">
+                Cures Related to "{props.match.params.type.toLowerCase()}"
+              </h1>
+              <h2 className="text-center h5 mb-4">
+                Explore Proven Natural Remedies from Trusted Healing Systems
+              </h2>
               <nav aria-label="breadcrumb">
                 <ol className="breadcrumb ">
                   <li className="breadcrumb-item">
@@ -274,9 +271,8 @@ const Blogpage = (props) => {
               </nav>
             </>
           ) : (
-            <div className="d-flex justify-content-between align-items-center mb-3">
-              <div className="tab-nav">
-                <ul>
+            <div className="tab-nav">
+              <ul>
                 <li role="presentation" className="my-1">
                   <button
                     className="btn mr-2"
@@ -446,7 +442,6 @@ const Blogpage = (props) => {
                 </li>
               </ul>
             </div>
-          </div>
           )}
 
           {items.length === 0 &&
@@ -459,15 +454,7 @@ const Blogpage = (props) => {
             </div>
           ) : null}
 
-          <div className="row mt-4" id="posts-container" style={{ position: "relative" }}>
-            {props.match.params.type && (
-              <div
-                className="consult-now-post-button"
-                style={{ position: "absolute", right: "0", top: "220px", zIndex: 10 }}
-              >
-                <ScrollableButton linkTo="/doctor-connect">Consult Now</ScrollableButton>
-              </div>
-            )}
+          <div className="row mt-4" id="posts-container">
             {items.map((i) =>
               i.pubstatus_id === 3 ? (
                 <AllPost
@@ -509,6 +496,13 @@ const Blogpage = (props) => {
           </div>
         ) : null}
         <Footer />
+        {/* 🔥 ADD THIS */}
+<div
+  className="consultsticky-btn"
+  onClick={() => (window.location.href = "/doctor-connect")}
+>
+  Consult Now
+</div>
       </ErrorBoundary>
     );
   } else if (regionPostsLoaded) {
@@ -532,6 +526,13 @@ const Blogpage = (props) => {
           </div>
         </div>
         <Footer />
+        {/* ADD HERE */}
+    <div
+      className="subscribe-btn"
+      onClick={() => (window.location.href = "/doctor-connect")}
+    >
+      Consult Now
+    </div>
       </>
     );
   }
