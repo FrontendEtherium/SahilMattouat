@@ -67,3 +67,65 @@
 .carousel-item.active {
   z-index: 1;
 }
+
+/* 🔵 Base button (common for all) */
+.doctor-patient-banner-btn {
+  position: absolute;
+  cursor: pointer;
+  border-radius: 30px;
+  border: 2px solid #fff;
+  padding: 10px 22px;
+  font-size: 14px;
+  color: #fff;
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+
+/* Hover */
+.doctor-patient-banner-btn:hover {
+  opacity: 0.85;
+}
+
+/* ========================= */
+/* 💻 DESKTOP STYLES */
+/* ========================= */
+
+/* Slide 1 (first banner - single doctor) */
+.btn-slide-1 {
+  bottom: 140px;
+  left: 85%;
+  background-color: #00415e;
+}
+
+/* Slide 2 (second banner - two doctors) */
+.btn-slide-2 {
+  bottom: 95px;
+  left: 78%;
+  background-color: #00415e;
+}
+
+
+/* ========================= */
+/* 📱 MOBILE STYLES */
+/* ========================= */
+
+@media (max-width: 768px) {
+  .doctor-patient-banner-btn {
+    padding: 6px 16px;
+    font-size: 10px;
+  }
+
+  /* Slide 1 mobile */
+  .btn-slide-1 {
+    bottom: 100px;
+    left: 75%;
+    transform: translateX(-50%);
+  }
+
+  /* Slide 2 mobile */
+  .btn-slide-2 {
+    bottom: 55px;
+    left: 66%;
+    transform: translateX(-50%);
+  }
+}
