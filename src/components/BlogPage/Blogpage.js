@@ -526,13 +526,13 @@ const Blogpage = (props) => {
           </div>
         </div>
         <Footer />
-        {/* ADD HERE */}
-    <div
-      className="subscribe-btn"
-      onClick={() => (window.location.href = "/doctor-connect")}
-    >
-      Consult Now
-    </div>
+    //     {/* ADD HERE */}
+    // <div
+    //   className="subscribe-btn"
+    //   onClick={() => (window.location.href = "/doctor-connect")}
+    // >
+    //   Consult Now
+    // </div>
       </>
     );
   }
