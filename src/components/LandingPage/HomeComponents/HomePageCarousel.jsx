@@ -90,7 +90,10 @@ const HomePageCarousel = memo(() => {
             {(idx === 0 || idx === 1) && (
               <Carousel.Caption>
                 <button
-                  className="doctor-patient-banner-btn"
+                 // className="doctor-patient-banner-btn"
+                  className={`doctor-patient-banner-btn ${
+                 idx === 0 ? "btn-slide-1" : "btn-slide-2"
+                  }`}
                   onClick={() => {
                     window.location.href = "/doctor-connect";
                     clickCounter();
