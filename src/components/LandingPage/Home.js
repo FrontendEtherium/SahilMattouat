@@ -98,7 +98,7 @@ function Home() {
 
             {/* SAME BUTTON AS CAROUSEL */}
             <button
-            className="doctor-patient-banner-btn"
+            className="doctor-patient-banner-btn-bannersdestop-mobiles-06"
             onClick={() => (window.location.href = "/doctor-connect")}
             >
             Consult Now
