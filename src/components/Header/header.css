@@ -642,13 +642,12 @@ body.home-page {
 .about-consult-btn {
   position: absolute;
   right: 400px;
-  top: 80px;
-  margin-top: 160px;  /* neeche push karega */
+  top: 145px;
 
   background-color: #00415e;
   color: #fff;
 
-  padding: 20px 44px;   /* 🔥 controlled size */
+  padding: 10px 44px;   /* 🔥 controlled size */
   border-radius: 25px;
   border: none;
 
@@ -661,12 +660,68 @@ body.home-page {
   width: auto;          /* 🔥 IMPORTANT (fix stretch) */
   display: inline-block;
 }
-/* 📱 Mobile view fix */
 @media (max-width: 768px) {
-  .about-consult-btn {
-    position: static;          /* 🔥 important */
-    display: block;
-    width: 100%;
-    margin-top: 15px;          /* feedback ke neeche gap */
+
+  .container.mb-90 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
   }
+
+  /* upar ka content full width */
+  .container.mb-90 h3,
+  .container.mb-90 h5 {
+    width: 100%;
+  }
+
+  /* 🔥 feedback container ko shrink karo */
+  .container.mb-90 .container.my-3 {
+    width: auto !important;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* 🔥 button ko inline karo */
+  .container.mb-90 .container.my-3 h3 {
+    width: auto;
+    margin: 0;
+  }
+
+  /* feedback button */
+  .container.mb-90 .btn {
+    width: auto;
+    padding: 6px 10px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  /* 🔥 consult button fix */
+  .about-consult-btn {
+    position: static !important;
+    width: auto;
+    margin-left: 8px;
+    padding: 6px 10px;
+    font-size: 12px;
+    white-space: nowrap;
+    margin-left: 25px;   /* 👉 thoda right */
+    margin-top: 16px;
+  }
+
+  /* 🔥 IMPORTANT: dono ko same line pe force karo */
+  .about-consult-btn,
+  .container.mb-90 .container.my-3 {
+    display: inline-flex;
+    align-items: center;
+  }
+}
+@media (max-width: 768px) {
+
+  .container.mb-90 .container.my-3 {
+    order: 1;   /* 👉 Feedback LEFT */
+  }
+
+  .about-consult-btn {
+    order: 2;   /* 👉 Consult RIGHT */
+  }
+
 }
