@@ -518,3 +518,10 @@
   outline: none;
   background: transparent;
 }
+.fa-star {
+  color: #ccc;  /* stars css */
+}
+
+.checked {
+  color: #f4c150;   /* stars css */
+}
