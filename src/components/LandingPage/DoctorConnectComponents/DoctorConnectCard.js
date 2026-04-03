@@ -138,7 +138,7 @@ function DoctorConnectCard({ doc, onConsult }) {
             )}
 {/*   <div className="doctor-hospital">{doc.hospitalAffiliated}</div>
             <div className="doctor-separator"></div> */}
-//star code start
+
            <div style={{ marginTop: "8px" }}>
           {/*  <Rating docid={doc.docID} /> */}
           {[1, 2, 3, 4, 5].map((i) => (
@@ -148,7 +148,7 @@ function DoctorConnectCard({ doc, onConsult }) {
                    ></span>
             ))}
             </div>
-//star code end 
+              
           </div>
         </div>
         <div className="book-button-container">
