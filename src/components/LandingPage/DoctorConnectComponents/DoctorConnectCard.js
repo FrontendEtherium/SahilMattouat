@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";  //for stars
+//import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import LocalPharmacyIcon from "@mui/icons-material/LocalPharmacy";
@@ -18,6 +19,17 @@ function DoctorConnectCard({ doc, onConsult }) {
   const imgLoc = doc.imgLoc ? `${imgKitImagePath}/${doc.imgLoc}` : DummyDoc;
   const [showModal, setShowModal] = useState(false);
   const [notAvailable, setNotAvailable] = useState(false);
+   // ✅ YAHAN ADD KARO stars code start
+  const [avgRating, setAvgRating] = useState(0);
+  useEffect(() => {
+  axios
+    .get(`${backendHost}/rating/target/${doc.docID}/targettype/1/avg`)
+    .then((res) => {
+      setAvgRating(Math.round(res.data));
+    })
+    .catch(() => {});
+}, [doc.docID]);
+  // stars code end
   const showFee =
     !!doc?.fee &&
     [doc.fee.totalFee, doc.fee.baseFee, doc.fee.etheriumPart, doc.fee.gst].some(
@@ -124,8 +136,19 @@ function DoctorConnectCard({ doc, onConsult }) {
                 />
               </div>
             )}
-            <div className="doctor-hospital">{doc.hospitalAffiliated}</div>
-            <div className="doctor-separator"></div>
+{/*   <div className="doctor-hospital">{doc.hospitalAffiliated}</div>
+            <div className="doctor-separator"></div> */}
+//star code start
+           <div style={{ marginTop: "8px" }}>
+          {/*  <Rating docid={doc.docID} /> */}
+          {[1, 2, 3, 4, 5].map((i) => (
+           <span
+             key={i}
+                className={`fa fa-star ${i <= avgRating ? "checked" : ""}`}
+                   ></span>
+            ))}
+            </div>
+//star code end 
           </div>
         </div>
         <div className="book-button-container">
