@@ -128,6 +128,14 @@ function Home() {
 
         <SubscriberComponent />
         <Footer />
+         </div>
+      {/* ✅ YAHAN */}
+    <div
+      className="consultsticky-btn"
+      onClick={() => (window.location.href = "/doctor-connect")}
+    >
+      Consult Now
+    </div>
       </div>
     </div>
   );
