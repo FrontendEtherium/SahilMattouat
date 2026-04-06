@@ -136,7 +136,6 @@ function Home() {
     >
       Consult Now
     </div>
-      </div>
     </div>
   );
 }
