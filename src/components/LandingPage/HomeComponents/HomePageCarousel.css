@@ -25,12 +25,12 @@
   content-visibility: auto;
 }
 
-.doctor-patient-banner-btn {
+.doctor-patient-banner-btn-bannersdestop-mobiles-06 {
   position: absolute;
   cursor: pointer;
   background-color: #00415e;
-  bottom: 45px;
-  left: 78%;
+  bottom: 58px;
+  left: 65%;
   border-radius: 30px;
   border: 2px solid #fff;
   font-size: 16px;
@@ -40,12 +40,12 @@
   z-index: 2;
 }
 
-.doctor-patient-banner-btn:hover {
+.doctor-patient-banner-btn-bannersdestop-mobiles-06:hover {
   opacity: 0.7;
 }
 
 @media (max-width: 768px) {
-  .doctor-patient-banner-btn {
+  .doctor-patient-banner-btn-bannersdestop-mobiles-06 {
     padding: 5px 15px;
     font-size: 8px;
     bottom: 20px;
