@@ -29,8 +29,9 @@
   position: absolute;
   cursor: pointer;
   background-color: #00415e;
-  bottom: 58px;
-  left: 65%;
+ /* bottom: 58px; */
+  top: 1112px;
+  left: 68%;
   border-radius: 30px;
   border: 2px solid #fff;
   font-size: 16px;
