@@ -81,28 +81,13 @@ function Home() {
         <TrendingSearches isMobile={isMobile} />
         <FeaturedBlogs isMobile={isMobile} />
 
-  {/*  <Link to="/doctor">
+    <Link to="/doctor">
           <img
             src={`${imgKitImagePath}/assets/img/bannersdestop-mobiles-06.jpg`}
             alt="Promo Banner"
             className="promo-banner"
           />
-        </Link> */}
-    <div className="promo-banner-wrapper">
-  <img
-    src={`${imgKitImagePath}/assets/img/bannersdestop-mobiles-06.jpg`}
-    alt="Promo Banner"
-    className="promo-banner"
-  />
-
-  {/* SAME BUTTON AS CAROUSEL */}
-  <button
-    className="doctor-patient-banner-btn-bannersdestop-mobiles-06"
-    onClick={() => (window.location.href = "/doctor-connect")}
-  >
-    Consult Now
-  </button>
-</div>
+        </Link> 
 
         <TrendingCures isMobile={isMobile} />
         <DoctorCures isMobile={isMobile} />
@@ -129,13 +114,6 @@ function Home() {
         <SubscriberComponent />
         <Footer />
          </div>
-      {/* ✅ YAHAN */}
-    <div
-      className="consultsticky-btn"
-      onClick={() => (window.location.href = "/doctor-connect")}
-    >
-      Consult Now
-    </div>
     </div>
   );
 }
