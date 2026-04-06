@@ -86,13 +86,17 @@ const HomePageCarousel = memo(() => {
               fetchPriority={idx === 0 ? "high" : "low"}
             />
 
-            {idx === 1 && (
+            {/*  {idx === 1 && ( */}
+            {(idx === 0 || idx === 1) && (
               <Carousel.Caption>
                 <button
-                  className="doctor-patient-banner-btn"
+               //   className="doctor-patient-banner-btn"
+                  className={`doctor-patient-banner-btn ${
+                 idx === 0 ? "btn-slide-1" : "btn-slide-2"
+                  }`}
                   onClick={async () => {
                     await clickCounter();
-                    window.location.href = "/doctor";
+                    window.location.href = "/doctor-connect";
                     
                   }}
                   aria-label="Start Online Doctor Consultation"
