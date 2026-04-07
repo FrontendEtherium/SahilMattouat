@@ -527,3 +527,104 @@ body.home-page {
   min-width: 200px !important;
   max-width: 90vw !important;
 }
+.about-consult-btn {
+  position: absolute;
+  right: 35%;
+  top: 38%;
+
+  background-color: #00415e;
+  color: #fff;
+
+  padding: 10px 44px;   /* 🔥 controlled size */
+  border-radius: 25px;
+  border: none;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  cursor: pointer;
+  white-space: nowrap;
+
+  width: auto;          /* 🔥 IMPORTANT (fix stretch) */
+  display: inline-block;
+}
+@media (max-width: 768px) {
+
+  .container.mb-90 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+
+  } 
+
+  /* upar ka content full width */
+  .container.mb-90 h3,
+  .container.mb-90 h5 {
+    width: 100%;
+  }
+
+  /* 🔥 feedback container ko shrink karo */
+  .container.mb-90 .container.my-3 {
+    width: auto !important;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* 🔥 button ko inline karo */
+   .container.mb-90 .container.my-3 h3 {
+    width: auto;
+    margin: 0;
+  } 
+
+  /* feedback button */
+  .container.mb-90 .btn {
+    width: auto;
+    padding: 6px 10px;
+    font-size: 12px;
+    white-space: nowrap;
+  } 
+
+  /* 🔥 consult button fix */
+  /*.about-consult-btn {
+    position: static !important;
+    width: auto;
+    margin-left: 8px;
+    padding: 6px 10px;
+    font-size: 12px;
+    white-space: nowrap;
+    margin-left: 25px;   
+    margin-top: 16px;
+  }
+  */
+
+  /* 🔥 IMPORTANT: dono ko same line pe force karo */
+  .about-consult-btn,
+  .container.mb-90 .container.my-3 {
+    display: inline-flex;
+    align-items: center;
+  }
+}
+@media (max-width: 768px) {
+
+  .container.mb-90 .container.my-3 {
+    order: 1;   /* 👉 Feedback LEFT */
+  }
+
+  .about-consult-btn {
+    order: 2;   /* 👉 Consult RIGHT */
+  }
+
+}
+@media (max-width: 768px) {
+
+  .about-consult-btn {
+    position: static !important;   /* 🔥 absolute hatao */
+    margin-left: auto;             /* 🔥 RIGHT SIDE PUSH */
+    margin-top: 10px;
+
+    padding: 9px 10px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+}
