@@ -502,6 +502,13 @@ const Blogpage = (props) => {
           </div>
         ) : null}
         <Footer />
+          {/* 🔥 ADD THIS */}
+          <div
+          className="consultsticky-btn"
+           onClick={() => (window.location.href = "/doctor-connect")}
+           >
+          Consult Now
+          </div>
       </ErrorBoundary>
     );
   } else if (regionPostsLoaded) {
