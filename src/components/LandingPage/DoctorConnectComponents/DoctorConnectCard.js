@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+//import React, { useState } from "react";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import LocalPharmacyIcon from "@mui/icons-material/LocalPharmacy";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -16,6 +17,16 @@ function DoctorConnectCard({ doc, onConsult }) {
   const imgLoc = doc.imgLoc ? `${imgKitImagePath}/${doc.imgLoc}` : DummyDoc;
   const [showModal, setShowModal] = useState(false);
   const [notAvailable, setNotAvailable] = useState(false);
+  const [rating, setRating] = useState(0);
+  useEffect(() => {
+  axios
+    .get(`${backendHost}/rating/target/${doc.docID}/targettype/1/avg`)
+    .then((res) => {
+      console.log("RATING 👉", res.data);
+      setRating(res.data || 0);
+    })
+    .catch((err) => console.log(err));
+}, [doc.docID]);
   const showFee =
     !!doc?.fee &&
     [doc.fee.totalFee, doc.fee.baseFee, doc.fee.etheriumPart, doc.fee.gst].some(
@@ -107,8 +118,20 @@ function DoctorConnectCard({ doc, onConsult }) {
                 />
               </div>
             )}
-            <div className="doctor-hospital">{doc.hospitalAffiliated}</div>
-            <div className="doctor-separator"></div>
+{/*   <div className="doctor-hospital">{doc.hospitalAffiliated}</div>
+            <div className="doctor-separator"></div> */}
+            <div className="doctor-rating">
+  {[1, 2, 3, 4, 5].map((i) => (
+    <span
+      key={i}
+      className={
+        i <= Math.round(rating)
+          ? "fa fa-star checked opacity-7 mr-1"
+          : "fa fa-star opacity-7 mr-1"
+      }
+    ></span>
+  ))}
+</div>
           </div>
         </div>
         <div className="book-button-container">
