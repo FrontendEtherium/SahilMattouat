@@ -516,4 +516,16 @@
   color: #0b5ed7;
   text-decoration: underline;
 }
+.fa-star {
+  color: #ccc;
+  font-size: 16px;
+}
 
+.fa-star.checked {
+  color: #f4c150; /* same profile wala color */
+}
+.doctor-rating {
+  display: flex;
+  align-items: center;
+  margin-top: 6px;   /* 👈 ADD THIS */
+}
