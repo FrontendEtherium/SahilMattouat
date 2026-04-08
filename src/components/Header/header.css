@@ -725,3 +725,17 @@ body.home-page {
   }
 
 }
+@media (min-width: 769px) {
+  .about-consult-btn::before {
+    content: "Talk to a Certified Doctor in 5 Minutes | 100% Online | Secure & Private";
+    
+    position: absolute;
+    top: -40px;   
+    left: 50%;
+    transform: translateX(-50%);
+
+    font-size: 13px;
+    color: #555;
+    white-space: nowrap;
+  }
+} 
