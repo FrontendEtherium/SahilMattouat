@@ -164,3 +164,11 @@
     width: 100%;
   }
 }
+@media (min-width: 768px) and (max-width: 1024px) {
+
+  .doctor-patient-banner-btn-bannersdestop-mobiles-06 {
+    bottom: 75% !important;   /* 🔼 upar / neeche control */
+    left: 66% !important;     /* ◀▶ right shift */
+  }
+
+}
