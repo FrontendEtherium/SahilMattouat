@@ -642,3 +642,11 @@ body.home-page {
     white-space: nowrap;
   }
 } 
+@media (min-width: 768px) and (max-width: 1024px) {
+
+  .container.mb-90 .container.my-3 {
+    padding-left: 0 !important;   /* 🔥 remove bootstrap padding */
+    margin-left: -170px !important; /* 🔥 force move left */
+  }
+
+}
