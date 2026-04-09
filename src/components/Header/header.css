@@ -653,7 +653,7 @@ body.home-page {
 @media (min-width: 768px) and (max-width: 1024px) {
 
   .about-consult-btn {
-    top: 395px !important;   /* 🔥 upar shift */
+    top: 371px !important;   /* 🔥 upar shift */
     right: 20%;
   }
 
