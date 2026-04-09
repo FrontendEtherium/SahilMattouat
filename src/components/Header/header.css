@@ -653,8 +653,8 @@ body.home-page {
 @media (min-width: 768px) and (max-width: 1024px) {
 
   .about-consult-btn {
-    top: 30% !important;   /* 🔥 pehle 38% tha → upar aa jayega */
-    right: 20%
+    top: 395px !important;   /* 🔥 upar shift */
+    right: 20%;
   }
 
 }
