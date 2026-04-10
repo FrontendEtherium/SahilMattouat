@@ -321,3 +321,17 @@ button.active {
     color: #fff; 
   }
 }
+
+/* 📱 Hide button by default on mobile */
+@media (max-width: 768px) {
+  .consultsticky-btn {
+    display: none;
+  }
+}
+
+/* 📱 Show ONLY after cookie accept */
+@media (max-width: 768px) {
+  body.cookie-accepted .consultsticky-btn {
+    display: block;
+  }
+}
