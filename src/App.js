@@ -19,6 +19,9 @@ const App = () => {
       <Main />
       <div>
         <CookieConsent
+         onAccept={() => {
+        document.body.classList.add("cookie-accepted");
+        }}
           style={{
             background: "#022a3c",
             width: "80%",
