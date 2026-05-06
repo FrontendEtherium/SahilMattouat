@@ -14,7 +14,12 @@ import { imgKitImagePath } from "../../../image-path";
 import RateTooltip from "../../../ui/Tooltip";
 
 function DoctorConnectCard({ doc, onConsult }) {
-  const imgLoc = doc.imgLoc ? `${imgKitImagePath}/${doc.imgLoc}` : DummyDoc;
+  {/* const imgLoc = doc.imgLoc ? `${imgKitImagePath}/${doc.imgLoc}` : DummyDoc; */}
+  const cleanBase = imgKitImagePath.replace(/\/+$/, "");
+  const cleanPath = doc.imgLoc?.replace(/^\/+/, "");
+  const imgLoc = doc.imgLoc
+  ? `${cleanBase}/${cleanPath}?tr=w-300,h-400,c-maintain_ratio,f-webp,q-70`
+  : DummyDoc;
   const [showModal, setShowModal] = useState(false);
   const [notAvailable, setNotAvailable] = useState(false);
   const [rating, setRating] = useState(0);
@@ -71,11 +76,24 @@ function DoctorConnectCard({ doc, onConsult }) {
       <div className="doctor-card">
         <div className="doctor-card-main">
           <div className="doctor-image-container">
-            <img
+  {/* <img
               src={imgLoc}
               alt={`Dr.${doc.firstName} ${doc.lastName}`}
               className="doctor-image"
-            />
+            /> */}
+    <img
+  src={imgLoc}
+  alt={`Dr.${doc.firstName} ${doc.lastName}`}
+  className="doctor-image"
+  loading="lazy"
+  decoding="async"
+  width="300"
+  height="300"
+  onError={(e) => {
+    e.currentTarget.onerror = null;
+    e.currentTarget.src = DummyDoc;
+  }}
+/>
           </div>
           <div className="doctor-details">
                <div className="doctor-name">
