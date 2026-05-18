@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Redirecting to Payment</title>
+</head>
+<body>
+
+<h2 style="text-align:center; margin-top:100px;">
+  Redirecting to Payment Gateway...
+</h2>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+
+  const encRequest = params.get("encRequest");
+  const accessCode = params.get("accessCode");
+
+  if (encRequest && accessCode) {
+    const paymentURL = `https://all-cures.com:444/cures/paymentRedirection?encRequest=${encRequest}&accessCode=${accessCode}`;
+
+    window.location.href = paymentURL;
+  } else {
+    document.body.innerHTML = "<h3 style='color:red;text-align:center;margin-top:100px;'>Missing Payment Parameters</h3>";
+  }
+</script>
+
+</body>
+</html>
