@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Redirecting to Payment</title>
+</head>
+<body>
+  <h2 style="text-align:center; margin-top:100px;">
+    Redirecting to Payment Gateway...
+  </h2>
+
+  <script>
+    async function goToPayment() {
+      try {
+        const response = await fetch("https://all-cures.com:444/cures/payment/basic");
+        const data = await response.json();
+
+        const encRequest = data.encRequest;
+        const accessCode = data.accessCode;
+
+        if (!encRequest || !accessCode) {
+          document.body.innerHTML = "<h3>Payment data missing</h3>";
+          return;
+        }
+
+        const form = document.createElement("form");
+        form.method = "POST";
+        form.action = "https://all-cures.com:444/cures/paymentRedirection";
+
+        const encInput = document.createElement("input");
+        encInput.type = "hidden";
+        encInput.name = "encRequest";
+        encInput.value = encRequest;
+
+        const codeInput = document.createElement("input");
+        codeInput.type = "hidden";
+        codeInput.name = "accessCode";
+        codeInput.value = accessCode;
+
+        form.appendChild(encInput);
+        form.appendChild(codeInput);
+        document.body.appendChild(form);
+
+        form.submit();
+      } catch (error) {
+        document.body.innerHTML = "<h3>Payment redirect failed</h3>";
+        console.error(error);
+      }
+    }
+
+    goToPayment();
+  </script>
+</body>
+</html>
