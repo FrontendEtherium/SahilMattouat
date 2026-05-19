@@ -17,16 +17,7 @@ const ResponseRedirect = () => {
     fetch(
       `${backendHost}/payment/get/payment-udpates/${responseObject.orderID}`
     )
- //     .then((res) => res.json())
-          .then(async (res) => {
-      const text = await res.text();
-
-      if (!text || text.trim() === "") {
-        return null;
-      }
-
-      return JSON.parse(text);
-    })
+      .then((res) => res.json())
       .then((json) => {
         console.log("res", json);
         setGetResponse(json);
