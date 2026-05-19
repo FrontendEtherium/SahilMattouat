@@ -1,12 +1,10 @@
 import React, { useEffect } from "react";
-
+import { backendHost } from "../../api-config";
 const DirectPayment = () => {
   useEffect(() => {
     const startPayment = async () => {
       try {
-        const response = await fetch(
-          "https://all-cures.com:444/cures/payment/basic",
-        );
+        const response = await fetch(`${backendHost}/payment/basic`);
 
         const data = await response.json();
 
@@ -19,7 +17,6 @@ const DirectPayment = () => {
         form.action =
           "https://secure.ccavenue.com/transaction.do?command=initiateTransaction";
 
-        // hide form completely
         form.style.display = "none";
 
         // encRequest
@@ -48,14 +45,13 @@ const DirectPayment = () => {
 
         form.submit();
       } catch (error) {
-        console.log(error);
+        console.log("Payment Error:", error);
       }
     };
 
     startPayment();
   }, []);
 
-  // return nothing
   return null;
 };
 
