@@ -86,6 +86,8 @@ import ResponsePage from "./Profile/ResponsePage.js";
 import PaymentRedirect from "./Profile/PaymentRedirect.js";
 import ResponseRedirect from "./Profile/ResponseRedirect.js";
 import DirectPayment from "./Profile/DirectPayment.js";
+import DirectResponsePage from "./Profile/DirectResponsePage";
+import DirectResponseRedirect from "./Profile/DirectResponseRedirect";
 import DoctorConnect from "./LandingPage/DoctorConnect.js";
 import DoctorLandingPage from "./LandingPage/DoctorLandingPage.js";
 import Bookings from "./Profile/Bookings.js";
@@ -165,6 +167,8 @@ const Routes = (props) => {
         <Route exact path="/paymentStatus" component={ResponsePage} />
         <Route exact path="/paymentRedirection" component={PaymentRedirect} />
          <Route exact path="/direct-payment" component={DirectPayment} />
+        <Route exact path="/directPaymentStatus" component={DirectResponsePage}/>
+        <Route exact path="/directStatusPayment" component={DirectResponseRedirect}/>
         <Route exact path="/statusPayment" component={ResponseRedirect} />
         <Route exact path="/bookings" component={Bookings} />
         <Route
