@@ -40,11 +40,11 @@ const DirectResponseRedirect = () => {
         .then((data) => {
           console.log("Parsed Data:", data);
 
-          if (data?.status === "Success") {
+        if (data === "Success") {
             setPaymentStatus("Success");
 
             clearInterval(interval);
-          } else if (data?.status === "Failed") {
+          } else if (data === "Failed") {
             setPaymentStatus("Failed");
 
             clearInterval(interval);
