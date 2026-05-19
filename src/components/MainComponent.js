@@ -85,6 +85,7 @@ import DoctorLink from "./Profile/DoctorLink.js";
 import ResponsePage from "./Profile/ResponsePage.js";
 import PaymentRedirect from "./Profile/PaymentRedirect.js";
 import ResponseRedirect from "./Profile/ResponseRedirect.js";
+import DirectPayment from "./Profile/DirectPayment.js";
 import DoctorConnect from "./LandingPage/DoctorConnect.js";
 import DoctorLandingPage from "./LandingPage/DoctorLandingPage.js";
 import Bookings from "./Profile/Bookings.js";
@@ -163,6 +164,7 @@ const Routes = (props) => {
         <Route path="/notification/:linkid" component={DoctorLink} />
         <Route exact path="/paymentStatus" component={ResponsePage} />
         <Route exact path="/paymentRedirection" component={PaymentRedirect} />
+         <Route exact path="/direct-payment" component={DirectPayment} />
         <Route exact path="/statusPayment" component={ResponseRedirect} />
         <Route exact path="/bookings" component={Bookings} />
         <Route
