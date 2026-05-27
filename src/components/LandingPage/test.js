@@ -1,10 +1,510 @@
+// import React, { useState } from "react";
+// import { Modal } from "react-bootstrap";
+// import { Alert } from "react-bootstrap";
+// import { Link } from "react-router-dom";
+// import axios from "axios";
+// import Cookies from "js-cookie";
+// import {
+//   Select,
+//   MenuItem,
+//   InputLabel,
+//   FormControl,
+//   Checkbox,
+//   FormGroup,
+//   FormControlLabel,
+// } from "@material-ui/core";
+// import { usePasswordValidation } from "../hooks/usePasswordValidation";
+// import { backendHost } from "../../api-config";
+// import PhoneInput from "react-phone-number-input";
+// import { isValidPhoneNumber } from "react-phone-number-input";
+// import { parsePhoneNumber } from "libphonenumber-js";
+
+// import "./test.css";
+// import ErrorBoundary from "../ErrorBoundary";
+
+// const Test = (props) => {
+//   const [click, setClick] = useState(true);
+//   const [email, setEmail] = useState("");
+//   const [rememberMe, setRememberMe] = useState("off");
+//   const [signInpassword, setPass] = useState("");
+//   const [buttonClick, setClicked] = useState("");
+
+//   const [firstName, setFname] = useState("");
+//   const [lastName, setLname] = useState("");
+//   const [password, setPassword] = useState({
+//     firstPassword: "",
+//     secondPassword: "",
+//   });
+//   const [userType, setUserType] = useState("other");
+//   const [buttonSignUpClick, setSignUpClicked] = useState("");
+//   const [number, setMname] = useState("");
+//   const [phoneNumber, setPhoneNumber] = useState("");
+//   const [validEmail, setValidEmail] = useState();
+//   const [hasError, sethasError] = useState(false);
+//   const [loginSuccess, setLoginSuccess] = useState(true);
+//   const [alert, setAlert] = useState("");
+//   const [phoneError, setPhoneError] = useState(false);
+
+//   const [validLength, upperCase, lowerCase, match] = usePasswordValidation({
+//     firstPassword: password.firstPassword,
+//     secondPassword: password.secondPassword,
+//   });
+
+//   const setFirst = (event) => {
+//     setPassword({ ...password, firstPassword: event.target.value });
+//   };
+//   const setSecond = (event) => {
+//     setPassword({ ...password, secondPassword: event.target.value });
+//   };
+
+//   const SignUpForm = async (e, props) => {
+//     e.preventDefault();
+//     setSignUpClicked(1);
+
+//     // Validate phone number
+//     if (phoneNumber && !isValidPhoneNumber(phoneNumber)) {
+//       setPhoneError(true);
+//       return;
+//     } else {
+//       setPhoneError(false);
+//     }
+
+//     if (validEmail && upperCase && lowerCase && match) {
+//       axios.defaults.withCredentials = true;
+
+//       // Parse phone number to get country ISO code and national number
+//       let countryCode = "";
+//       let nationalNumber = number; // fallback to old number field
+
+//       if (phoneNumber) {
+//         try {
+//           const parsedPhone = parsePhoneNumber(phoneNumber);
+//           countryCode = parsedPhone.country; // This gives us "IN", "US", etc.
+//           nationalNumber = parsedPhone.nationalNumber;
+//         } catch (error) {
+//           console.error("Error parsing phone number:", error);
+//           setPhoneError(true);
+//           return;
+//         }
+//       }
+
+//       const params = {
+//         firstname: firstName,
+//         lastname: lastName,
+//         email: email,
+//         psw: password.firstPassword,
+//         "psw-repeat": password.secondPassword,
+//         // rempwd: rempwd,
+//         rempwd: "1",
+//         doc_patient: userType,
+//         acceptTnc: "1",
+//         number: nationalNumber,
+//         country_code: countryCode,
+//         Age: null,
+//       };
+//       axios
+//         .post(`${backendHost}/registration/add/new`, params, {
+//           headers: { "Access-Control-Allow-Credentials": true },
+//         })
+//         .then((response) => {
+//           if (response.data === "Email Address already Exists in the System") {
+//             document.getElementById("signup-msg").innerText =
+//               "Email already exists!";
+//           } else if (response.data.registration_id) {
+//             // Registration successful - now log the user in automatically
+//             setAlert("Registered Successfully!!!");
+
+//             // Set user cookies and localStorage for registration response
+//             Cookies.set("uName", response.data.first_name, { expires: 365 });
+//             if (response.data.docID) {
+//               localStorage.setItem("doctorid", response.data.docID);
+//             }
+//             if (response.data.value) {
+//               localStorage.setItem("token", response.data.value);
+//             }
+
+//             // Now perform automatic login to set proper authentication cookies
+//             setTimeout(() => {
+//               axios.defaults.withCredentials = true;
+//               axios
+//                 .post(
+//                   `${backendHost}/login?cmd=login&email=${email}&psw=${password.firstPassword}&rempwd=1`
+//                 )
+//                 .then((loginResponse) => {
+//                   if (loginResponse.data.registration_id) {
+//                     // Login successful - authentication cookies should now be set by server
+//                     console.log(
+//                       "Auto-login after registration successful:",
+//                       loginResponse.data
+//                     );
+
+//                     // Update any additional data from login response
+//                     Cookies.set("uName", loginResponse.data.first_name, {
+//                       expires: 365,
+//                     });
+//                     if (loginResponse.data.docID) {
+//                       localStorage.setItem(
+//                         "doctorid",
+//                         loginResponse.data.docID
+//                       );
+//                     }
+//                     if (loginResponse.data.value) {
+//                       localStorage.setItem("token", loginResponse.data.value);
+//                     }
+
+//                     // Redirect to homepage with proper authentication
+//                     setTimeout(() => {
+//                       window.location.reload();
+//                     }, 500);
+//                   } else {
+//                     console.error("Auto-login failed after registration");
+//                     // Still redirect, user can login manually if needed
+//                     setTimeout(() => {
+//                       window.location.reload();
+//                     }, 500);
+//                   }
+//                 })
+//                 .catch((loginError) => {
+//                   console.error(
+//                     "Auto-login error after registration:",
+//                     loginError
+//                   );
+//                   // Still redirect, user can login manually if needed
+//                   setTimeout(() => {
+//                     window.location.reload();
+//                   }, 500);
+//                 });
+//             }, 1000); // Wait 1 second to show success message
+//           }
+
+//           // Clear alert after some time if registration wasn't successful
+//           if (!response.data.registration_id) {
+//             setTimeout(() => {
+//               setAlert("");
+//             }, 5000);
+//           }
+//         })
+//         .catch((err) => {
+//           setTimeout(() => {
+//             setSignUpClicked(3);
+//           }, 5000);
+//           document.getElementById("signup-msg").innerText =
+//             "Some error occured!";
+//         });
+//     } else {
+//       return;
+//     }
+//   };
+
+//   const handleEmail = (e) => {
+//     var re = /^[a-zA-Z-0-9.]+@[a-zA-Z0-9]+\.[A-Za-z]+$/;
+//     if (!re.test(e.target.value)) {
+//       setValidEmail(false);
+//     } else {
+//       setEmail(e.target.value);
+//       setValidEmail(true);
+//     }
+//   };
+
+//   const handleClick = () => {
+//     if (click === true) {
+//       document.getElementById("container").classList.add("right-panel-active");
+//     } else {
+//       document
+//         .getElementById("container")
+//         .classList.remove("right-panel-active");
+//     }
+//   };
+
+//   const loginForm = async (e) => {
+//     e.preventDefault();
+//     setClicked(1);
+//     // Sett withCredentials on $axios before creating instance
+//     axios.defaults.withCredentials = true;
+//     axios
+//       .post(
+//         `${backendHost}/login?cmd=login&email=${email}&psw=${signInpassword}&rempwd=${rememberMe}`
+//       )
+//       .then((response) => {
+//         if (response.data.registration_id) {
+//           console.log("response login", response.data);
+
+//           Cookies.set("uName", response.data.first_name, { expires: 365 });
+//           localStorage.setItem("doctorid", response.data.docID);
+//           localStorage.setItem("token", response.data.value);
+//           setTimeout(() => {
+//             if (props.path) {
+//               window.location = props.path;
+//             } else {
+//               window.location.reload();
+//             }
+//           }, 500);
+//         } else {
+//           document.getElementById("login-msg").innerText =
+//             "Some error occured!";
+//         }
+//       })
+//       .catch((err) => {
+//         setLoginSuccess(false);
+//         if (err.response) {
+//           if (err.response.data.includes("Incorrect email")) {
+//             document.getElementById("login-msg").innerText =
+//               "Incorrect email or password";
+//           } else {
+//             document.getElementById("login-msg").innerText =
+//               "Some error occured!";
+//           }
+//         } else {
+//           return;
+//         }
+//       });
+//   };
+
+//   return (
+//     <>
+//       {hasError && <ErrorBoundary></ErrorBoundary>}
+
+//       {!hasError && (
+//         <div className="sign">
+//           <Modal
+//             {...props}
+//             size="lg"
+//             aria-labelledby="contained-modal-title-vcenter"
+//             centered
+//           >
+//             <Modal.Body>
+//               <div className="container sign" id="container">
+//                 <div className="form-container sign-up-container">
+//                   <form className="sign" onSubmit={SignUpForm}>
+//                     <div className="h2 py-0 my-1">Create Account</div>
+//                     <span>or use your email for registration</span>
+
+//                     {parseInt(buttonSignUpClick) === 1 ? (
+//                       <div
+//                         id="signup-msg"
+//                         className="alert alert-danger mt-2 py-1 px-3 border border-dark"
+//                       ></div>
+//                     ) : null}
+//                     <input
+//                       className="px-2 py-1 rounded border-dark border"
+//                       type="text"
+//                       placeholder="First Name"
+//                       onChange={(e) => setFname(e.target.value)}
+//                       required
+//                     />
+//                     <input
+//                       className="px-2 py-1 rounded border-dark border"
+//                       type="text"
+//                       placeholder="Last Name"
+//                       onChange={(e) => setLname(e.target.value)}
+//                       required
+//                     />
+//                     <input
+//                       className="px-2 py-1 rounded border-dark border"
+//                       type="email"
+//                       placeholder="Email"
+//                       onChange={(e) => handleEmail(e)}
+//                       required
+//                     />
+//                     <div className="phone-input-container">
+//                       <PhoneInput
+//                         placeholder="Mobile Number"
+//                         value={phoneNumber}
+//                         onChange={setPhoneNumber}
+//                         defaultCountry="IN"
+//                         style={{ paddingLeft: "10px" }}
+//                       />
+
+//                       {phoneError && (
+//                         <div
+//                           className="text-danger mt-1"
+//                           style={{ fontSize: "12px" }}
+//                         >
+//                           Please enter a valid phone number
+//                         </div>
+//                       )}
+//                     </div>
+//                     <input
+//                       className="px-2 py-1 rounded border-dark border"
+//                       type="password"
+//                       placeholder="Password"
+//                       onChange={(e) => setFirst(e)}
+//                       required
+//                     />
+//                     {buttonSignUpClick === 1 ? (
+//                       <div className="rounded alert-danger">
+//                         <div className="alert-msg">
+//                           {!validEmail && <div>◼ Enter Valid Email! </div>}
+//                           {phoneError && (
+//                             <div>◼ Enter Valid Phone Number! </div>
+//                           )}
+//                           {!validLength && (
+//                             <div>
+//                               ◼ Password should contain at least 8 characters!{" "}
+//                             </div>
+//                           )}
+//                           {!upperCase && (
+//                             <div>
+//                               ◼ Password should contain at least 1 uppercase
+//                               character!{" "}
+//                             </div>
+//                           )}
+//                           {!lowerCase && (
+//                             <div>
+//                               ◼ Password should contain at least 1 lowercase
+//                               character!{" "}
+//                             </div>
+//                           )}
+//                           {!match && <div>◼ Passwords don't match! </div>}
+//                         </div>
+//                       </div>
+//                     ) : null}
+//                     <input
+//                       className="px-2 py-1 rounded border-dark border"
+//                       type="password"
+//                       placeholder="Confirm Password"
+//                       onChange={(e) => setSecond(e)}
+//                       autoComplete="off"
+//                       required
+//                     />
+
+//                     <FormControl className="mb-4 w-75">
+//                       <InputLabel id="demo-simple-select-label">
+//                         User Type
+//                       </InputLabel>
+//                       <Select
+//                         labelId="demo-simple-select-label"
+//                         id="demo-simple-select"
+//                         value={userType}
+//                         onChange={(e) => setUserType(e.target.value)}
+//                         required
+//                       >
+//                         <MenuItem value="doctor">Doctor</MenuItem>
+//                         <MenuItem value="other">Other</MenuItem>
+//                       </Select>
+//                     </FormControl>
+//                     <button type="submit" className="ghost">
+//                       Sign Up
+//                     </button>
+//                   </form>
+//                 </div>
+//                 <div className="form-container sign-in-container">
+//                   <form className="sign" onSubmit={loginForm}>
+//                     <h1 id="headSign">Sign in</h1>
+//                     <span id="accText">or use your account</span>
+
+//                     {buttonClick === 1 && !loginSuccess && (
+//                       <div
+//                         id="login-msg"
+//                         className="alert alert-danger mt-2 py-1 px-3 border border-dark"
+//                       >
+//                         Some Error Occured
+//                       </div>
+//                     )}
+
+//                     <input
+//                       className="p-2 rounded border-dark border"
+//                       type="email"
+//                       placeholder="Email"
+//                       autoComplete="off"
+//                       onChange={(e) => setEmail(e.target.value)}
+//                     />
+//                     <input
+//                       className="p-2 rounded border-dark border"
+//                       type="password"
+//                       placeholder="Password"
+//                       onChange={(e) => setPass(e.target.value)}
+//                     />
+//                     <Link
+//                       className="text-dark"
+//                       to="/loginForm/verify"
+//                       id="forgetPass"
+//                     >
+//                       Forgot your password?
+//                     </Link>
+//                     <FormGroup>
+//                       <FormControlLabel
+//                         control={
+//                           <Checkbox
+//                             name="Terms"
+//                             value={rememberMe}
+//                             onClick={(e) =>
+//                               e.target.value === "off"
+//                                 ? setRememberMe("on")
+//                                 : setRememberMe("off")
+//                             }
+//                           />
+//                         }
+//                         label="Remember Me"
+//                       />
+//                     </FormGroup>
+//                     <button className="ghost" id="btn1">
+//                       Sign In
+//                     </button>
+//                   </form>
+//                 </div>
+//                 <div className="overlay-container">
+//                   <div className="overlay">
+//                     <div className="overlay-panel overlay-left">
+//                       <h1>Welcome Back!</h1>
+//                       <p className="text-center">
+//                         To keep connected with us please login with your
+//                         personal info or
+//                       </p>
+//                       <button
+//                         onClick={(e) => handleClick(setClick(true))}
+//                         className="ghost"
+//                         id="signIn"
+//                       >
+//                         Sign In
+//                       </button>
+//                     </div>
+//                     <div
+//                       className="overlay-panel overlay-right"
+//                       id="rightPanel"
+//                     >
+//                       <h1 id="headSign">Hello, Friend!</h1>
+//                       <p>
+//                         Enter your personal details and start journey with us
+//                       </p>
+//                       <button
+//                         onClick={(e) => handleClick(setClick(false))}
+//                         className="ghost"
+//                         id="signUp"
+//                       >
+//                         Sign Up
+//                       </button>
+//                     </div>
+
+//                     {alert && (
+//                       <Alert variant="success" className="h6 mx-3">
+//                         {alert}
+//                       </Alert>
+//                     )}
+//                   </div>
+//                 </div>
+//               </div>
+//             </Modal.Body>
+//           </Modal>
+//         </div>
+//       )}
+//     </>
+//   );
+// };
+
+// export default Test;
+
+//new Model
 import React, { useState } from "react";
-import { Modal, Alert } from "react-bootstrap";
+
+import { Modal } from "react-bootstrap";
+import { Alert } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import Select from "react-select";
 import axios from "axios";
 import Cookies from "js-cookie";
 import {
-  Select,
+  // Select,
   MenuItem,
   InputLabel,
   FormControl,
@@ -12,74 +512,58 @@ import {
   FormGroup,
   FormControlLabel,
 } from "@material-ui/core";
+import { TextField, Button } from "@material-ui/core";
 import { usePasswordValidation } from "../hooks/usePasswordValidation";
 import { backendHost } from "../../api-config";
 import PhoneInput from "react-phone-number-input";
 import { isValidPhoneNumber } from "react-phone-number-input";
 import { parsePhoneNumber } from "libphonenumber-js";
 
-import "react-phone-number-input/style.css";
 import "./test.css";
 import ErrorBoundary from "../ErrorBoundary";
 
 const Test = (props) => {
   const [click, setClick] = useState(true);
-
-  const [hasError] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [alertMsg, setAlertMsg] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
-
-  // Tabs
-  const [loginMode, setLoginMode] = useState("email");
-  const [signupMode, setSignupMode] = useState("email");
-  const [mobileSignupType, setMobileSignupType] = useState("otp");
-
-  // Email login
   const [email, setEmail] = useState("");
   const [rememberMe, setRememberMe] = useState("off");
   const [signInpassword, setPass] = useState("");
-  
-  
+  const [buttonClick, setClicked] = useState("");
+  // ===== NEW LOGIN STATES =====
+  const [loginType, setLoginType] = useState("email");
 
-  // Mobile login
-  const [loginPhoneNumber, setLoginPhoneNumber] = useState("");
-  const [loginMobilePassword, setLoginMobilePassword] = useState("");
+  const [mobileNumber, setMobileNumber] = useState("");
+  const [mobilePassword, setMobilePassword] = useState("");
 
-  // Email signup
+  const [otp, setOtp] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
+  const [useOtpLogin, setUseOtpLogin] = useState(false);
+  // ============================
   const [firstName, setFname] = useState("");
   const [lastName, setLname] = useState("");
   const [password, setPassword] = useState({
     firstPassword: "",
     secondPassword: "",
   });
+  const [mobileView, setMobileView] = useState("signup");
+  const [menuOpen, setMenuOpen] = useState(false);
   const [userType, setUserType] = useState("other");
+  const [buttonSignUpClick, setSignUpClicked] = useState("");
+  const [number, setMname] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [validEmail, setValidEmail] = useState();
+  const [hasError, sethasError] = useState(false);
+  const [loginSuccess, setLoginSuccess] = useState(true);
+  const [alert, setAlert] = useState("");
   const [phoneError, setPhoneError] = useState(false);
-
-  // Mobile OTP signup
-  const [mobileFirstName, setMobileFirstName] = useState("");
-  const [mobileLastName, setMobileLastName] = useState("");
-  const [signupPhoneNumber, setSignupPhoneNumber] = useState("");
-  const [signupMobilePassword, setSignupMobilePassword] = useState("");
-  const [otp, setOtp] = useState("");
-  const [otpSent, setOtpSent] = useState(false);
+  const options = [
+    { value: "doctor", label: "Doctor" },
+    { value: "other", label: "Other" },
+  ];
 
   const [validLength, upperCase, lowerCase, match] = usePasswordValidation({
     firstPassword: password.firstPassword,
     secondPassword: password.secondPassword,
   });
-
-  const showError = (message) => {
-    setErrorMsg(message);
-    setAlertMsg("");
-  };
-
-  const showSuccess = (message) => {
-    setAlertMsg(message);
-    setErrorMsg("");
-  };
 
   const setFirst = (event) => {
     setPassword({ ...password, firstPassword: event.target.value });
@@ -89,515 +573,321 @@ const Test = (props) => {
     setPassword({ ...password, secondPassword: event.target.value });
   };
 
-  const handleEmail = (e) => {
-    const value = e.target.value;
-    var re = /^[a-zA-Z-0-9.]+@[a-zA-Z0-9]+\.[A-Za-z]+$/;
+  const SignUpForm = async (e, props) => {
+    e.preventDefault();
+    setSignUpClicked(1);
 
-    if (!re.test(value)) {
+    // Validate phone number
+    if (phoneNumber && !isValidPhoneNumber(phoneNumber)) {
+      setPhoneError(true);
+      return;
+    } else {
+      setPhoneError(false);
+    }
+
+    if (validEmail && upperCase && lowerCase && match) {
+      axios.defaults.withCredentials = true;
+
+      // Parse phone number to get country ISO code and national number
+      let countryCode = "";
+      let nationalNumber = number; // fallback to old number field
+
+      if (phoneNumber) {
+        try {
+          const parsedPhone = parsePhoneNumber(phoneNumber);
+          countryCode = parsedPhone.country; // This gives us "IN", "US", etc.
+          nationalNumber = parsedPhone.nationalNumber;
+        } catch (error) {
+          console.error("Error parsing phone number:", error);
+          setPhoneError(true);
+          return;
+        }
+      }
+
+      const params = {
+        firstname: firstName,
+        lastname: lastName,
+        email: email,
+        psw: password.firstPassword,
+        "psw-repeat": password.secondPassword,
+        // rempwd: rempwd,
+        rempwd: "on",
+        doc_patient: userType,
+        acceptTnc: "on",
+        acceptPolicy: "on",
+        number: nationalNumber,
+        country_code: countryCode,
+        Age: null,
+      };
+      axios
+        .post(`${backendHost}/auth/register-user`, params, {
+          headers: { "Access-Control-Allow-Credentials": true },
+        })
+        .then((response) => {
+          if (response.data === "Email Address already Exists in the System") {
+            document.getElementById("signup-msg").innerText =
+              "Email already exists!";
+          } else if (response.data.registration_id) {
+            // Registration successful - now log the user in automatically
+            setAlert("Registered Successfully!!!");
+
+            // Set user cookies and localStorage for registration response
+            Cookies.set("uName", response.data.first_name, { expires: 365 });
+            if (response.data.docID) {
+              localStorage.setItem("doctorid", response.data.docID);
+            }
+            if (response.data.value) {
+              localStorage.setItem("token", response.data.value);
+            }
+
+            // Now perform automatic login to set proper authentication cookies
+            setTimeout(() => {
+              axios.defaults.withCredentials = true;
+              axios
+                .post(
+                  `${backendHost}/login?cmd=login&email=${email}&psw=${signInpassword}&rempwd=1`,
+                )
+                .then((loginResponse) => {
+                  if (loginResponse.data.registration_id) {
+                    // Login successful - authentication cookies should now be set by server
+                    console.log(
+                      "Auto-login after registration successful:",
+                      loginResponse.data,
+                    );
+
+                    // Update any additional data from login response
+                    Cookies.set("uName", loginResponse.data.first_name, {
+                      expires: 365,
+                    });
+                    if (loginResponse.data.docID) {
+                      localStorage.setItem(
+                        "doctorid",
+                        loginResponse.data.docID,
+                      );
+                    }
+                    if (loginResponse.data.value) {
+                      localStorage.setItem("token", loginResponse.data.value);
+                    }
+
+                    // Redirect to homepage with proper authentication
+                    setTimeout(() => {
+                      window.location.reload();
+                    }, 3500);
+                  } else {
+                    console.error("Auto-login failed after registration");
+                    // Still redirect, user can login manually if needed
+                    setTimeout(() => {
+                      window.location.reload();
+                    }, 3500);
+                  }
+                })
+                .catch((loginError) => {
+                  console.error(
+                    "Auto-login error after registration:",
+                    loginError,
+                  );
+                  // Still redirect, user can login manually if needed
+                  setTimeout(() => {
+                    window.location.reload();
+                  }, 3500);
+                });
+            }, 1000); // Wait 1 second to show success message
+          }
+
+          // Clear alert after some time if registration wasn't successful
+          if (!response.data.registration_id) {
+            setTimeout(() => {
+              setAlert("");
+            }, 5000);
+          }
+        })
+        .catch((err) => {
+          setTimeout(() => {
+            setSignUpClicked(3);
+          }, 5000);
+          document.getElementById("signup-msg").innerText =
+            "Some error occured!";
+        });
+    } else {
+      return;
+    }
+  };
+
+  const handleEmail = (e) => {
+    var re = /^[a-zA-Z-0-9.]+@[a-zA-Z0-9]+\.[A-Za-z]+$/;
+    if (!re.test(e.target.value)) {
       setValidEmail(false);
     } else {
-      setEmail(value);
+      setEmail(e.target.value);
       setValidEmail(true);
     }
   };
+  const handleClick = (type) => {
+    if (type === "signup") {
+      setClick(false);
 
-  const handleClick = (isSignIn) => {
-    setClick(isSignIn);
-    setErrorMsg("");
-    setAlertMsg("");
-
-    const container = document.getElementById("container");
-    if (!container) return;
-
-    if (isSignIn) {
-      container.classList.remove("right-panel-active");
+      document.getElementById("container").classList.add("right-panel-active");
     } else {
-      container.classList.add("right-panel-active");
+      setClick(true);
+
+      document
+        .getElementById("container")
+        .classList.remove("right-panel-active");
     }
   };
 
-  const getPhonePayload = (value) => {
-    const parsedPhone = parsePhoneNumber(value || "");
+  // ===== SEND OTP FUNCTION =====
+  const sendOtp = async () => {
+    try {
+      axios.defaults.withCredentials = true;
 
-    return {
-      mobile: parsedPhone.nationalNumber,
-      countryCode: `+${parsedPhone.countryCallingCode}`,
-    };
-  };
-
-  // EMAIL SIGNUP
-  const SignUpForm = async (e) => {
-    e.preventDefault();
-
-    if (signupMode !== "email") return;
-
-    if (phoneNumber && !isValidPhoneNumber(phoneNumber)) {
-      setPhoneError(true);
-      showError("Please enter a valid phone number");
-      return;
-    }
-
-    setPhoneError(false);
-
-    if (!validEmail || !validLength || !upperCase || !lowerCase || !match) {
-      showError("Please check email and password rules");
-      return;
-    }
-
-    setLoading(true);
-    axios.defaults.withCredentials = true;
-
-    let countryCode = "";
-    let nationalNumber = "";
-
-    if (phoneNumber) {
-      const parsedPhone = parsePhoneNumber(phoneNumber);
-      countryCode = parsedPhone.country;
-      nationalNumber = parsedPhone.nationalNumber;
-    }
-
-    const params = {
-      firstname: firstName,
-      lastname: lastName,
-      email: email,
-      psw: password.firstPassword,
-      "psw-repeat": password.secondPassword,
-      rempwd: "1",
-      doc_patient: userType,
-      acceptTnc: "1",
-      number: nationalNumber,
-      country_code: countryCode,
-      Age: null,
-    };
-
-    axios
-      .post(`${backendHost}/registration/add/new`, params, {
-        headers: { "Access-Control-Allow-Credentials": true },
-      })
-      .then((response) => {
-        console.log("Signup Response:", response.data);
-
-        if (response.data === "Email Address already Exists in the System") {
-          showError("Email already exists");
-          setLoading(false);
-          return;
-        }
-
-        if (response.data.registration_id) {
-          showSuccess("Registered successfully");
-
-          Cookies.set("uName", response.data.first_name, { expires: 365 });
-
-          if (response.data.docID) {
-            localStorage.setItem("doctorid", response.data.docID);
-          }
-
-          if (response.data.value) {
-            localStorage.setItem("token", response.data.value);
-          }
-
-          setTimeout(() => {
-  axios.defaults.withCredentials = true;
-
-  axios
-    .post(
-      `${backendHost}/login`,
-      null,
-      {
-        params: {
-          cmd: "login",
-          email: email,
-          psw: password.firstPassword,
-          rempwd: 1,
-        },
-        withCredentials: true,
-      }
-    )
-    .then((loginResponse) => {
-      console.log("Auto-login Response:", loginResponse.data);
-
-      if (loginResponse.data && loginResponse.data.value) {
-
-        Cookies.set("uName", loginResponse.data.first_name, {
-          expires: 365,
-        });
-
-        if (loginResponse.data.docID) {
-          localStorage.setItem(
-            "doctorid",
-            loginResponse.data.docID
-          );
-        }
-
-        if (loginResponse.data.value) {
-          localStorage.setItem(
-            "token",
-            loginResponse.data.value
-          );
-        }
-
-        localStorage.setItem(
-          "registration_id",
-          loginResponse.data.registration_id
-        );
-        localStorage.setItem(
-  "userId",
-  loginResponse.data.registration_id
-);
-
-localStorage.setItem(
-  "user_id",
-  loginResponse.data.registration_id
-);
-
-Cookies.set(
-  "registration_id",
-  loginResponse.data.registration_id,
-  {
-    expires: 365,
-  }
-);
-
-Cookies.set(
-  "userId",
-  loginResponse.data.registration_id,
-  {
-    expires: 365,
-  }
-);
-        localStorage.setItem("isLoggedIn", "true");
-
-        if (props.onHide) {
-          props.onHide();
-        }
-
-        setTimeout(() => {
-          if (props.path) {
-            window.location = props.path;
-          } else {
-            window.location.href = "/";
-          }
-        }, 500);
-
-      } else {
-        showError("Signup successful but auto-login failed");
-        setLoading(false);
-      }
-    })
-    .catch((loginError) => {
-
-      console.error(
-        "Auto-login error after signup:",
-        loginError.response?.data || loginError.message
-      );
-
-      showError("Signup successful but auto-login failed");
-      setLoading(false);
-
-    });
-
-}, 1000);
-        } else {
-          showError("Registration failed");
-          setLoading(false);
-        }
-      })
-      .catch((err) => {
-        console.error("Email signup error:", err.response?.data || err.message);
-        showError("Some error occurred");
-        setLoading(false);
+      const response = await axios.post(`${backendHost}/send-otp`, {
+        mobile: mobileNumber,
       });
+
+      if (response.data.success) {
+        setOtpSent(true);
+        alert("OTP Sent Successfully");
+      } else {
+        alert("Failed to send OTP");
+      }
+    } catch (error) {
+      console.log(error);
+      alert("Error sending OTP");
+    }
   };
+  // =============================
+  // ===== VERIFY OTP FUNCTION =====
+  const verifyOtp = async () => {
+    try {
+      axios.defaults.withCredentials = true;
 
-  // EMAIL LOGIN
-const loginForm = async (e) => {
-  e.preventDefault();
+      const response = await axios.post(`${backendHost}/verify-otp`, {
+        mobile: mobileNumber,
+        otp: otp,
+      });
 
-  setLoading(true);
-  axios.defaults.withCredentials = true;
-
-  axios.post(
-    `${backendHost}/login?cmd=login&email=${email}&psw=${signInpassword}&rempwd=${rememberMe}`
-  )
-    .then((response) => {
-      console.log("Login Response:", response.data);
-
-      if (response.data && response.data.first_name) {
-        console.log("Login successful:", response.data);
-
+      if (response.data.registration_id) {
         Cookies.set("uName", response.data.first_name, {
           expires: 365,
         });
 
-        localStorage.setItem(
-          "doctorid",
-          response.data.docID
-        );
+        localStorage.setItem("doctorid", response.data.docID);
+        localStorage.setItem("token", response.data.value);
 
-        localStorage.setItem(
-          "token",
-          response.data.value
-        );
-        localStorage.setItem("isLoggedIn", "true");
-
-        setTimeout(() => {
-          if (props.onHide) {
-            props.onHide();
-          }
-          
-          if (props.path) {
-            window.location = props.path;
-          } else {
-            window.location.reload();
-          }
-        }, 500);
+        window.location.reload();
       } else {
-        showError("Incorrect email or password");
-        setLoading(false);
-      }
-    })
-    .catch((err) => {
-      console.log("Email login error:", err.response?.data);
-      showError("Incorrect email or password");
-      setLoading(false);
-    });
-};
-
-  // MOBILE SIGNUP - SEND OTP
-  const sendOtp = async () => {
-    if (!mobileFirstName || !mobileLastName || !signupPhoneNumber) {
-  showError("Please fill name and mobile number");
-  return;
-}
-
-if (mobileSignupType === "password" && !signupMobilePassword) {
-  showError("Please enter password");
-  return;
-}
-    try {
-      setLoading(true);
-
-      const { mobile, countryCode } = getPhonePayload(signupPhoneNumber);
-
-      const response = await axios.post(
-        `${backendHost}/auth/send-otp?mobile=${mobile}&countryCode=${encodeURIComponent(
-          countryCode
-        )}`
-      );
-
-      if (response.data.success) {
-        setOtpSent(true);
-        showSuccess("OTP sent successfully");
-      } else {
-        showError(response.data.message || "OTP send failed");
+        alert("Invalid OTP");
       }
     } catch (error) {
-      console.log("Send OTP error:", error);
-      showError("OTP send failed");
-    } finally {
-      setLoading(false);
+      console.log(error);
+      alert("OTP Verification Failed");
     }
   };
+  // =================================
+  const loginForm = async (e) => {
+    e.preventDefault();
 
-  // MOBILE SIGNUP - VERIFY OTP + REGISTER + LOGIN
- const verifyOtp = async () => {
-  if (!otp) {
-    showError("Please enter OTP");
-    return;
-  }
+    setClicked(1);
 
-  try {
-    setLoading(true);
+    axios.defaults.withCredentials = true;
 
-    const { mobile, countryCode } = getPhonePayload(signupPhoneNumber);
+    // =========================================
+    // EMAIL LOGIN (YOUR EXISTING LOGIN)
+    // =========================================
 
-    const verifyPayload = {
-      mobile: String(mobile).replace(/\s/g, ""),
-      countryCode: countryCode,
-      otp: String(otp).trim(),
-      firstName: mobileFirstName,
-      lastName: mobileLastName,
-      acceptTnC: "Yes",
-      acceptPolicy: "Yes",
-    };
+    if (loginType === "email") {
+      axios
+        .post(
+          `${backendHost}/login?cmd=login&email=${email}&psw=${signInpassword}&rempwd=1`,
+          {},
+          {
+            withCredentials: true,
+          },
+        )
+        .then((response) => {
+          console.log("FULL RESPONSE:", response);
+          console.log("RESPONSE DATA:", response.data);
+          console.log("RESPONSE HEADERS:", response.headers);
+          console.log("DOCUMENT COOKIE:", document.cookie);
+          if (response.data.registration_id) {
+            console.log("response login", response.data);
 
-    const verifyResponse = await axios.post(
-      `${backendHost}/auth/verify-otp`,
-      verifyPayload
-    );
+            Cookies.set("uName", response.data.first_name, {
+              expires: 365,
+            });
 
-    if (!verifyResponse.data.success) {
-      showError(verifyResponse.data.message || "OTP verification failed");
-      return;
+            localStorage.setItem("doctorid", response.data.docID);
+            localStorage.setItem("token", response.data.value);
+
+            setTimeout(() => {
+              if (props.path) {
+                window.location = props.path;
+              } else {
+                window.location.reload();
+              }
+            }, 500);
+          } else {
+            document.getElementById("login-msg").innerText =
+              "Some error occured!";
+          }
+        })
+        .catch((err) => {
+          setLoginSuccess(false);
+
+          if (err.response) {
+            if (err.response.data.includes("Incorrect email")) {
+              document.getElementById("login-msg").innerText =
+                "Incorrect email or password";
+            } else {
+              document.getElementById("login-msg").innerText =
+                "Some error occured!";
+            }
+          }
+        });
     }
 
-    const userData = verifyResponse.data.data;
+    // =========================================
+    // MOBILE + PASSWORD LOGIN
+    // =========================================
+    else if (loginType === "mobile-password") {
+      axios
+        .post(`${backendHost}/mobile-login`, {
+          mobile: mobileNumber,
+          password: mobilePassword,
+        })
+        .then((response) => {
+          if (response.data.registration_id) {
+            Cookies.set("uName", response.data.first_name, {
+              expires: 365,
+            });
 
-    if (userData?.value) {
-  localStorage.setItem("token", userData.value);
-}
+            localStorage.setItem("doctorid", response.data.docID);
+            localStorage.setItem("token", response.data.value);
 
-if (userData?.docID) {
-  localStorage.setItem("doctorid", userData.docID);
-}
+            setTimeout(() => {
+              if (props.path) {
+                window.location = props.path;
+              } else {
+                window.location.reload();
+              }
+            }, 500);
+          } else {
+            document.getElementById("login-msg").innerText =
+              "Invalid Mobile Number or Password";
+          }
+        })
+        .catch((err) => {
+          console.log(err);
 
-Cookies.set(
-  "registration_id",
-  userData.registration_id,
-  { expires: 365 }
-);
-
-Cookies.set(
-  "userId",
-  userData.registration_id,
-  { expires: 365 }
-);
-
-    if (userData?.registration_id) {
-      localStorage.setItem("registration_id", userData.registration_id);
-      localStorage.setItem("userId", userData.registration_id);
-      localStorage.setItem("user_id", userData.registration_id);
+          document.getElementById("login-msg").innerText =
+            "Some error occured!";
+        });
     }
-
-    if (userData?.first_name) {
-      Cookies.set("uName", userData.first_name, { expires: 365 });
-    }
-
-    localStorage.setItem("isLoggedIn", "true");
-
-    showSuccess("OTP signup successful");
-
-    setTimeout(() => {
-      if (props.path) {
-        window.location = props.path;
-      } else {
-        window.location.reload();
-      }
-    }, 700);
-  } catch (error) {
-    showError(error.response?.data?.message || "OTP verification failed");
-  } finally {
-    setLoading(false);
-  }
-};
-
-const handleMobilePasswordSignup = async () => {
-  if (
-    !mobileFirstName ||
-    !mobileLastName ||
-    !signupPhoneNumber ||
-    !signupMobilePassword
-  ) {
-    showError("Please fill all password signup fields");
-    return;
-  }
-
-  try {
-    setLoading(true);
-
-    const { mobile, countryCode } =
-      getPhonePayload(signupPhoneNumber);
-
-    const registerPayload = {
-      mobile: String(mobile).replace(/\s/g, ""),
-      countryCode: countryCode,
-      password: signupMobilePassword,
-      firstName: mobileFirstName,
-      lastName: mobileLastName,
-      acceptTnC: "Yes",
-      acceptPolicy: "Yes",
-    };
-
-    const registerResponse = await axios.post(
-      `${backendHost}/auth/register-mobile`,
-      registerPayload
-    );
-
-    console.log(
-      "Password Signup Response:",
-      registerResponse.data
-    );
-
-    if (registerResponse.data.success) {
-      const loginPayload = {
-  mobile: String(mobile).replace(/\s/g, ""),
-  countryCode: countryCode,
-  password: signupMobilePassword,
-};
-
-const loginResponse = await axios.post(
-  `${backendHost}/auth/login-mobile`,
-  loginPayload
-);
-
-const loginData = loginResponse.data.data;
-
-if (loginData?.value) {
-  localStorage.setItem("token", loginData.value);
-}
-
-if (loginData?.registration_id) {
-  localStorage.setItem(
-    "registration_id",
-    loginData.registration_id
-  );
-
-  localStorage.setItem(
-    "userId",
-    loginData.registration_id
-  );
-
-  localStorage.setItem(
-    "user_id",
-    loginData.registration_id
-  );
-
-  Cookies.set(
-    "registration_id",
-    loginData.registration_id,
-    { expires: 365 }
-  );
-
-  Cookies.set(
-    "userId",
-    loginData.registration_id,
-    { expires: 365 }
-  );
-}
-
-if (loginData?.first_name) {
-  Cookies.set("uName", loginData.first_name, {
-    expires: 365,
-  });
-}
-
-localStorage.setItem("isLoggedIn", "true");
-
-setTimeout(() => {
-  window.location.reload();
-}, 500);
-      showSuccess(
-  "Account created successfully. Logging you in..."
-);
-    } else {
-      showError(
-        registerResponse.data.message ||
-          "Mobile registration failed"
-      );
-    }
-  } catch (error) {
-    showError(
-      error.response?.data?.message ||
-        "Mobile registration failed"
-    );
-  } finally {
-    setLoading(false);
-  }
-};
-
-return (
+  };
+  return (
     <>
-      {hasError && <ErrorBoundary />}
+      {hasError && <ErrorBoundary></ErrorBoundary>}
 
       {!hasError && (
         <div className="sign">
@@ -606,461 +896,415 @@ return (
             size="lg"
             aria-labelledby="contained-modal-title-vcenter"
             centered
-            dialogClassName="auth-modal-dialog"
           >
-            <Modal.Body className="auth-modal-body">
-              <div className="container sign auth-container" id="container">
-                {/* SIGN UP */}
-                <div className="form-container sign-up-container">
-                  <form className="sign auth-form" onSubmit={SignUpForm}>
-                    <div className="h2 py-0 my-1 auth-title">
-                      Create Account
-                    </div>
+            <Modal.Body>
+              <div className="container sign" id="container">
+                <div
+                  className={`form-container sign-up-container ${
+                    mobileView === "login" ? "mobile-hidden" : ""
+                  }`}
+                >
+                  <form className="sign" onSubmit={SignUpForm}>
+                    <div className="h2 py-0 my-1">Create Account</div>
+                    <span>or use your email for registration</span>
 
-                    <div className="auth-tabs">
-                      <button
-                        type="button"
-                        className={signupMode === "email" ? "active" : ""}
-                        onClick={() => {
-                          setSignupMode("email");
-                          setErrorMsg("");
-                          setAlertMsg("");
-                        }}
-                      >
-                        Email
-                      </button>
+                    {parseInt(buttonSignUpClick) === 1 ? (
+                      <div
+                        id="signup-msg"
+                        className="alert alert-danger mt-2 py-1 px-3 border border-dark"
+                      ></div>
+                    ) : null}
+                    <TextField
+                      variant="outlined"
+                      size="small"
+                      label="First Name"
+                      aria-label="First name"
+                      className="input-field"
+                      onChange={(e) => setFname(e.target.value)}
+                      required
+                    />
+                    <TextField
+                      variant="outlined"
+                      size="small"
+                      label="Last Name"
+                      aria-label="Last name"
+                      className="input-field"
+                      onChange={(e) => setLname(e.target.value)}
+                      required
+                    />
+                    <TextField
+                      variant="outlined"
+                      size="small"
+                      label="Email"
+                      type="email"
+                      aria-label="Signup email"
+                      className="input-field"
+                      onChange={(e) => handleEmail(e)}
+                      required
+                    />
+                    <div className="phone-input-container">
+                      <PhoneInput
+                        placeholder="Mobile Number"
+                        value={phoneNumber}
+                        onChange={setPhoneNumber}
+                        defaultCountry="IN"
+                        style={{ paddingLeft: "10px" }}
+                      />
 
-                      <button
-                        type="button"
-                        className={signupMode === "mobile" ? "active" : ""}
-                        onClick={() => {
-                          setSignupMode("mobile");
-                          setErrorMsg("");
-                          setAlertMsg("");
-                        }}
-                      >
-                        Mobile OTP
-                      </button>
-                    </div>
-
-                    {errorMsg && !click && (
-                      <div className="alert alert-danger auth-alert">
-                        {errorMsg}
-                      </div>
-                    )}
-
-                    {alertMsg && !click && (
-                      <Alert variant="success" className="auth-alert">
-                        {alertMsg}
-                      </Alert>
-                    )}
-
-                    {signupMode === "email" && (
-                      <>
-                        <span className="auth-subtitle">
-                          or use your email for registration
-                        </span>
-
-                        <input
-                          className="px-2 py-1 rounded border-dark border auth-input"
-                          type="text"
-                          placeholder="First Name"
-                          value={firstName}
-                          onChange={(e) => setFname(e.target.value)}
-                          required
-                        />
-
-                        <input
-                          className="px-2 py-1 rounded border-dark border auth-input"
-                          type="text"
-                          placeholder="Last Name"
-                          value={lastName}
-                          onChange={(e) => setLname(e.target.value)}
-                          required
-                        />
-
-                        <input
-                          className="px-2 py-1 rounded border-dark border auth-input"
-                          type="email"
-                          placeholder="Email"
-                          onChange={(e) => handleEmail(e)}
-                          required
-                        />
-
-                        <div className="phone-input-container auth-phone">
-                          <PhoneInput
-                            placeholder="Mobile Number"
-                            value={phoneNumber}
-                            onChange={setPhoneNumber}
-                            defaultCountry="IN"
-                          />
-                        </div>
-
-                        {phoneError && (
-                          <div className="auth-small-error">
-                            Please enter a valid phone number
-                          </div>
-                        )}
-
-                        <input
-                          className="px-2 py-1 rounded border-dark border auth-input"
-                          type="password"
-                          placeholder="Password"
-                          value={password.firstPassword}
-                          onChange={setFirst}
-                          required
-                        />
-
-                        <input
-                          className="px-2 py-1 rounded border-dark border auth-input"
-                          type="password"
-                          placeholder="Confirm Password"
-                          value={password.secondPassword}
-                          onChange={setSecond}
-                          autoComplete="off"
-                          required
-                        />
-
-                        <FormControl className="auth-user-type">
-                          <InputLabel id="demo-simple-select-label">
-                            User Type
-                          </InputLabel>
-                          <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={userType}
-                            onChange={(e) => setUserType(e.target.value)}
-                            required
-                          >
-                            <MenuItem value="doctor">Doctor</MenuItem>
-                            <MenuItem value="other">Other</MenuItem>
-                          </Select>
-                        </FormControl>
-
-                        <button
-                          type="submit"
-                          className="ghost auth-btn"
-                          disabled={loading}
+                      {phoneError && (
+                        <div
+                          className="text-danger mt-1"
+                          style={{ fontSize: "12px" }}
                         >
-                          {loading ? "Signing Up..." : "Sign Up"}
-                        </button>
-                      </>
-                    )}
-
-                    {signupMode === "mobile" && (
-                      <>
-                        <span className="auth-subtitle">
-                          Register with mobile OTP
-                        </span>
-                        <div className="auth-tabs">
-  <button
-    type="button"
-    className={mobileSignupType === "otp" ? "active" : ""}
-    onClick={() => {
-      setMobileSignupType("otp");
-      setOtpSent(false);
-      setErrorMsg("");
-      setAlertMsg("");
-    }}
-  >
-    OTP Signup
-  </button>
-
-  <button
-    type="button"
-    className={mobileSignupType === "password" ? "active" : ""}
-    onClick={() => {
-      setMobileSignupType("password");
-      setOtpSent(false);
-      setErrorMsg("");
-      setAlertMsg("");
-    }}
-  >
-    Password Signup
-  </button>
-</div>
-
-                        <input
-                          className="px-2 py-1 rounded border-dark border auth-input"
-                          type="text"
-                          placeholder="First Name"
-                          value={mobileFirstName}
-                          onChange={(e) => setMobileFirstName(e.target.value)}
-                        />
-
-                        <input
-                          className="px-2 py-1 rounded border-dark border auth-input"
-                          type="text"
-                          placeholder="Last Name"
-                          value={mobileLastName}
-                          onChange={(e) => setMobileLastName(e.target.value)}
-                        />
-
-                        <div className="phone-input-container auth-phone">
-                          <PhoneInput
-                            placeholder="Mobile Number"
-                            value={signupPhoneNumber}
-                            onChange={setSignupPhoneNumber}
-                            defaultCountry="IN"
-                          />
+                          Please enter a valid phone number
                         </div>
+                      )}
+                    </div>
+                    <TextField
+                      variant="outlined"
+                      size="small"
+                      label="Password"
+                      type="password"
+                      aria-label="Signup password"
+                      className="input-field"
+                      onChange={(e) => setFirst(e)}
+                      required
+                    />
+                    {buttonSignUpClick === 1 ? (
+                      <div className="rounded alert-danger">
+                        <div className="alert-msg">
+                          {!validEmail && <div>◼ Enter Valid Email! </div>}
+                          {phoneError && (
+                            <div>◼ Enter Valid Phone Number! </div>
+                          )}
+                          {!validLength && (
+                            <div>
+                              ◼ Password should contain at least 8
+                              characters!{" "}
+                            </div>
+                          )}
+                          {!upperCase && (
+                            <div>
+                              ◼ Password should contain at least 1 uppercase
+                              character!{" "}
+                            </div>
+                          )}
+                          {!lowerCase && (
+                            <div>
+                              ◼ Password should contain at least 1 lowercase
+                              character!{" "}
+                            </div>
+                          )}
+                          {!match && <div>◼ Passwords don't match! </div>}
+                        </div>
+                      </div>
+                    ) : null}
+                    <TextField
+                      variant="outlined"
+                      size="small"
+                      label="Confirm Password"
+                      type="password"
+                      aria-label="Confirm password"
+                      className="input-field"
+                      onChange={(e) => setSecond(e)}
+                      autoComplete="off"
+                      required
+                    />
+                    <div className="custom-field">
+                      <label className="custom-label" htmlFor="userType">
+                        User Type
+                      </label>
+                      <Select
+                        options={options}
+                        className="react-select-container"
+                        classNamePrefix="react-select"
+                        menuIsOpen={menuOpen}
+                        onMenuOpen={() => setMenuOpen(true)}
+                        onMenuClose={() => setMenuOpen(false)}
+                        isSearchable={false}
+                        menuPortalTarget={document.body}
+                        menuPosition="fixed"
+                      />
+                    </div>
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      color="primary"
+                      className="ghost"
+                      aria-label="Sign up"
+                      id="signUp"
+                    >
+                      Sign Up
+                    </Button>
+                    <div className="mobile-login-switch">
+                      <span>Already have an account?</span>
 
-                        {mobileSignupType === "password" && (
-                        <input
-                        className="px-2 py-1 rounded border-dark border auth-input"
-                        type="password"
-                        placeholder="Create Password"
-                        value={signupMobilePassword}
-                        onChange={(e) => setSignupMobilePassword(e.target.value)}
-                        />
-                        )}
-
-                        {mobileSignupType === "otp" && !otpSent && (
-  <button
-    type="button"
-    className="ghost auth-btn"
-    onClick={sendOtp}
-    disabled={loading}
-  >
-    {loading ? "Sending..." : "Send OTP"}
-  </button>
-)}
-
-{mobileSignupType === "otp" && otpSent && (
-  <>
-    <input
-      className="px-2 py-1 rounded border-dark border auth-input"
-      type="text"
-      placeholder="Enter OTP"
-      value={otp}
-      onChange={(e) => setOtp(e.target.value)}
-    />
-
-    <button
-      type="button"
-      className="ghost auth-btn"
-      onClick={verifyOtp}
-      disabled={loading}
-    >
-      {loading ? "Verifying..." : "Verify OTP"}
-    </button>
-
-    <button
-      type="button"
-      className="auth-link-btn"
-      onClick={sendOtp}
-      disabled={loading}
-    >
-      Resend OTP
-    </button>
-  </>
-)}
-
-{mobileSignupType === "password" && (
-  <button
-    type="button"
-    className="ghost auth-btn"
-    onClick={handleMobilePasswordSignup}
-    disabled={loading}
-  >
-    {loading ? "Creating..." : "Create Account"}
-  </button>
-)}
-                      </>
-                    )}
+                      <span
+                        className="switch-link"
+                        onClick={() => {
+                          setMenuOpen(false);
+                          setMobileView("login");
+                        }}
+                      >
+                        Sign In
+                      </span>
+                    </div>
                   </form>
                 </div>
-
-                {/* SIGN IN */}
-                <div className="form-container sign-in-container">
+                <div
+                  className={`form-container sign-in-container ${
+                    mobileView === "login" ? "mobile-visible" : ""
+                  }`}
+                >
                   <form
-                    className="sign auth-form"
+                    className={`sign ${useOtpLogin ? "otp-mode" : ""}`}
                     onSubmit={loginForm}
                   >
-                    <h1 id="headSign" className="auth-title">
-                      Sign In
-                    </h1>
+                    <h1 id="headSign">Sign In</h1>
 
-                    <div className="auth-tabs">
-                      <button
-                        type="button"
-                        className={loginMode === "email" ? "active" : ""}
-                        onClick={() => {
-                          setLoginMode("email");
-                          setErrorMsg("");
-                          setAlertMsg("");
-                        }}
+                    <span id="accText">
+                      Access your healthcare account securely
+                    </span>
+
+                    {buttonClick === 1 && !loginSuccess && (
+                      <div
+                        id="login-msg"
+                        className="alert alert-danger mt-2 py-1 px-3 border border-dark"
                       >
-                        Email
-                      </button>
-
-                      <button
-                        type="button"
-                        className={loginMode === "mobile" ? "active" : ""}
-                        onClick={() => {
-                          setLoginMode("mobile");
-                          setErrorMsg("");
-                          setAlertMsg("");
-                        }}
-                      >
-                        Mobile
-                      </button>
-                    </div>
-
-                    {errorMsg && click && (
-                      <div className="alert alert-danger auth-alert">
-                        {errorMsg}
+                        Some Error Occured
                       </div>
                     )}
 
-                    {alertMsg && click && (
-                      <Alert variant="success" className="auth-alert">
-                        {alertMsg}
-                      </Alert>
+                    {/* LOGIN FIELD */}
+                    {useOtpLogin ? (
+                      <div className="phone-input-container login-phone">
+                        <label className="login-label">Mobile Number</label>
+
+                        <PhoneInput
+                          placeholder="Enter mobile number"
+                          value={mobileNumber}
+                          onChange={setMobileNumber}
+                          defaultCountry="IN"
+                          international
+                          countryCallingCodeEditable={false}
+                        />
+                      </div>
+                    ) : (
+                      <>
+                        <label className="custom-label">
+                          Mobile Number / Email ID
+                        </label>
+
+                        <TextField
+                          variant="outlined"
+                          size="small"
+                          label=""
+                          aria-label="Login Email or Mobile"
+                          className="input-field"
+                          autoComplete="off"
+                          onChange={(e) => {
+                            const value = e.target.value;
+
+                            if (value.includes("@")) {
+                              setEmail(value);
+
+                              setLoginType("email");
+                            } else {
+                              setMobileNumber(value);
+
+                              setLoginType("mobile-password");
+                            }
+                          }}
+                        />
+                      </>
                     )}
 
-                    {loginMode === "email" && (
+                    {/* PASSWORD FIELD */}
+                    {!useOtpLogin && (
                       <>
-                        <span id="accText" className="auth-subtitle">
-                          Login with your email account
-                        </span>
+                        <label className="custom-label">Password</label>
 
-                        <input
-                          className="p-2 rounded border-dark border auth-input"
-                          type="email"
-                          placeholder="Email"
-                          autoComplete="off"
-                          onChange={(e) => setEmail(e.target.value)}
-                        />
-
-                        <input
-                          className="p-2 rounded border-dark border auth-input"
+                        <TextField
+                          variant="outlined"
+                          size="small"
+                          label=""
                           type="password"
-                          placeholder="Password"
-                          value={signInpassword}
-                          onChange={(e) => setPass(e.target.value)}
+                          aria-label="Login Password"
+                          className="input-field"
+                          onChange={(e) => {
+                            setPass(e.target.value);
+
+                            setMobilePassword(e.target.value);
+                          }}
                         />
+                      </>
+                    )}
 
-                        <Link
-                          className="text-dark auth-forgot"
-                          to="/loginForm/verify"
-                          id="forgetPass"
+                    {useOtpLogin && otpSent && (
+                      <div className="otp-card">
+                        <h2 className="otp-title">Number verification</h2>
+
+                        <p className="otp-subtitle">
+                          We have sent you an OTP on
+                        </p>
+
+                        <div className="otp-mobile-row">
+                          <span className="otp-mobile">{mobileNumber}</span>
+
+                          <button
+                            type="button"
+                            className="edit-number-btn"
+                            onClick={() => setOtpSent(false)}
+                          >
+                            ✎
+                          </button>
+                        </div>
+
+                        <div className="custom-field">
+                          <label className="custom-label">OTP</label>
+
+                          <input
+                            type="text"
+                            className="custom-input otp-input"
+                            placeholder="Enter OTP"
+                            onChange={(e) => setOtp(e.target.value)}
+                          />
+                        </div>
+
+                        <button
+                          type="button"
+                          className="ghost"
+                          onClick={verifyOtp}
                         >
-                          Forgot your password?
-                        </Link>
+                          Verify OTP
+                        </button>
+                      </div>
+                    )}
 
-                        <FormGroup className="auth-remember">
+                    {/* LOGIN ROW */}
+
+                    {!useOtpLogin && (
+                      <div className="login-row">
+                        <FormGroup>
                           <FormControlLabel
                             control={
                               <Checkbox
                                 name="Terms"
-                                checked={rememberMe === "on"}
-                                onChange={(e) =>
-                                  setRememberMe(e.target.checked ? "on" : "off")
+                                value={rememberMe}
+                                onClick={(e) =>
+                                  e.target.value === "off"
+                                    ? setRememberMe("on")
+                                    : setRememberMe("off")
                                 }
                               />
                             }
-                            label="Remember Me"
+                            label="Remember me for 30 days"
                           />
                         </FormGroup>
 
-                        <button
-                          type="submit"
-                          className="ghost auth-btn"
-                          id="btn1"
-                          disabled={loading}
+                        <Link
+                          className="text-dark"
+                          to="/loginForm/verify"
+                          id="forgetPass"
                         >
-                          {loading ? "Signing In..." : "Sign In"}
-                        </button>
-                      </>
+                          Forgot password?
+                        </Link>
+                      </div>
                     )}
 
-                    {loginMode === "mobile" && (
-                      <>
-                        <span className="auth-subtitle">
-                          Login with mobile number
-                        </span>
+                    {/* OTP LOGIN TOGGLE */}
 
-                        <div className="phone-input-container auth-phone">
-                          <PhoneInput
-                            placeholder="Mobile Number"
-                            value={loginPhoneNumber}
-                            onChange={setLoginPhoneNumber}
-                            defaultCountry="IN"
-                          />
-                        </div>
-
+                    <div className="otp-toggle">
+                      <label className="otp-toggle-label">
                         <input
-                          className="p-2 rounded border-dark border auth-input"
-                          type="password"
-                          placeholder="Password"
-                          value={loginMobilePassword}
-                          onChange={(e) =>
-                            setLoginMobilePassword(e.target.value)
-                          }
+                          type="checkbox"
+                          checked={useOtpLogin}
+                          onChange={(e) => {
+                            setUseOtpLogin(e.target.checked);
+
+                            setOtpSent(false);
+
+                            if (e.target.checked) {
+                              setLoginType("otp");
+                            } else {
+                              setLoginType("mobile-password");
+                            }
+                          }}
                         />
 
-                        <button
-                          type="submit"
-                          className="ghost auth-btn"
-                          disabled={loading}
-                        >
-                          {loading ? "Signing In..." : "Mobile Sign In"}
-                        </button>
-                      </>
+                        <span>Login with OTP instead of password</span>
+                      </label>
+                    </div>
+
+                    {/* LOGIN BUTTON */}
+
+                    {!useOtpLogin && (
+                      <button className="ghost" id="btn1">
+                        Login
+                      </button>
+                    )}
+
+                    <div className="mobile-login-switch">
+                      <span>Don’t have an account?</span>
+
+                      <span
+                        className="switch-link"
+                        onClick={() => setMobileView("signup")}
+                      >
+                        Sign Up
+                      </span>
+                    </div>
+                    {/* SEND OTP BUTTON */}
+
+                    {useOtpLogin && !otpSent && (
+                      <button type="button" className="ghost" onClick={sendOtp}>
+                        Send OTP
+                      </button>
                     )}
                   </form>
                 </div>
-
-                {/* OVERLAY */}
                 <div className="overlay-container">
                   <div className="overlay">
                     <div className="overlay-panel overlay-left">
                       <h1>Welcome Back!</h1>
                       <p className="text-center">
-                        Already have an account? Login with email or mobile.
+                        To keep connected with us please login with your
+                        personal info or
                       </p>
                       <button
-                        type="button"
-                        onClick={() => handleClick(true)}
+                        onClick={() => {
+                          setMenuOpen(false);
+                          handleClick("signin");
+                        }}
                         className="ghost"
                         id="signIn"
                       >
                         Sign In
                       </button>
                     </div>
-
-                    <div className="overlay-panel overlay-right" id="rightPanel">
-                      <h1 id="headSign">Hello, Friend!</h1>
-                      <p>Create account using email or mobile OTP.</p>
+                    <div
+                      className="overlay-panel overlay-right"
+                      id="rightPanel"
+                    >
+                      <h1>Hello, Friend!</h1>
+                      <p>
+                        Enter your personal details and start journey with us
+                      </p>
                       <button
-                        type="button"
-                        onClick={() => handleClick(false)}
+                        onClick={() => handleClick("signup")}
                         className="ghost"
                         id="signUp"
                       >
                         Sign Up
                       </button>
                     </div>
-                  </div>
-                </div>
 
-                {/* MOBILE SWITCH */}
-                <div className="auth-mobile-switch">
-                  <button
-                    type="button"
-                    className={click ? "active" : ""}
-                    onClick={() => handleClick(true)}
-                  >
-                    Sign In
-                  </button>
-                  <button
-                    type="button"
-                    className={!click ? "active" : ""}
-                    onClick={() => handleClick(false)}
-                  >
-                    Sign Up
-                  </button>
+                    {alert && (
+                      <Alert variant="success" className="h6 mx-3">
+                        {alert}
+                      </Alert>
+                    )}
+                  </div>
                 </div>
               </div>
             </Modal.Body>
