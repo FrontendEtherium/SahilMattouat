@@ -800,6 +800,8 @@ const Test = (props) => {
       axios
         .post(
           `${backendHost}/login?cmd=login&email=${email}&psw=${signInpassword}&rempwd=1`,
+          //    `${backendHost}/login-user?email=${email}&password=${signInpassword}&loginType=EMAIL&rempwd=1`,
+
           {},
           {
             withCredentials: true,
@@ -852,10 +854,14 @@ const Test = (props) => {
     // =========================================
     else if (loginType === "mobile-password") {
       axios
-        .post(`${backendHost}/mobile-login`, {
-          mobile: mobileNumber,
-          password: mobilePassword,
-        })
+        .post(
+          `${backendHost}/login-user?mobile=${mobileNumber}&password=${mobilePassword}&loginType=MOBILE&rempwd=1`,
+
+          {},
+          {
+            withCredentials: true,
+          },
+        )
         .then((response) => {
           if (response.data.registration_id) {
             Cookies.set("uName", response.data.first_name, {
