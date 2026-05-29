@@ -253,6 +253,16 @@ form.sign {
   text-align: center;
 }
 
+.signup-heading {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  color: #1f2a44;
+  margin: 0 0 6px;
+  padding: 0;
+}
+
 /* ========================================= */
 /* OTP MODE */
 /* ========================================= */
@@ -265,6 +275,7 @@ form.sign {
 
 .otp-mode .input-field,
 .otp-mode .PhoneInput,
+.otp-mode .otp-input-field,
 .otp-mode button {
   max-width: 320px;
 
@@ -326,6 +337,7 @@ form.sign {
 /* ========================================= */
 /* CUSTOM LABEL */
 /* ========================================= */
+
 .custom-label {
   display: block;
 
@@ -487,9 +499,9 @@ input:-webkit-autofill:focus {
 
   gap: 12px;
 
-  margin-top: 8px;
+  margin-top: 16px;
 
-  margin-bottom: 22px;
+  margin-bottom: 20px;
 
   color: #64748b;
 
@@ -507,29 +519,92 @@ input:-webkit-autofill:focus {
 }
 
 /* ========================================= */
-/* OTP CARD */
+/* LOGIN OTP FLOW */
 /* ========================================= */
 
+.login-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1f2a44;
+  text-align: center;
+  width: 100%;
+}
+
+.login-phone {
+  margin-bottom: 16px;
+}
+
+.phone-input-container .PhoneInput--disabled {
+  background: #f8fbfd;
+  opacity: 1;
+}
+
+.phone-input-container .PhoneInput--disabled .PhoneInputInput {
+  color: #1e293b;
+}
+
+.otp-input-field {
+  width: 100%;
+  height: 50px;
+  padding: 0 16px;
+  border-radius: 12px;
+  border: 1px solid #dbe4ee;
+  background: #ffffff;
+  font-size: 15px;
+  color: #1e293b;
+  text-align: center;
+  letter-spacing: 4px;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+.otp-input-field:focus {
+  outline: none;
+  border-color: #27b1e6;
+  box-shadow: 0 0 0 3px rgba(39, 177, 230, 0.12);
+}
+
+.edit-number-link {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #004a6e;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+}
+
+.edit-number-link:hover {
+  color: #00334d;
+}
+
+/* Legacy OTP card styles kept for backwards compatibility */
 .otp-card {
   width: 100%;
 
   max-width: 420px;
 
-  margin-top: 10px;
+  margin-top: 16px;
 
-  padding: 10px 0;
+  padding: 0;
 
   text-align: left;
 }
 
 .otp-title {
-  font-size: 32px;
+  font-size: 20px;
 
   font-weight: 700;
 
   color: #1e293b;
 
-  margin-bottom: 14px;
+  margin-bottom: 18px;
 }
 
 .otp-subtitle {
@@ -537,7 +612,7 @@ input:-webkit-autofill:focus {
 
   color: #64748b;
 
-  margin-bottom: 14px;
+  margin-bottom: 20px;
 }
 
 .otp-mobile-row {
@@ -547,15 +622,25 @@ input:-webkit-autofill:focus {
 
   gap: 12px;
 
-  margin-bottom: 28px;
+  margin-bottom: 20px;
+
+  background: #f0f5fa;
+
+  padding: 12px 16px;
+
+  border-radius: 10px;
+
+  border: 1px solid #e0e7f1;
 }
 
 .otp-mobile {
-  font-size: 32px;
+  font-size: 16px;
 
-  font-weight: 500;
+  font-weight: 600;
 
-  color: #64748b;
+  color: #1e293b;
+
+  flex: 1;
 }
 
 .edit-number-btn {
@@ -565,21 +650,29 @@ input:-webkit-autofill:focus {
 
   color: #004a6e;
 
-  font-size: 22px;
+  font-size: 16px;
 
   cursor: pointer;
 
-  padding: 0;
+  padding: 4px 8px;
+
+  transition: all 0.2s ease;
+}
+
+.edit-number-btn:hover {
+  opacity: 0.7;
 }
 
 .otp-input {
   text-align: center;
 
-  letter-spacing: 8px;
+  letter-spacing: 6px;
 
-  font-size: 22px;
+  font-size: 18px;
 
   font-weight: 600;
+
+  margin-bottom: 20px;
 }
 
 /* ========================================= */
@@ -715,6 +808,20 @@ button.ghost:active {
   transform: scale(0.98);
 }
 
+.verify-btn {
+  width: 100%;
+  max-width: 320px;
+  height: 48px;
+  background: #004a6e !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 12px !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  box-shadow: 0 6px 16px rgba(0, 79, 115, 0.12);
+  transition: all 0.3s ease !important;
+  cursor: pointer;
+}
 /* ========================================= */
 /* OVERLAY CONTAINER */
 /* ========================================= */
@@ -976,21 +1083,30 @@ button.ghost:active {
 
     max-width: 100% !important;
 
-    min-height: 100vh !important;
+    min-height: 100dvh !important;
 
     display: flex;
 
-    align-items: center;
+    align-items: flex-start !important;
 
-    justify-content: center;
+    justify-content: center !important;
+  }
+
+  .modal-dialog.modal-dialog-centered::before,
+  .sign-mobile-modal::before {
+    display: none !important;
+    height: 0 !important;
+    content: none !important;
   }
 
   .modal-content {
     width: 100% !important;
 
-    min-height: 100vh !important;
+    min-height: 100dvh !important;
 
-    height: 100vh !important;
+    height: 100dvh !important;
+
+    max-height: 100dvh !important;
 
     border-radius: 0 !important;
 
@@ -999,34 +1115,41 @@ button.ghost:active {
     background: #f5f7fb !important;
 
     box-shadow: none !important;
+
+    overflow: hidden !important;
   }
 
   .modal-body {
-    padding: 20px !important;
+    padding: 12px !important;
 
     width: 100%;
 
     height: 100% !important;
 
+    max-height: 100dvh !important;
+
     overflow-y: auto !important;
+
+    overflow-x: hidden !important;
+
+    -webkit-overflow-scrolling: touch;
+
+    box-sizing: border-box !important;
   }
 
   /* MAIN CONTAINER */
-
   .sign.container {
     width: 100% !important;
 
-    min-height: 95vh !important;
+    max-width: 100% !important;
 
-    height: 95vh !important;
+    height: auto !important;
+
+    min-height: auto !important;
 
     background: transparent;
 
-    display: flex;
-
-    justify-content: center;
-
-    align-items: flex-start;
+    display: block !important;
 
     padding: 0 !important;
 
@@ -1035,6 +1158,12 @@ button.ghost:active {
     border-radius: 0 !important;
 
     box-shadow: none !important;
+
+    border: none !important;
+  }
+
+  .sign.container::before {
+    display: none !important;
   }
 
   /* HIDE DESKTOP OVERLAY */
@@ -1053,25 +1182,28 @@ button.ghost:active {
   /* LOGIN OPTIONS */
 
   /* SHOW SIGNUP PANEL */
-
   .sign-up-container {
     position: relative !important;
 
     display: flex !important;
 
-    flex-direction: column;
+    flex-direction: column !important;
 
-    width: calc(100% - 24px) !important;
+    justify-content: flex-start !important;
 
-    max-width: 380px !important;
+    align-items: stretch !important;
+
+    width: 100% !important;
+
+    max-width: 100% !important;
 
     background: #ffffff;
 
-    border-radius: 24px;
+    border-radius: 20px !important;
 
-    padding: 28px 16px 32px 16px !important;
+    padding: 20px 14px !important;
 
-    margin: 0 auto !important;
+    margin: 0 !important;
 
     left: 0 !important;
 
@@ -1084,7 +1216,10 @@ button.ghost:active {
     overflow: visible !important;
 
     box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+
     transition: none !important;
+
+    box-sizing: border-box !important;
   }
 
   .container.right-panel-active .sign-up-container {
@@ -1116,11 +1251,16 @@ button.ghost:active {
 
     margin-top: 10px;
 
-    margin-bottom: 0;
+    margin-bottom: 8px;
 
     font-size: 12px;
 
     color: #64748b;
+  }
+
+  .sign-mobile-body {
+    scroll-padding-top: 12px;
+    scroll-padding-bottom: 16px;
   }
 
   /* MOBILE SCREEN SWITCH */
@@ -1290,21 +1430,41 @@ button.ghost:active {
     margin: 0 !important;
 
     padding: 0 !important;
+
+    height: auto !important;
+
+    min-height: 0 !important;
+
+    justify-content: flex-start !important;
+
+    align-items: stretch !important;
+
+    overflow: visible !important;
+  }
+
+  .sign-up-container form.sign {
+    height: auto !important;
+    min-height: 0 !important;
+    justify-content: flex-start !important;
+    align-items: stretch !important;
+    max-width: 100% !important;
   }
 
   /* TITLE */
 
-  .h2 {
+  .h2,
+  .signup-heading {
     font-size: 28px !important;
 
     font-weight: 700 !important;
 
-    line-height: 1.1;
+    line-height: 1.25 !important;
 
     text-align: center;
 
     color: #1f2a44;
-    margin-bottom: 6px !important;
+    margin: 0 0 6px !important;
+    padding: 0 !important;
   }
 
   /* SUBTITLE */
@@ -1492,9 +1652,6 @@ button.ghost:active {
     padding: 0 !important;
   }
 
-  /* ========================================= */
-  /* MOBILE LOGIN SCREEN */
-  /* ========================================= */
   /* ========================================= */
   /* MOBILE LOGIN SCREEN */
   /* ========================================= */
@@ -1785,5 +1942,169 @@ button.ghost:active {
 
   .container.right-panel-active .sign-up-container {
     z-index: 1004 !important;
+  }
+}
+@media only screen and (max-width: 375px) {
+  /* Kill Bootstrap centered modal spacer that clips content on iOS */
+  .sign .modal-dialog,
+  .sign .modal-dialog.modal-dialog-centered,
+  .sign .sign-mobile-modal {
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    min-height: 100dvh !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    margin: 0 auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .sign .modal-dialog.modal-dialog-centered::before,
+  .sign .sign-mobile-modal::before {
+    display: none !important;
+    height: 0 !important;
+    content: none !important;
+  }
+
+  .sign .modal-content {
+    height: 100dvh !important;
+    min-height: 100dvh !important;
+    max-height: 100dvh !important;
+    overflow: hidden !important;
+    border-radius: 0 !important;
+  }
+
+  .sign .modal-body {
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch;
+    padding: 10px 10px calc(16px + env(safe-area-inset-bottom)) !important;
+    display: block !important;
+    box-sizing: border-box !important;
+  }
+
+  .sign .sign.container {
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+    display: block !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .sign .sign.container::before {
+    display: none !important;
+  }
+
+  .sign .sign-up-container {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 18px 14px 16px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    align-items: stretch !important;
+    overflow: visible !important;
+    box-sizing: border-box !important;
+  }
+
+  .sign .sign-up-container form.sign {
+    height: auto !important;
+    min-height: 0 !important;
+    max-width: 100% !important;
+    justify-content: flex-start !important;
+    align-items: stretch !important;
+    overflow: visible !important;
+  }
+
+  .sign .signup-heading {
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    line-height: 1.3 !important;
+    text-align: center !important;
+    color: #1f2a44 !important;
+    margin: 0 0 6px !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  .sign .sign-up-container span {
+    font-size: 11px !important;
+    line-height: 1.3 !important;
+    text-align: center !important;
+    color: #64748b !important;
+    margin: 0 0 8px 0 !important;
+    padding: 0 !important;
+    display: block !important;
+  }
+
+  .sign .input-field,
+  .sign .phone-input-container,
+  .sign .custom-field {
+    width: 100% !important;
+    margin-bottom: 3px !important;
+    height: auto !important;
+    max-width: 100% !important;
+  }
+
+  .sign .MuiOutlinedInput-root,
+  .sign .phone-input-container .PhoneInput,
+  .sign .react-select__control {
+    min-height: 34px !important;
+    height: 34px !important;
+    font-size: 13px !important;
+  }
+
+  .sign .MuiOutlinedInput-input {
+    padding: 6px 10px !important;
+    font-size: 13px !important;
+  }
+
+  .sign .custom-label {
+    font-size: 12px !important;
+    margin-bottom: 2px !important;
+  }
+
+  .sign .ghost {
+    width: 100% !important;
+    height: 34px !important;
+    min-height: 34px !important;
+    margin-top: 4px !important;
+    font-size: 13px !important;
+    padding: 0 !important;
+  }
+
+  .sign .alert {
+    margin-bottom: 2px !important;
+    padding: 3px 6px !important;
+    font-size: 11px !important;
+  }
+
+  .sign .mobile-login-switch {
+    margin-top: 8px !important;
+    margin-bottom: 4px !important;
+  }
+}
+
+/* iPhone SE 1st gen: 320x568 */
+@media only screen and (max-width: 320px) and (max-height: 568px) {
+  .sign .sign-up-container {
+    padding: 14px 12px 12px !important;
+  }
+
+  .sign .signup-heading {
+    font-size: 18px !important;
   }
 }
