@@ -536,6 +536,7 @@ const Test = (props) => {
 
   const [otp, setOtp] = useState("");
   const [otpSent, setOtpSent] = useState(false);
+  const [sendingOtp, setSendingOtp] = useState(false);
   const [useOtpLogin, setUseOtpLogin] = useState(false);
   // ============================
   const [firstName, setFname] = useState("");
@@ -750,14 +751,17 @@ const Test = (props) => {
   // ===== SEND OTP FUNCTION =====
   const sendOtp = async () => {
     try {
+      setSendingOtp(true);
+
       axios.defaults.withCredentials = true;
 
-      // Extract country code and national number from phone number
       let countryCodeForOtp = "";
       let nationalNumber = "";
+
       if (mobileNumber) {
         try {
           const parsedPhone = parsePhoneNumber(mobileNumber);
+
           countryCodeForOtp = "+" + parsedPhone.countryCallingCode;
           nationalNumber = parsedPhone.nationalNumber;
         } catch (error) {
@@ -776,13 +780,14 @@ const Test = (props) => {
 
       if (response.data.success) {
         setOtpSent(true);
-        //    window.alert("OTP Sent Successfully");
       } else {
         window.alert("Failed to send OTP");
       }
     } catch (error) {
       console.log(error);
       window.alert("Error sending OTP");
+    } finally {
+      setSendingOtp(false);
     }
   };
   // =============================
@@ -1287,8 +1292,13 @@ const Test = (props) => {
                     )}
 
                     {useOtpLogin && !otpSent && (
-                      <button type="button" className="ghost" onClick={sendOtp}>
-                        Send OTP
+                      <button
+                        type="button"
+                        className="ghost"
+                        onClick={sendOtp}
+                        disabled={sendingOtp}
+                      >
+                        {sendingOtp ? "Sending OTP..." : "Send OTP"}
                       </button>
                     )}
 
