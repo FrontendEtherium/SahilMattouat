@@ -545,6 +545,7 @@ const Test = (props) => {
     secondPassword: "",
   });
   const [mobileView, setMobileView] = useState("signup");
+  const [isMobile, setIsMobile] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [userType, setUserType] = useState("other");
   const [buttonSignUpClick, setSignUpClicked] = useState("");
@@ -572,6 +573,16 @@ const Test = (props) => {
   const setSecond = (event) => {
     setPassword({ ...password, secondPassword: event.target.value });
   };
+
+  React.useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const SignUpForm = async (e, props) => {
     e.preventDefault();
@@ -741,19 +752,37 @@ const Test = (props) => {
     try {
       axios.defaults.withCredentials = true;
 
-      const response = await axios.post(`${backendHost}/send-otp`, {
-        mobile: mobileNumber,
+      // Extract country code and national number from phone number
+      let countryCodeForOtp = "";
+      let nationalNumber = "";
+      if (mobileNumber) {
+        try {
+          const parsedPhone = parsePhoneNumber(mobileNumber);
+          countryCodeForOtp = "+" + parsedPhone.countryCallingCode;
+          nationalNumber = parsedPhone.nationalNumber;
+        } catch (error) {
+          console.error("Error parsing phone number:", error);
+          window.alert("Please enter a valid phone number");
+          return;
+        }
+      }
+
+      const response = await axios.post(`${backendHost}/auth/send-otp`, null, {
+        params: {
+          mobile: nationalNumber,
+          countryCode: countryCodeForOtp,
+        },
       });
 
       if (response.data.success) {
         setOtpSent(true);
-        alert("OTP Sent Successfully");
+        //    window.alert("OTP Sent Successfully");
       } else {
-        alert("Failed to send OTP");
+        window.alert("Failed to send OTP");
       }
     } catch (error) {
       console.log(error);
-      alert("Error sending OTP");
+      window.alert("Error sending OTP");
     }
   };
   // =============================
@@ -761,23 +790,38 @@ const Test = (props) => {
   const verifyOtp = async () => {
     try {
       axios.defaults.withCredentials = true;
+      // Extract country code and national number from phone number
 
-      const response = await axios.post(`${backendHost}/verify-otp`, {
-        mobile: mobileNumber,
+      let countryCodeForVerify = "";
+      let nationalNumber = "";
+      if (mobileNumber) {
+        try {
+          const parsedPhone = parsePhoneNumber(mobileNumber);
+          countryCodeForVerify = "+" + parsedPhone.countryCallingCode;
+          nationalNumber = parsedPhone.nationalNumber;
+        } catch (error) {
+          console.error("Error parsing phone number:", error);
+          window.alert("Please enter a valid phone number");
+          return;
+        }
+      }
+
+      const response = await axios.post(`${backendHost}/auth/verify-otp`, {
+        mobile: nationalNumber,
+        countryCode: countryCodeForVerify,
         otp: otp,
+        rememberPassword: 1,
       });
 
-      if (response.data.registration_id) {
-        Cookies.set("uName", response.data.first_name, {
+      if (response.data.data && response.data.data.registration_id) {
+        Cookies.set("uName", response.data.data.first_name, {
           expires: 365,
         });
-
-        localStorage.setItem("doctorid", response.data.docID);
-        localStorage.setItem("token", response.data.value);
-
+        localStorage.setItem("doctorid", response.data.data.docID);
+        localStorage.setItem("token", response.data.data.value);
         window.location.reload();
       } else {
-        alert("Invalid OTP");
+        window.alert("Invalid OTP");
       }
     } catch (error) {
       console.log(error);
@@ -901,9 +945,10 @@ const Test = (props) => {
             {...props}
             size="lg"
             aria-labelledby="contained-modal-title-vcenter"
-            centered
+            centered={!isMobile}
+            dialogClassName={isMobile ? "sign-mobile-modal" : ""}
           >
-            <Modal.Body>
+            <Modal.Body className={isMobile ? "sign-mobile-body" : ""}>
               <div className="container sign" id="container">
                 <div
                   className={`form-container sign-up-container ${
@@ -911,7 +956,7 @@ const Test = (props) => {
                   }`}
                 >
                   <form className="sign" onSubmit={SignUpForm}>
-                    <div className="h2 py-0 my-1">Create Account</div>
+                    <div className="signup-heading">Create Account</div>
                     <span>or use your email for registration</span>
 
                     {parseInt(buttonSignUpClick) === 1 ? (
@@ -1069,7 +1114,9 @@ const Test = (props) => {
                     <h1 id="headSign">Sign In</h1>
 
                     <span id="accText">
-                      Access your healthcare account securely
+                      {useOtpLogin && otpSent
+                        ? "We have sent you an OTP on your mobile"
+                        : "Access your healthcare account securely"}
                     </span>
 
                     {buttonClick === 1 && !loginSuccess && (
@@ -1083,18 +1130,48 @@ const Test = (props) => {
 
                     {/* LOGIN FIELD */}
                     {useOtpLogin ? (
-                      <div className="phone-input-container login-phone">
-                        <label className="login-label">Mobile Number</label>
+                      <>
+                        <div className="phone-input-container login-phone">
+                          <label className="login-label">Mobile Number</label>
 
-                        <PhoneInput
-                          placeholder="Enter mobile number"
-                          value={mobileNumber}
-                          onChange={setMobileNumber}
-                          defaultCountry="IN"
-                          international
-                          countryCallingCodeEditable={false}
-                        />
-                      </div>
+                          <PhoneInput
+                            placeholder="Enter mobile number"
+                            value={mobileNumber}
+                            onChange={setMobileNumber}
+                            defaultCountry="IN"
+                            international
+                            countryCallingCodeEditable={false}
+                            disabled={otpSent}
+                          />
+                        </div>
+
+                        {otpSent && (
+                          <div className="phone-input-container login-phone">
+                            <label className="login-label">OTP</label>
+
+                            <input
+                              type="text"
+                              inputMode="numeric"
+                              autoComplete="one-time-code"
+                              className="otp-input-field"
+                              placeholder="Enter OTP"
+                              value={otp}
+                              onChange={(e) => setOtp(e.target.value)}
+                            />
+
+                            <button
+                              type="button"
+                              className="edit-number-link"
+                              onClick={() => {
+                                setOtpSent(false);
+                                setOtp("");
+                              }}
+                            >
+                              Change mobile number
+                            </button>
+                          </div>
+                        )}
+                      </>
                     ) : (
                       <>
                         <label className="custom-label">
@@ -1144,47 +1221,6 @@ const Test = (props) => {
                           }}
                         />
                       </>
-                    )}
-
-                    {useOtpLogin && otpSent && (
-                      <div className="otp-card">
-                        <h2 className="otp-title">Number verification</h2>
-
-                        <p className="otp-subtitle">
-                          We have sent you an OTP on
-                        </p>
-
-                        <div className="otp-mobile-row">
-                          <span className="otp-mobile">{mobileNumber}</span>
-
-                          <button
-                            type="button"
-                            className="edit-number-btn"
-                            onClick={() => setOtpSent(false)}
-                          >
-                            ✎
-                          </button>
-                        </div>
-
-                        <div className="custom-field">
-                          <label className="custom-label">OTP</label>
-
-                          <input
-                            type="text"
-                            className="custom-input otp-input"
-                            placeholder="Enter OTP"
-                            onChange={(e) => setOtp(e.target.value)}
-                          />
-                        </div>
-
-                        <button
-                          type="button"
-                          className="ghost"
-                          onClick={verifyOtp}
-                        >
-                          Verify OTP
-                        </button>
-                      </div>
                     )}
 
                     {/* LOGIN ROW */}
@@ -1250,6 +1286,23 @@ const Test = (props) => {
                       </button>
                     )}
 
+                    {useOtpLogin && !otpSent && (
+                      <button type="button" className="ghost" onClick={sendOtp}>
+                        Send OTP
+                      </button>
+                    )}
+
+                    {useOtpLogin && otpSent && (
+                      <button
+                        type="button"
+                        className="ghost"
+                        id="verifyBtn"
+                        onClick={verifyOtp}
+                      >
+                        Verify OTP
+                      </button>
+                    )}
+
                     <div className="mobile-login-switch">
                       <span>Don’t have an account?</span>
 
@@ -1260,13 +1313,6 @@ const Test = (props) => {
                         Sign Up
                       </span>
                     </div>
-                    {/* SEND OTP BUTTON */}
-
-                    {useOtpLogin && !otpSent && (
-                      <button type="button" className="ghost" onClick={sendOtp}>
-                        Send OTP
-                      </button>
-                    )}
                   </form>
                 </div>
                 <div className="overlay-container">
