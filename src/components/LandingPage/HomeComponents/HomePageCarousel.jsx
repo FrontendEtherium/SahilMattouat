@@ -32,17 +32,17 @@ const HomePageCarousel = memo(() => {
         title: "Online Doctor Consultation",
       },
     ],
-    mobile: [ {
-      src:`${imageUrl}/tr:f-webp/assets/img/Mobile-banner003.jpg`,
-      alt: "Mobile Healthcare",
-      title: "Mobile Doctor Consultation",
-    },
+    mobile: [
+      {
+        src: `${imageUrl}/tr:f-webp/assets/img/Mobile-banner003.jpg`,
+        alt: "Mobile Healthcare",
+        title: "Mobile Doctor Consultation",
+      },
       {
         src: `${imageUrl}/tr:f-webp/assets/img/Mobile-banner004.jpg`,
         alt: "Mobile Healthcare ",
         title: "Mobile Healthcare Services",
       },
-      
     ],
   };
 
@@ -86,24 +86,18 @@ const HomePageCarousel = memo(() => {
               fetchPriority={idx === 0 ? "high" : "low"}
             />
 
-            {/*  {idx === 1 && ( */}
-            {(idx === 0 || idx === 1) && (
-              <Carousel.Caption>
-                <button
-                 // className="doctor-patient-banner-btn"
-                  className={`doctor-patient-banner-btn ${
-                 idx === 0 ? "btn-slide-1" : "btn-slide-2"
-                  }`}
-                  onClick={() => {
-                    window.location.href = "/doctor-connect";
-                    clickCounter();
-                  }}
-                  aria-label="Start Online Doctor Consultation"
-                >
-                  Consult Now
-                </button>
-              </Carousel.Caption>
-            )}
+            <Carousel.Caption>
+              <button
+                className="doctor-patient-banner-btn"
+                onClick={() => {
+                  window.location.href = "/doctor";
+                  clickCounter();
+                }}
+                aria-label="Start Online Doctor Consultation"
+              >
+                Consult Now
+              </button>
+            </Carousel.Caption>
           </Carousel.Item>
         ))}
       </Carousel>
