@@ -521,6 +521,7 @@ import { parsePhoneNumber } from "libphonenumber-js";
 
 import "./test.css";
 import ErrorBoundary from "../ErrorBoundary";
+import { useRef } from "react";
 
 const Test = (props) => {
   const [click, setClick] = useState(true);
@@ -552,20 +553,33 @@ const Test = (props) => {
   const [buttonSignUpClick, setSignUpClicked] = useState("");
   const [number, setMname] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [validEmail, setValidEmail] = useState();
+  const [validEmail, setValidEmail] = useState(true);
   const [hasError, sethasError] = useState(false);
   const [loginSuccess, setLoginSuccess] = useState(true);
   const [alert, setAlert] = useState("");
-  const [phoneError, setPhoneError] = useState(false);
+  const [phoneError, setPhoneError] = useState("");
+  const [signupError, setSignupError] = useState("");
   const options = [
     { value: "doctor", label: "Doctor" },
     { value: "other", label: "Other" },
   ];
 
-  const [validLength, upperCase, lowerCase, match] = usePasswordValidation({
+  const [
+    validLength,
+    hasNumber,
+    upperCase,
+    lowerCase,
+    match,
+    specialCharFromHook,
+  ] = usePasswordValidation({
     firstPassword: password.firstPassword,
     secondPassword: password.secondPassword,
   });
+
+  const passwordRef = useRef(null);
+  const confirmPasswordRef = useRef(null);
+  // CHANGED
+  const specialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password.firstPassword);
 
   const setFirst = (event) => {
     setPassword({ ...password, firstPassword: event.target.value });
@@ -587,17 +601,56 @@ const Test = (props) => {
 
   const SignUpForm = async (e, props) => {
     e.preventDefault();
+    setSignupError("");
     setSignUpClicked(1);
 
     // Validate phone number
-    if (phoneNumber && !isValidPhoneNumber(phoneNumber)) {
-      setPhoneError(true);
+    // CHANGED: Mobile mandatory
+
+    if (!phoneNumber) {
+      setPhoneError("Mobile number is required");
       return;
-    } else {
-      setPhoneError(false);
     }
 
-    if (validEmail && upperCase && lowerCase && match) {
+    if (!isValidPhoneNumber(phoneNumber)) {
+      setPhoneError("Please enter a valid mobile number");
+      return;
+    }
+
+    setPhoneError("");
+    if (!validLength || !upperCase || !lowerCase || !specialCharFromHook) {
+      passwordRef.current?.focus();
+
+      passwordRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+
+      return;
+    }
+    if (!match) {
+      confirmPasswordRef.current?.focus();
+
+      confirmPasswordRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+
+      return;
+    }
+
+    if (!validEmail) {
+      return;
+    }
+
+    if (
+      validEmail &&
+      validLength &&
+      upperCase &&
+      lowerCase &&
+      specialCharFromHook &&
+      match
+    ) {
       axios.defaults.withCredentials = true;
 
       // Parse phone number to get country ISO code and national number
@@ -631,14 +684,14 @@ const Test = (props) => {
         country_code: countryCode,
         Age: null,
       };
+
       axios
         .post(`${backendHost}/auth/register-user`, params, {
           headers: { "Access-Control-Allow-Credentials": true },
         })
         .then((response) => {
           if (response.data === "Email Address already Exists in the System") {
-            document.getElementById("signup-msg").innerText =
-              "Email already exists!";
+            setSignupError("Email already exists!");
           } else if (response.data.registration_id) {
             // Registration successful - now log the user in automatically
             setAlert("Registered Successfully!!!");
@@ -657,7 +710,7 @@ const Test = (props) => {
               axios.defaults.withCredentials = true;
               axios
                 .post(
-                  `${backendHost}/login?cmd=login&email=${email}&psw=${signInpassword}&rempwd=1`,
+                  `${backendHost}/login?cmd=login&email=${email}&psw=${password.firstPassword}&rempwd=1`,
                 )
                 .then((loginResponse) => {
                   if (loginResponse.data.registration_id) {
@@ -717,22 +770,27 @@ const Test = (props) => {
           setTimeout(() => {
             setSignUpClicked(3);
           }, 5000);
-          document.getElementById("signup-msg").innerText =
-            "Some error occured!";
+          setSignupError("Some error occurred!");
         });
     } else {
       return;
     }
   };
 
+  // CHANGED: Email optional
   const handleEmail = (e) => {
-    var re = /^[a-zA-Z-0-9.]+@[a-zA-Z0-9]+\.[A-Za-z]+$/;
-    if (!re.test(e.target.value)) {
-      setValidEmail(false);
-    } else {
-      setEmail(e.target.value);
+    const value = e.target.value.trim();
+
+    setEmail(value);
+
+    if (!value) {
       setValidEmail(true);
+      return;
     }
+
+    const re = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+
+    setValidEmail(re.test(value));
   };
   const handleClick = (type) => {
     if (type === "signup") {
@@ -964,12 +1022,11 @@ const Test = (props) => {
                     <div className="signup-heading">Create Account</div>
                     <span>or use your email for registration</span>
 
-                    {parseInt(buttonSignUpClick) === 1 ? (
-                      <div
-                        id="signup-msg"
-                        className="alert alert-danger mt-2 py-1 px-3 border border-dark"
-                      ></div>
-                    ) : null}
+                    {signupError && (
+                      <div className="alert alert-danger mt-2 py-1 px-3 border border-dark">
+                        {signupError}
+                      </div>
+                    )}
                     <TextField
                       variant="outlined"
                       size="small"
@@ -986,7 +1043,6 @@ const Test = (props) => {
                       aria-label="Last name"
                       className="input-field"
                       onChange={(e) => setLname(e.target.value)}
-                      required
                     />
                     <TextField
                       variant="outlined"
@@ -996,7 +1052,6 @@ const Test = (props) => {
                       aria-label="Signup email"
                       className="input-field"
                       onChange={(e) => handleEmail(e)}
-                      required
                     />
                     <div className="phone-input-container">
                       <PhoneInput
@@ -1006,72 +1061,59 @@ const Test = (props) => {
                         defaultCountry="IN"
                         style={{ paddingLeft: "10px" }}
                       />
-
+                      {/* CHANGED: Dynamic professional error */}
+                      {/* {phoneError && (
+                        <div className="validation-error">{phoneError}</div>
+                      )} */}
                       {phoneError && (
-                        <div
-                          className="text-danger mt-1"
-                          style={{ fontSize: "12px" }}
-                        >
-                          Please enter a valid phone number
-                        </div>
+                        <div className="mobile-field-error">{phoneError}</div>
                       )}
                     </div>
                     <TextField
+                      inputRef={passwordRef}
                       variant="outlined"
                       size="small"
                       label="Password"
                       type="password"
-                      aria-label="Signup password"
-                      className="input-field"
+                      className={`input-field ${
+                        buttonSignUpClick === 1 &&
+                        (!validLength || !upperCase || !lowerCase)
+                          ? "field-invalid"
+                          : ""
+                      }`}
                       onChange={(e) => setFirst(e)}
                       required
                     />
-                    {buttonSignUpClick === 1 ? (
-                      <div className="rounded alert-danger">
-                        <div className="alert-msg">
-                          {!validEmail && <div>◼ Enter Valid Email! </div>}
-                          {phoneError && (
-                            <div>◼ Enter Valid Phone Number! </div>
-                          )}
-                          {!validLength && (
-                            <div>
-                              ◼ Password should contain at least 8
-                              characters!{" "}
-                            </div>
-                          )}
-                          {!upperCase && (
-                            <div>
-                              ◼ Password should contain at least 1 uppercase
-                              character!{" "}
-                            </div>
-                          )}
-                          {!lowerCase && (
-                            <div>
-                              ◼ Password should contain at least 1 lowercase
-                              character!{" "}
-                            </div>
-                          )}
-                          {!match && <div>◼ Passwords don't match! </div>}
-                        </div>
-                      </div>
-                    ) : null}
                     <TextField
+                      inputRef={confirmPasswordRef}
                       variant="outlined"
                       size="small"
                       label="Confirm Password"
                       type="password"
                       aria-label="Confirm password"
-                      className="input-field"
+                      className={`input-field ${
+                        buttonSignUpClick === 1 && !match ? "field-invalid" : ""
+                      }`}
                       onChange={(e) => setSecond(e)}
                       autoComplete="off"
                       required
                     />
+
+                    {buttonSignUpClick === 1 && !match && (
+                      <div className="field-error">Passwords do not match.</div>
+                    )}
+                    <div className="password-hint">
+                      Password must contain 8+ characters, uppercase, lowercase,
+                      and a special character.✅
+                    </div>
                     <div className="custom-field">
                       <label className="custom-label" htmlFor="userType">
                         User Type
                       </label>
                       <Select
                         options={options}
+                        value={options.find((opt) => opt.value === userType)}
+                        onChange={(option) => setUserType(option.value)}
                         className="react-select-container"
                         classNamePrefix="react-select"
                         menuIsOpen={menuOpen}
