@@ -559,6 +559,9 @@ const Test = (props) => {
   const [alert, setAlert] = useState("");
   const [phoneError, setPhoneError] = useState("");
   const [signupError, setSignupError] = useState("");
+  const [otpMessage, setOtpMessage] = useState("");
+  const [otpMessageType, setOtpMessageType] = useState("");
+  const [loginError, setLoginError] = useState("");
   const options = [
     { value: "doctor", label: "Doctor" },
     { value: "other", label: "Other" },
@@ -580,7 +583,7 @@ const Test = (props) => {
   const confirmPasswordRef = useRef(null);
   // CHANGED
   const specialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password.firstPassword);
-
+  const [loginMessage, setLoginMessage] = useState("");
   const setFirst = (event) => {
     setPassword({ ...password, firstPassword: event.target.value });
   };
@@ -695,13 +698,22 @@ const Test = (props) => {
               response.data.toLowerCase().includes("duplicate") ||
               response.data.toLowerCase().includes("already")
             ) {
-              setSignupError(response.data);
+              setLoginMessage(
+                "An account already exists with this mobile number.",
+              );
+
+              if (isMobile) {
+                setMobileView("login");
+              } else {
+                handleClick("signin");
+              }
               return;
             }
 
             if (
               response.data.toLowerCase().includes("error") ||
-              response.data.toLowerCase().includes("failed")
+              response.data.toLowerCase().includes("failed") ||
+              response.data.toLowerCase().includes("invalid")
             ) {
               setSignupError(response.data);
               return;
@@ -827,6 +839,19 @@ const Test = (props) => {
 
       axios.defaults.withCredentials = true;
 
+      // Mobile number required
+      if (!mobileNumber) {
+        setOtpMessage("Mobile number is required.");
+        setOtpMessageType("error");
+        return;
+      }
+
+      // Mobile number format validation
+      if (!isValidPhoneNumber(mobileNumber)) {
+        setOtpMessage("Please enter a valid mobile number.");
+        setOtpMessageType("error");
+        return;
+      }
       let countryCodeForOtp = "";
       let nationalNumber = "";
 
@@ -838,7 +863,8 @@ const Test = (props) => {
           nationalNumber = parsedPhone.nationalNumber;
         } catch (error) {
           console.error("Error parsing phone number:", error);
-          window.alert("Please enter a valid phone number");
+          setOtpMessage("Please enter a valid phone number");
+          setOtpMessageType("error");
           return;
         }
       }
@@ -852,12 +878,18 @@ const Test = (props) => {
 
       if (response.data.success) {
         setOtpSent(true);
+        setOtpMessage("OTP sent successfully.");
+        setOtpMessageType("success");
       } else {
-        window.alert("Failed to send OTP");
+        setOtpMessage("Unable to send OTP. Please try again.");
+        setOtpMessageType("error");
       }
     } catch (error) {
       console.log(error);
-      window.alert("Error sending OTP");
+      setOtpMessage(
+        "This number is not registered on WhatsApp. Please enter a valid WhatsApp number.",
+      );
+      setOtpMessageType("error");
     } finally {
       setSendingOtp(false);
     }
@@ -910,7 +942,7 @@ const Test = (props) => {
     e.preventDefault();
 
     setClicked(1);
-
+    setLoginError("");
     axios.defaults.withCredentials = true;
 
     // =========================================
@@ -929,10 +961,6 @@ const Test = (props) => {
           },
         )
         .then((response) => {
-          console.log("FULL RESPONSE:", response);
-          console.log("RESPONSE DATA:", response.data);
-          console.log("RESPONSE HEADERS:", response.headers);
-          console.log("DOCUMENT COOKIE:", document.cookie);
           if (response.data.registration_id) {
             console.log("response login", response.data);
 
@@ -951,8 +979,8 @@ const Test = (props) => {
               }
             }, 500);
           } else {
-            document.getElementById("login-msg").innerText =
-              "Some error occured!";
+            setLoginSuccess(false);
+            setLoginError("Some error occurred!");
           }
         })
         .catch((err) => {
@@ -960,11 +988,11 @@ const Test = (props) => {
 
           if (err.response) {
             if (err.response.data.includes("Incorrect email")) {
-              document.getElementById("login-msg").innerText =
-                "Incorrect email or password";
+              setLoginSuccess(false);
+              setLoginError("Incorrect email or password");
             } else {
-              document.getElementById("login-msg").innerText =
-                "Some error occured!";
+              setLoginSuccess(false);
+              setLoginError("Some error occurred!");
             }
           }
         });
@@ -1000,15 +1028,14 @@ const Test = (props) => {
               }
             }, 500);
           } else {
-            document.getElementById("login-msg").innerText =
-              "Invalid Mobile Number or Password";
+            setLoginSuccess(false);
+            setLoginError("Invalid Mobile Number or Password!");
           }
         })
         .catch((err) => {
           console.log(err);
-
-          document.getElementById("login-msg").innerText =
-            "Some error occured!";
+          setLoginSuccess(false);
+          setLoginError("Some error occurred!");
         });
     }
   };
@@ -1037,8 +1064,8 @@ const Test = (props) => {
                     <span>or use your email for registration</span>
 
                     {signupError && (
-                      <div className="alert alert-danger mt-2 py-1 px-3 border border-dark">
-                        {signupError}
+                      <div className="signup-error">
+                        <div>{signupError}</div>
                       </div>
                     )}
                     <TextField
@@ -1182,19 +1209,29 @@ const Test = (props) => {
                         ? "We have sent you an OTP on your mobile"
                         : "Access your healthcare account securely"}
                     </span>
-
-                    {buttonClick === 1 && !loginSuccess && (
-                      <div
-                        id="login-msg"
-                        className="alert alert-danger mt-2 py-1 px-3 border border-dark"
-                      >
-                        Some Error Occured
-                      </div>
+                    {loginError && (
+                      <div className="otp-error-message">{loginError}</div>
                     )}
 
+                    {loginMessage && (
+                      <div className="existing-account-message">
+                        {loginMessage}
+                      </div>
+                    )}
                     {/* LOGIN FIELD */}
                     {useOtpLogin ? (
                       <>
+                        {otpMessage && (
+                          <div
+                            className={
+                              otpMessageType === "success"
+                                ? "otp-success-message"
+                                : "otp-error-message"
+                            }
+                          >
+                            {otpMessage}
+                          </div>
+                        )}
                         <div className="phone-input-container login-phone">
                           <label className="login-label">Mobile Number</label>
 
