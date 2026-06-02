@@ -689,8 +689,23 @@ const Test = (props) => {
           headers: { "Access-Control-Allow-Credentials": true },
         })
         .then((response) => {
-          if (response.data === "Email Address already Exists in the System") {
-            setSignupError("Email already exists!");
+          if (typeof response.data === "string") {
+            if (
+              response.data.toLowerCase().includes("exists") ||
+              response.data.toLowerCase().includes("duplicate") ||
+              response.data.toLowerCase().includes("already")
+            ) {
+              setSignupError(response.data);
+              return;
+            }
+
+            if (
+              response.data.toLowerCase().includes("error") ||
+              response.data.toLowerCase().includes("failed")
+            ) {
+              setSignupError(response.data);
+              return;
+            }
           } else if (response.data.registration_id) {
             // Registration successful - now log the user in automatically
             setAlert("Registered Successfully!!!");
@@ -1076,7 +1091,9 @@ const Test = (props) => {
                       type="password"
                       className={`input-field ${
                         buttonSignUpClick === 1 &&
-                        (!validLength || !upperCase || !lowerCase ||
+                        (!validLength ||
+                          !upperCase ||
+                          !lowerCase ||
                           !specialCharFromHook)
                           ? "field-invalid"
                           : ""
