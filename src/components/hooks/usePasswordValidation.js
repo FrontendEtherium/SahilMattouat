@@ -13,7 +13,7 @@ export const usePasswordValidation = ({
   const [lowerCase, setLowerCase] = useState(null);
   const [specialChar, setSpecialChar] = useState(null);
   const [match, setMatch] = useState(null);
-    
+  
   useEffect(() => {
     
   setValidLength(firstPassword.length >= requiredLength ? true : false);
