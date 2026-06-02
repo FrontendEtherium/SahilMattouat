@@ -1076,7 +1076,8 @@ const Test = (props) => {
                       type="password"
                       className={`input-field ${
                         buttonSignUpClick === 1 &&
-                        (!validLength || !upperCase || !lowerCase)
+                        (!validLength || !upperCase || !lowerCase ||
+                          !specialCharFromHook)
                           ? "field-invalid"
                           : ""
                       }`}
