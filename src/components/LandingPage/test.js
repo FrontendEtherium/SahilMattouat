@@ -604,19 +604,6 @@ const Test = (props) => {
     setSignupError("");
     setSignUpClicked(1);
 
-    // Validate phone number
-    // CHANGED: Mobile mandatory
-
-    if (!phoneNumber) {
-      setPhoneError("Mobile number is required");
-      return;
-    }
-
-    if (!isValidPhoneNumber(phoneNumber)) {
-      setPhoneError("Please enter a valid mobile number");
-      return;
-    }
-
     setPhoneError("");
     if (!validLength || !upperCase || !lowerCase || !specialCharFromHook) {
       passwordRef.current?.focus();
@@ -639,6 +626,18 @@ const Test = (props) => {
       return;
     }
 
+    // Validate phone number
+    // CHANGED: Mobile mandatory
+
+    if (!phoneNumber) {
+      setPhoneError("Mobile number is required");
+      return;
+    }
+
+    if (!isValidPhoneNumber(phoneNumber)) {
+      setPhoneError("Please enter a valid mobile number");
+      return;
+    }
     if (!validEmail) {
       return;
     }
