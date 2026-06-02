@@ -154,7 +154,7 @@ body::-webkit-scrollbar {
 
   height: 100%;
 
-  padding: 55px 48px;
+  padding: 55px 48px 20px 48px;
 
   box-sizing: border-box;
 
@@ -260,7 +260,7 @@ form.sign {
   text-align: center;
   color: #1f2a44;
   margin: 0 0 6px;
-  padding: 0;
+  padding: 16px 0 0 0;
 }
 
 /* ========================================= */
@@ -408,11 +408,10 @@ input:focus,
 
 .phone-input-container {
   width: 100%;
-
-  max-width: 300px;
-
-  margin: 0 auto;
+  max-width: 350px;
+  margin: 0 auto 12px auto;
 }
+
 /* ========================================= */
 /* AUTOFILL FIX */
 /* ========================================= */
@@ -438,16 +437,13 @@ input:-webkit-autofill:focus {
 
 .phone-input-container .PhoneInput {
   width: 100%;
-  height: 50px;
+  height: 40px;
   border-radius: 12px;
-
   border: 1px solid #dbe4ee;
-
   background: white;
-
-  padding: 14px 16px;
-
+  padding: 10px 20px;
   transition: all 0.3s ease;
+  margin-bottom: -7px;
 }
 
 .phone-input-container .PhoneInput:focus-within {
@@ -929,6 +925,8 @@ button.ghost:active {
 .MuiOutlinedInput-root {
   border-radius: 12px !important;
   background: white;
+  height: 38px;
+  margin-bottom: 4px;
 }
 
 .MuiSelect-select {
@@ -1064,6 +1062,29 @@ button.ghost:active {
 
 .otp-toggle-label input {
   cursor: pointer;
+}
+
+.password-hint {
+  width: 100%;
+  margin-top: -6px;
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: #64748b;
+  text-align: left;
+}
+.field-error .mobile-field-error {
+  width: 100%;
+  margin-top: -4px;
+  margin-bottom: 4px;
+  padding-left: 4px;
+  color: #dc2626;
+  font-size: 12px;
+  text-align: left;
+}
+
+.field-invalid .MuiOutlinedInput-notchedOutline {
+  border-color: #dc2626 !important;
+  border-width: 2px !important;
 }
 /* ========================================= */
 /* MOBILE RESPONSIVE FINAL */
@@ -1201,7 +1222,7 @@ button.ghost:active {
 
     border-radius: 20px !important;
 
-    padding: 20px 14px !important;
+    padding: 20px 14px 15px 14px !important;
 
     margin: 0 !important;
 
@@ -1220,6 +1241,8 @@ button.ghost:active {
     transition: none !important;
 
     box-sizing: border-box !important;
+
+    min-height: calc(100dvh - 24px) !important;
   }
 
   .container.right-panel-active .sign-up-container {
@@ -1464,6 +1487,7 @@ button.ghost:active {
 
     color: #1f2a44;
     margin: 0 0 6px !important;
+    padding: 12px 0 0 0 !important;
     padding: 0 !important;
   }
 
@@ -1551,6 +1575,7 @@ button.ghost:active {
     background: white;
 
     padding: 0 10px;
+    margin-bottom: 10px;
   }
 
   .phone-input-container .PhoneInputInput {
@@ -1943,6 +1968,46 @@ button.ghost:active {
   .container.right-panel-active .sign-up-container {
     z-index: 1004 !important;
   }
+
+  .sign-up-container #signUp {
+    width: 220px;
+
+    color: #ffffff !important;
+    margin-top: 8px;
+    position: relative;
+    top: -10px;
+  }
+
+  .signup-heading {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.2;
+    text-align: center;
+    color: #1f2a44;
+    margin: 0 0 4px;
+    padding: 16px 0 0 0;
+  }
+  .field-error {
+    width: 100%;
+    margin-top: -8px;
+    margin-bottom: -4px;
+    padding-left: 4px;
+    color: #dc2626;
+    font-size: 10px;
+    text-align: left;
+    font-weight: 500;
+  }
+
+  .mobile-field-error {
+    width: 100%;
+    margin-top: 4px;
+    margin-bottom: -8px;
+    padding-left: 4px;
+    color: #dc2626;
+    font-size: 10px;
+    text-align: left;
+    font-weight: 500;
+  }
 }
 @media only screen and (max-width: 375px) {
   /* Kill Bootstrap centered modal spacer that clips content on iOS */
@@ -2036,7 +2101,7 @@ button.ghost:active {
     text-align: center !important;
     color: #1f2a44 !important;
     margin: 0 0 6px !important;
-    padding: 0 !important;
+    padding: 10px 0 0 0 !important;
     overflow: visible !important;
   }
 
