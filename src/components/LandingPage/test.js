@@ -836,7 +836,7 @@ const Test = (props) => {
   const sendOtp = async () => {
     try {
       setSendingOtp(true);
-
+      setLoginError("");
       axios.defaults.withCredentials = true;
 
       // Mobile number required
@@ -878,8 +878,8 @@ const Test = (props) => {
 
       if (response.data.success) {
         setOtpSent(true);
-        setOtpMessage("OTP sent successfully.");
-        setOtpMessageType("success");
+        // setOtpMessage("OTP sent successfully.");
+        // setOtpMessageType("success");
       } else {
         setOtpMessage("Unable to send OTP. Please try again.");
         setOtpMessageType("error");
@@ -898,6 +898,8 @@ const Test = (props) => {
   // ===== VERIFY OTP FUNCTION =====
   const verifyOtp = async () => {
     try {
+      setLoginError("");
+      setOtpMessage("");
       axios.defaults.withCredentials = true;
       // Extract country code and national number from phone number
 
@@ -1002,6 +1004,18 @@ const Test = (props) => {
     // MOBILE + PASSWORD LOGIN
     // =========================================
     else if (loginType === "mobile-password") {
+      // Mobile number required
+      if (!mobileNumber) {
+        setLoginError("Mobile number is required.");
+
+        return;
+      }
+
+      // Mobile number format validation
+      if (!/^\d{10}$/.test(mobileNumber)) {
+        setLoginError("Please enter a valid mobile number.");
+        return;
+      }
       axios
         .post(
           `${backendHost}/login-user?mobile=${mobileNumber}&password=${mobilePassword}&loginType=MOBILE&rempwd=1`,
@@ -1245,7 +1259,10 @@ const Test = (props) => {
                             disabled={otpSent}
                           />
                         </div>
-
+                        <div className="whatsapp-hint">
+                          OTP will be delivered via WhatsApp. Ensure this number
+                          is active on WhatsApp.
+                        </div>
                         {otpSent && (
                           <div className="phone-input-container login-phone">
                             <label className="login-label">OTP</label>
