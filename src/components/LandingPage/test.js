@@ -522,6 +522,7 @@ import { parsePhoneNumber } from "libphonenumber-js";
 import "./test.css";
 import ErrorBoundary from "../ErrorBoundary";
 import { useRef } from "react";
+import { purple } from "@material-ui/core/colors";
 
 const Test = (props) => {
   const [click, setClick] = useState(true);
@@ -541,7 +542,6 @@ const Test = (props) => {
   const [useOtpLogin, setUseOtpLogin] = useState(false);
   // ============================
   const [firstName, setFname] = useState("");
-  const [lastName, setLname] = useState("");
   const [password, setPassword] = useState({
     firstPassword: "",
     secondPassword: "",
@@ -562,6 +562,11 @@ const Test = (props) => {
   const [otpMessage, setOtpMessage] = useState("");
   const [otpMessageType, setOtpMessageType] = useState("");
   const [loginError, setLoginError] = useState("");
+  const [signupOtp, setSignupOtp] = useState("");
+  const [signupOtpSent, setSignupOtpSent] = useState(false);
+  const [signupOtpVerified, setSignupOtpVerified] = useState(false);
+  const [signupOtpMessage, setSignupOtpMessage] = useState("");
+  const [sendingSignupOtp, setSendingSignupOtp] = useState(false);
   const options = [
     { value: "doctor", label: "Doctor" },
     { value: "other", label: "Other" },
@@ -580,16 +585,12 @@ const Test = (props) => {
   });
 
   const passwordRef = useRef(null);
-  const confirmPasswordRef = useRef(null);
+
   // CHANGED
   const specialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password.firstPassword);
   const [loginMessage, setLoginMessage] = useState("");
   const setFirst = (event) => {
     setPassword({ ...password, firstPassword: event.target.value });
-  };
-
-  const setSecond = (event) => {
-    setPassword({ ...password, secondPassword: event.target.value });
   };
 
   React.useEffect(() => {
@@ -606,22 +607,17 @@ const Test = (props) => {
     e.preventDefault();
     setSignupError("");
     setSignUpClicked(1);
-
+    if (!signupOtpVerified) {
+      setSignupError(
+        "Please verify your WhatsApp number before creating an account.",
+      );
+      return;
+    }
     setPhoneError("");
     if (!validLength || !upperCase || !lowerCase || !specialCharFromHook) {
       passwordRef.current?.focus();
 
       passwordRef.current?.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
-
-      return;
-    }
-    if (!match) {
-      confirmPasswordRef.current?.focus();
-
-      confirmPasswordRef.current?.scrollIntoView({
         behavior: "smooth",
         block: "center",
       });
@@ -673,10 +669,9 @@ const Test = (props) => {
 
       const params = {
         firstname: firstName,
-        lastname: lastName,
         email: email,
         psw: password.firstPassword,
-        "psw-repeat": password.secondPassword,
+
         // rempwd: rempwd,
         rempwd: "on",
         doc_patient: userType,
@@ -873,6 +868,7 @@ const Test = (props) => {
         params: {
           mobile: nationalNumber,
           countryCode: countryCodeForOtp,
+          purpose: "LOGIN",
         },
       });
 
@@ -922,6 +918,7 @@ const Test = (props) => {
         countryCode: countryCodeForVerify,
         otp: otp,
         rememberPassword: 1,
+        purpose: "LOGIN",
       });
 
       if (response.data.data && response.data.data.registration_id) {
@@ -937,6 +934,80 @@ const Test = (props) => {
     } catch (error) {
       console.log(error);
       alert("OTP Verification Failed");
+    }
+  };
+
+  // =====================================
+  // SIGNUP SEND OTP
+  // =====================================
+  const sendSignupOtp = async () => {
+    try {
+      setSignupOtpMessage("");
+      setPhoneError("");
+
+      if (!phoneNumber) {
+        setPhoneError("Mobile number is required");
+        return;
+      }
+
+      if (!isValidPhoneNumber(phoneNumber)) {
+        setPhoneError("Please enter a valid mobile number");
+        return;
+      }
+
+      const parsedPhone = parsePhoneNumber(phoneNumber);
+
+      const countryCode = "+" + parsedPhone.countryCallingCode;
+
+      const mobile = parsedPhone.nationalNumber;
+
+      const response = await axios.post(`${backendHost}/auth/send-otp`, null, {
+        params: {
+          mobile,
+          countryCode,
+          purpose: "REGISTER",
+        },
+      });
+
+      if (response.data.success) {
+        setSignupOtpSent(true);
+        setSignupOtpMessage("OTP sent successfully");
+      }
+    } catch (error) {
+      setPhoneError("This number is not registered on WhatsApp.");
+    }
+  };
+  // =====================================
+  // SIGNUP VERIFY OTP
+  // =====================================
+  const verifySignupOtp = async () => {
+    try {
+      if (!signupOtp) {
+        setSignupOtpMessage("Enter OTP");
+        return;
+      }
+
+      const parsedPhone = parsePhoneNumber(phoneNumber);
+
+      const countryCode = "+" + parsedPhone.countryCallingCode;
+
+      const mobile = parsedPhone.nationalNumber;
+
+      const response = await axios.post(`${backendHost}/auth/verify-otp`, {
+        mobile,
+        countryCode,
+        otp: signupOtp,
+        purpose: "REGISTER",
+      });
+
+      if (response.data.success) {
+        setSignupOtpVerified(true);
+        setSignupOtpMessage("");
+      } else {
+        setSignupOtpMessage("Invalid OTP");
+      }
+    } catch (error) {
+      setSignupOtpMessage("OTP verification failed");
     }
   };
   // =================================
@@ -1085,20 +1156,20 @@ const Test = (props) => {
                     <TextField
                       variant="outlined"
                       size="small"
-                      label="First Name"
+                      label="Enter your Name"
                       aria-label="First name"
                       className="input-field"
                       onChange={(e) => setFname(e.target.value)}
                       required
                     />
-                    <TextField
+                    {/* <TextField
                       variant="outlined"
                       size="small"
                       label="Last Name"
                       aria-label="Last name"
                       className="input-field"
                       onChange={(e) => setLname(e.target.value)}
-                    />
+                    /> */}
                     <TextField
                       variant="outlined"
                       size="small"
@@ -1108,22 +1179,68 @@ const Test = (props) => {
                       className="input-field"
                       onChange={(e) => handleEmail(e)}
                     />
-                    <div className="phone-input-container">
-                      <PhoneInput
-                        placeholder="Mobile Number"
-                        value={phoneNumber}
-                        onChange={setPhoneNumber}
-                        defaultCountry="IN"
-                        style={{ paddingLeft: "10px" }}
-                      />
-                      {/* CHANGED: Dynamic professional error */}
-                      {/* {phoneError && (
-                        <div className="validation-error">{phoneError}</div>
-                      )} */}
-                      {phoneError && (
-                        <div className="mobile-field-error">{phoneError}</div>
+                    <div className="mobile-otp-row">
+                      <div className="phone-input-container">
+                        <PhoneInput
+                          placeholder="Mobile Number"
+                          value={phoneNumber}
+                          onChange={setPhoneNumber}
+                          defaultCountry="IN"
+                          disabled={signupOtpVerified}
+                        />
+                      </div>
+
+                      {!signupOtpSent && !signupOtpVerified && (
+                        <Button
+                          variant="contained"
+                          className="send-otp-btn"
+                          onClick={sendSignupOtp}
+                        >
+                          {sendingSignupOtp ? "Sending..." : "Verify"}
+                        </Button>
+                      )}
+
+                      {signupOtpVerified && (
+                        <div className="verified-badge">✓ Verified</div>
                       )}
                     </div>
+                    <div className="whatsapp-hint">
+                      OTP will be sent to your WhatsApp-registered number for
+                      verification.
+                    </div>
+
+                    {phoneError && (
+                      <div className="mobile-field-error">{phoneError}</div>
+                    )}
+                    {signupOtpSent && !signupOtpVerified && (
+                      <>
+                        <div className="otp-verify-row">
+                          <TextField
+                            variant="outlined"
+                            size="small"
+                            label="Enter OTP"
+                            value={signupOtp}
+                            onChange={(e) => setSignupOtp(e.target.value)}
+                            className="otp-input"
+                          />
+
+                          <Button
+                            variant="contained"
+                            className="verify-otp-btn"
+                            onClick={verifySignupOtp}
+                          >
+                            Verify
+                          </Button>
+                        </div>
+                        <div
+                          className="resend-otp-link"
+                          onClick={sendSignupOtp}
+                        >
+                          Resend OTP
+                        </div>
+                      </>
+                    )}
+
                     <TextField
                       inputRef={passwordRef}
                       variant="outlined"
@@ -1142,24 +1259,7 @@ const Test = (props) => {
                       onChange={(e) => setFirst(e)}
                       required
                     />
-                    <TextField
-                      inputRef={confirmPasswordRef}
-                      variant="outlined"
-                      size="small"
-                      label="Confirm Password"
-                      type="password"
-                      aria-label="Confirm password"
-                      className={`input-field ${
-                        buttonSignUpClick === 1 && !match ? "field-invalid" : ""
-                      }`}
-                      onChange={(e) => setSecond(e)}
-                      autoComplete="off"
-                      required
-                    />
 
-                    {buttonSignUpClick === 1 && !match && (
-                      <div className="field-error">Passwords do not match.</div>
-                    )}
                     <div className="password-hint">
                       Password must contain 8+ characters, uppercase, lowercase,
                       and a special character.✅
@@ -1189,6 +1289,7 @@ const Test = (props) => {
                       className="ghost"
                       aria-label="Sign up"
                       id="signUp"
+                      disabled={!signupOtpVerified}
                     >
                       Sign Up
                     </Button>
@@ -1259,6 +1360,7 @@ const Test = (props) => {
                             disabled={otpSent}
                           />
                         </div>
+
                         <div className="whatsapp-hint">
                           OTP will be delivered via WhatsApp. Ensure this number
                           is active on WhatsApp.
