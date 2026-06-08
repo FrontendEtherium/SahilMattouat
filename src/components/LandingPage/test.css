@@ -432,7 +432,7 @@ input:-webkit-autofill:focus {
 
 .phone-input-container {
   width: 100%;
-  max-width: 420px;
+  /* max-width: 420px; */
 }
 
 .phone-input-container .PhoneInput {
@@ -1143,9 +1143,102 @@ button.ghost:active {
 .whatsapp-hint {
   font-size: 12px;
   color: #64748b;
-  margin-top: 6px;
   text-align: left;
+  margin-top: -4px;
 }
+
+.mobile-otp-row,
+.otp-verify-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mobile-otp-row .phone-input-container,
+.otp-verify-row .otp-input {
+  flex: 1;
+}
+/* Material UI label */
+.send-otp-btn .MuiButton-label,
+.verify-otp-btn .MuiButton-label {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: 100%;
+  height: 100%;
+
+  margin: 0 !important;
+  padding: 0 !important;
+  color: black !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+}
+
+.otp-input {
+  width: 100%;
+  height: 40px;
+}
+.send-otp-btn,
+.verify-otp-btn {
+  width: 70px !important;
+  min-width: 70px !important;
+  height: 36px !important;
+
+  background: #aacfe1 !important;
+
+  color: black !important;
+
+  font-size: 10px !important;
+  font-weight: 600 !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  white-space: nowrap !important;
+
+  border-radius: 12px !important;
+  border: none !important;
+}
+.verified-badge {
+  color: #2e7d32;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.verify-before-signup {
+  font-size: 13px;
+  color: #666;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.resend-otp-link {
+  display: inline-block;
+  width: fit-content;
+
+  font-size: 13px;
+  font-weight: 500;
+
+  color: #004a6e;
+  text-decoration: none;
+
+  cursor: pointer;
+
+  /* margin-top: 4px; */
+  margin-bottom: 4px;
+
+  align-self: flex-start;
+  text-decoration: underline;
+}
+
+.resend-otp-link:hover {
+  text-decoration: underline;
+  color: #00334d;
+}
+
 /* ========================================= */
 /* MOBILE RESPONSIVE FINAL */
 /* ========================================= */
@@ -1936,6 +2029,129 @@ button.ghost:active {
     color: black !important;
     padding-top: 10px;
   }
+
+  .field-error {
+    color: #dc2626;
+  }
+
+  .mobile-field-error {
+    color: #dc2626;
+  }
+
+  .mobile-otp-row,
+  .otp-verify-row {
+    display: flex;
+    align-items: center; /* important */
+    gap: 10px;
+    width: 100%;
+  }
+
+  .otp-input {
+    width: 100%;
+    height: 40px;
+  }
+  /* Phone field takes remaining space */
+  .mobile-otp-row .phone-input-container,
+  .otp-verify-row .otp-input {
+    flex: 1;
+    margin: 0 !important;
+    max-width: none;
+  }
+
+  /* PhoneInput styling */
+  .mobile-otp-row .PhoneInput {
+    height: 48px !important;
+    margin: 0 !important;
+    padding: 0 12px !important;
+    display: flex;
+    align-items: center;
+    border-radius: 12px;
+    box-sizing: border-box;
+  }
+
+  .mobile-otp-row .PhoneInputInput {
+    height: 100%;
+    font-size: 14px;
+  }
+
+  /* OTP buttons */
+  /* Verify button */
+  .send-otp-btn,
+  .verify-otp-btn {
+    width: 90px !important;
+    min-width: 90px !important;
+    height: 40px !important;
+    margin: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    border-radius: 12px !important;
+    box-sizing: border-box;
+  }
+
+  /* Material UI label */
+  .send-otp-btn .MuiButton-label,
+  .verify-otp-btn .MuiButton-label {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    width: 100%;
+    height: 100%;
+
+    margin: 0 !important;
+    padding: 0 !important;
+    color: black !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+  }
+  .whatsapp-hint {
+    font-size: 12px;
+    line-height: 1.4;
+    margin-top: 2px;
+    margin-bottom: 10px;
+    text-align: left;
+  }
+
+  .verified-badge {
+    min-width: 100px;
+
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #ecfdf5;
+    border: 1px solid #86efac;
+
+    color: #166534;
+
+    border-radius: 12px;
+
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .resend-otp-link {
+    display: inline-block;
+    width: fit-content;
+
+    font-size: 13px;
+    font-weight: 500;
+
+    color: #004a6e;
+    text-decoration: none;
+
+    cursor: pointer;
+
+    margin-top: 6px;
+    margin-bottom: 10px;
+
+    align-self: flex-start;
+  }
 }
 
 /* ========================================= */
@@ -1961,9 +2177,9 @@ button.ghost:active {
     pointer-events: auto !important;
   }
   .react-select__control {
-    height: 50px !important;
+    height: 40px !important;
 
-    min-height: 50px !important;
+    min-height: 40px !important;
 
     display: flex !important;
 
@@ -1974,7 +2190,7 @@ button.ghost:active {
   /* VALUE CONTAINER */
 
   .react-select__value-container {
-    height: 50px !important;
+    height: 40px !important;
 
     display: flex !important;
 
@@ -2044,8 +2260,10 @@ button.ghost:active {
     line-height: 1.2;
     text-align: center;
     color: #1f2a44;
-    margin: 0 0 4px;
-    padding: 16px 0 0 0;
+    /* margin: 0 0 4px;
+    padding: 16px 0 0 0; */
+    margin-top: 12px;
+    margin-bottom: 4px;
   }
   .field-error {
     width: 100%;
@@ -2053,7 +2271,7 @@ button.ghost:active {
     margin-bottom: -4px;
     padding-left: 4px;
     color: #dc2626;
-    font-size: 10px;
+    font-size: 12px;
     text-align: left;
     font-weight: 500;
   }
@@ -2061,10 +2279,10 @@ button.ghost:active {
   .mobile-field-error {
     width: 100%;
     margin-top: 4px;
-    margin-bottom: -8px;
+    margin-bottom: -2px;
     padding-left: 4px;
     color: #dc2626;
-    font-size: 10px;
+    font-size: 12px;
     text-align: left;
     font-weight: 500;
   }
@@ -2112,6 +2330,59 @@ button.ghost:active {
 
     font-size: 13px;
     font-weight: 500;
+  }
+
+  /* ALL INPUT TEXT SAME SIZE */
+
+  .MuiOutlinedInput-input,
+  .PhoneInputInput,
+  .otp-input,
+  .react-select__single-value,
+  .react-select__placeholder,
+  input {
+    font-size: 14px !important;
+  }
+  .otp-input .MuiOutlinedInput-input {
+    font-size: 14px !important;
+  }
+
+  .otp-input {
+    text-align: center;
+
+    letter-spacing: 6px;
+
+    font-size: 9px;
+
+    font-weight: 600;
+
+    margin-bottom: 20px;
+  }
+
+  .resend-otp-link {
+    display: inline-block;
+    width: fit-content;
+
+    font-size: 13px;
+    font-weight: 500;
+
+    color: #004a6e;
+    text-decoration: underline;
+
+    cursor: pointer;
+
+    /* margin-top: -4px;
+    margin-bottom: -4px; */
+    margin-left: 8px;
+    align-self: flex-start;
+  }
+
+  .password-hint {
+    width: 100%;
+    margin-top: -6px;
+    margin-bottom: -2px;
+    font-size: 12px;
+    color: #64748b;
+    text-align: left;
   }
 }
 @media only screen and (max-width: 375px) {
