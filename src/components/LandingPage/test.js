@@ -646,8 +646,7 @@ const Test = (props) => {
       validLength &&
       upperCase &&
       lowerCase &&
-      specialCharFromHook &&
-      match
+      specialCharFromHook
     ) {
       axios.defaults.withCredentials = true;
 
