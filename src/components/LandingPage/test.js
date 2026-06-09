@@ -974,28 +974,26 @@ const Test = (props) => {
         setSignupOtpMessage("OTP sent successfully");
       }
     } catch (error) {
-  const message =
-    error?.response?.data?.message ||
-    "Unable to send OTP. Please try again.";
+      const message =
+        error?.response?.data?.message ||
+        "Unable to send OTP. Please try again.";
 
-  if (
-    message.toLowerCase().includes("already registered")
-  ) {
-    setLoginMessage(
-      "An account already exists with this mobile number. Please sign in."
-    );
+      if (message.toLowerCase().includes("already registered")) {
+        setLoginMessage(
+          "An account already exists with this mobile number. Please sign in.",
+        );
 
-    if (isMobile) {
-      setMobileView("login");
-    } else {
-      handleClick("signin");
+        if (isMobile) {
+          setMobileView("login");
+        } else {
+          handleClick("signin");
+        }
+
+        return;
+      }
+
+      setPhoneError(message);
     }
-
-    return;
-  }
-
-  setPhoneError(message);
-}
   };
   // =====================================
   // SIGNUP VERIFY OTP
@@ -1043,6 +1041,7 @@ const Test = (props) => {
     // =========================================
 
     if (loginType === "email") {
+      setLoginMessage("");
       axios
         .post(
           `${backendHost}/login?cmd=login&email=${email}&psw=${signInpassword}&rempwd=1`,
@@ -1095,6 +1094,8 @@ const Test = (props) => {
     // MOBILE + PASSWORD LOGIN
     // =========================================
     else if (loginType === "mobile-password") {
+      setLoginMessage("");
+
       // Mobile number required
       if (!mobileNumber) {
         setLoginError("Mobile number is required.");
@@ -1503,7 +1504,11 @@ const Test = (props) => {
                           checked={useOtpLogin}
                           onChange={(e) => {
                             setUseOtpLogin(e.target.checked);
+                            // ⭐ Clear existing account message
+                            setLoginMessage("");
 
+                            // ⭐ Optional: clear old login errors too
+                            setLoginError("");
                             setOtpSent(false);
 
                             if (e.target.checked) {
