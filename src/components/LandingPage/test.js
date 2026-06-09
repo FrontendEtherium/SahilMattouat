@@ -896,19 +896,21 @@ const Test = (props) => {
     try {
       setLoginError("");
       setOtpMessage("");
+
       axios.defaults.withCredentials = true;
-      // Extract country code and national number from phone number
 
       let countryCodeForVerify = "";
       let nationalNumber = "";
+
       if (mobileNumber) {
         try {
           const parsedPhone = parsePhoneNumber(mobileNumber);
+
           countryCodeForVerify = "+" + parsedPhone.countryCallingCode;
+
           nationalNumber = parsedPhone.nationalNumber;
         } catch (error) {
-          console.error("Error parsing phone number:", error);
-          window.alert("Please enter a valid phone number");
+          setLoginError("Please enter a valid mobile number.");
           return;
         }
       }
@@ -921,19 +923,39 @@ const Test = (props) => {
         purpose: "LOGIN",
       });
 
-      if (response.data.data && response.data.data.registration_id) {
-        Cookies.set("uName", response.data.data.first_name, {
-          expires: 365,
-        });
+      if (response?.data?.data?.registration_id) {
+        Cookies.set("uName", response.data.data.first_name, { expires: 365 });
+
         localStorage.setItem("doctorid", response.data.data.docID);
+
         localStorage.setItem("token", response.data.data.value);
+
         window.location.reload();
       } else {
-        window.alert("Invalid OTP");
+        setLoginError(response?.data?.message || "Invalid OTP");
       }
     } catch (error) {
-      console.log(error);
-      alert("OTP Verification Failed");
+      console.error("OTP verification error:", error);
+
+      const backendMessage = error?.response?.data?.message;
+
+      const status = error?.response?.status;
+
+      if (status === 400) {
+        setLoginError(backendMessage || "Invalid OTP");
+      } else if (status === 404) {
+        setLoginError(backendMessage || "Account not found");
+      } else if (status === 429) {
+        setLoginError(
+          backendMessage || "Too many attempts. Please try again later.",
+        );
+      } else if (status === 500) {
+        setLoginError(
+          backendMessage || "Something went wrong. Please try again.",
+        );
+      } else {
+        setLoginError(backendMessage || "OTP verification failed.");
+      }
     }
   };
 
