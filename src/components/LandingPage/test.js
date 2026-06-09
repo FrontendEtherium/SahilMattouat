@@ -668,6 +668,7 @@ const Test = (props) => {
 
       const params = {
         firstname: firstName,
+
         email: email,
         psw: password.firstPassword,
 
@@ -973,8 +974,28 @@ const Test = (props) => {
         setSignupOtpMessage("OTP sent successfully");
       }
     } catch (error) {
-      setPhoneError("This number is not registered on WhatsApp.");
+  const message =
+    error?.response?.data?.message ||
+    "Unable to send OTP. Please try again.";
+
+  if (
+    message.toLowerCase().includes("already registered")
+  ) {
+    setLoginMessage(
+      "An account already exists with this mobile number. Please sign in."
+    );
+
+    if (isMobile) {
+      setMobileView("login");
+    } else {
+      handleClick("signin");
     }
+
+    return;
+  }
+
+  setPhoneError(message);
+}
   };
   // =====================================
   // SIGNUP VERIFY OTP
