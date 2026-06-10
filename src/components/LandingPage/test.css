@@ -562,25 +562,6 @@ input:-webkit-autofill:focus {
   box-shadow: 0 0 0 3px rgba(39, 177, 230, 0.12);
 }
 
-.edit-number-link {
-  display: block;
-  width: 100%;
-  margin-top: 8px;
-  padding: 0;
-  border: none;
-  background: transparent;
-  color: #004a6e;
-  font-size: 14px;
-  font-weight: 600;
-  text-align: center;
-  cursor: pointer;
-  margin-bottom: -40px;
-}
-
-.edit-number-link:hover {
-  color: #00334d;
-}
-
 /* Legacy OTP card styles kept for backwards compatibility */
 .otp-card {
   width: 100%;
@@ -594,6 +575,15 @@ input:-webkit-autofill:focus {
   text-align: left;
 }
 
+.otp-error-inline {
+  color: #d32f2f;
+  font-size: 13px;
+  margin-top: 6px;
+  margin-bottom: -2px;
+  text-align: left;
+  width: 100%;
+  max-width: 340px;
+}
 .otp-title {
   font-size: 20px;
 
@@ -1132,8 +1122,6 @@ button.ghost:active {
   font-weight: 500;
 }
 .otp-error-message {
-  background: #fef2f2;
-  border: 1px solid #fca5a5;
   color: #b91c1c;
   padding: 10px 12px;
   border-radius: 8px;
@@ -2322,8 +2310,6 @@ button.ghost:active {
     font-weight: 500;
   }
   .otp-error-message {
-    background: #fef2f2;
-    border: 1px solid #fca5a5;
     color: #b91c1c;
     margin-top: -20px;
     padding: 6px 8px;
