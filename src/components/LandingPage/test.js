@@ -567,6 +567,15 @@ const Test = (props) => {
   const [signupOtpVerified, setSignupOtpVerified] = useState(false);
   const [signupOtpMessage, setSignupOtpMessage] = useState("");
   const [sendingSignupOtp, setSendingSignupOtp] = useState(false);
+  const clearAllErrors = () => {
+    setLoginError("");
+    setOtpMessage("");
+    setLoginMessage("");
+
+    setSignupError("");
+    setPhoneError("");
+    setSignupOtpMessage("");
+  };
   const options = [
     { value: "doctor", label: "Doctor" },
     { value: "other", label: "Other" },
@@ -590,6 +599,7 @@ const Test = (props) => {
   const specialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password.firstPassword);
   const [loginMessage, setLoginMessage] = useState("");
   const setFirst = (event) => {
+    clearAllErrors();
     setPassword({ ...password, firstPassword: event.target.value });
   };
 
@@ -682,6 +692,7 @@ const Test = (props) => {
         Age: null,
       };
 
+      clearAllErrors();
       axios
         .post(`${backendHost}/auth/register-user`, params, {
           headers: { "Access-Control-Allow-Credentials": true },
@@ -800,6 +811,7 @@ const Test = (props) => {
 
   // CHANGED: Email optional
   const handleEmail = (e) => {
+    clearAllErrors();
     const value = e.target.value.trim();
 
     setEmail(value);
@@ -863,7 +875,7 @@ const Test = (props) => {
           return;
         }
       }
-
+      clearAllErrors();
       const response = await axios.post(`${backendHost}/auth/send-otp`, null, {
         params: {
           mobile: nationalNumber,
@@ -893,6 +905,11 @@ const Test = (props) => {
   // =============================
   // ===== VERIFY OTP FUNCTION =====
   const verifyOtp = async () => {
+    // ⭐ OTP required validation
+    if (!otp || !otp.trim()) {
+      setLoginError("Please enter OTP");
+      return;
+    }
     try {
       setLoginError("");
       setOtpMessage("");
@@ -914,7 +931,7 @@ const Test = (props) => {
           return;
         }
       }
-
+      clearAllErrors();
       const response = await axios.post(`${backendHost}/auth/verify-otp`, {
         mobile: nationalNumber,
         countryCode: countryCodeForVerify,
@@ -933,10 +950,11 @@ const Test = (props) => {
         window.location.reload();
       } else {
         setLoginError(response?.data?.message || "Invalid OTP");
+        setOtp("");
       }
     } catch (error) {
       console.error("OTP verification error:", error);
-
+      setOtp("");
       const backendMessage = error?.response?.data?.message;
 
       const status = error?.response?.status;
@@ -983,6 +1001,7 @@ const Test = (props) => {
 
       const mobile = parsedPhone.nationalNumber;
 
+      clearAllErrors();
       const response = await axios.post(`${backendHost}/auth/send-otp`, null, {
         params: {
           mobile,
@@ -1033,6 +1052,7 @@ const Test = (props) => {
 
       const mobile = parsedPhone.nationalNumber;
 
+      clearAllErrors();
       const response = await axios.post(`${backendHost}/auth/verify-otp`, {
         mobile,
         countryCode,
@@ -1058,16 +1078,28 @@ const Test = (props) => {
     setLoginError("");
     axios.defaults.withCredentials = true;
 
+    clearAllErrors();
+
+    // Login field required
+    if ((!email || !email.trim()) && (!mobileNumber || !mobileNumber.trim())) {
+      setLoginError("Please enter Email ID or Mobile Number");
+      return;
+    }
+
+    // Password required (for non-OTP login)
+    if (!useOtpLogin && !signInpassword?.trim()) {
+      setLoginError("Please enter Password");
+      return;
+    }
     // =========================================
     // EMAIL LOGIN (YOUR EXISTING LOGIN)
     // =========================================
 
     if (loginType === "email") {
-      setLoginMessage("");
       axios
         .post(
-          `${backendHost}/login?cmd=login&email=${email}&psw=${signInpassword}&rempwd=1`,
-          //    `${backendHost}/login-user?email=${email}&password=${signInpassword}&loginType=EMAIL&rempwd=1`,
+          //  `${backendHost}/login?cmd=login&email=${email}&psw=${signInpassword}&rempwd=1`,
+          `${backendHost}/login-user?email=${email}&password=${signInpassword}&loginType=EMAIL&rempwd=1`,
 
           {},
           {
@@ -1128,6 +1160,11 @@ const Test = (props) => {
       // Mobile number format validation
       if (!/^\d{10}$/.test(mobileNumber)) {
         setLoginError("Please enter a valid mobile number.");
+        return;
+      }
+
+      if (!mobilePassword || !mobilePassword.trim()) {
+        setLoginError("Please enter Password");
         return;
       }
       axios
@@ -1227,7 +1264,15 @@ const Test = (props) => {
                         <PhoneInput
                           placeholder="Mobile Number"
                           value={phoneNumber}
-                          onChange={setPhoneNumber}
+                          onChange={(value) => {
+                            setPhoneNumber(value);
+
+                            clearAllErrors();
+
+                            if (signupOtpVerified) {
+                              setSignupOtpVerified(false);
+                            }
+                          }}
                           defaultCountry="IN"
                           disabled={signupOtpVerified}
                         />
@@ -1263,7 +1308,11 @@ const Test = (props) => {
                             size="small"
                             label="Enter OTP"
                             value={signupOtp}
-                            onChange={(e) => setSignupOtp(e.target.value)}
+                            onChange={(e) => {
+                              setSignupOtp(e.target.value);
+
+                              setSignupOtpMessage("");
+                            }}
                             className="otp-input"
                           />
 
@@ -1343,6 +1392,7 @@ const Test = (props) => {
                         className="switch-link"
                         onClick={() => {
                           setMenuOpen(false);
+                          clearAllErrors();
                           setMobileView("login");
                         }}
                       >
@@ -1367,9 +1417,9 @@ const Test = (props) => {
                         ? "We have sent you an OTP on your mobile"
                         : "Access your healthcare account securely"}
                     </span>
-                    {loginError && (
+                    {/* {loginError && (
                       <div className="otp-error-message">{loginError}</div>
-                    )}
+                    )} */}
 
                     {loginMessage && (
                       <div className="existing-account-message">
@@ -1396,7 +1446,10 @@ const Test = (props) => {
                           <PhoneInput
                             placeholder="Enter mobile number"
                             value={mobileNumber}
-                            onChange={setMobileNumber}
+                            onChange={(value) => {
+                              setMobileNumber(value);
+                              clearAllErrors();
+                            }}
                             defaultCountry="IN"
                             international
                             countryCallingCodeEditable={false}
@@ -1419,24 +1472,25 @@ const Test = (props) => {
                               className="otp-input-field"
                               placeholder="Enter OTP"
                               value={otp}
-                              onChange={(e) => setOtp(e.target.value)}
+                              onChange={(e) => {
+                                setOtp(e.target.value);
+                                clearAllErrors();
+                              }}
                             />
 
-                            <button
-                              type="button"
-                              className="edit-number-link"
-                              onClick={() => {
-                                setOtpSent(false);
-                                setOtp("");
-                              }}
-                            >
-                              Change mobile number
-                            </button>
+                            {loginError && (
+                              <div className="otp-error-inline">
+                                {loginError}
+                              </div>
+                            )}
                           </div>
                         )}
                       </>
                     ) : (
                       <>
+                        {loginError && (
+                          <div className="otp-error-message">{loginError}</div>
+                        )}
                         <label className="custom-label">
                           Mobile Number / Email ID
                         </label>
@@ -1449,15 +1503,16 @@ const Test = (props) => {
                           className="input-field"
                           autoComplete="off"
                           onChange={(e) => {
+                            clearAllErrors();
                             const value = e.target.value;
 
                             if (value.includes("@")) {
                               setEmail(value);
-
+                              setMobileNumber(""); // clear old mobile
                               setLoginType("email");
                             } else {
                               setMobileNumber(value);
-
+                              setEmail(""); // clear old email
                               setLoginType("mobile-password");
                             }
                           }}
@@ -1479,7 +1534,7 @@ const Test = (props) => {
                           className="input-field"
                           onChange={(e) => {
                             setPass(e.target.value);
-
+                            clearAllErrors();
                             setMobilePassword(e.target.value);
                           }}
                         />
@@ -1527,11 +1582,10 @@ const Test = (props) => {
                           onChange={(e) => {
                             setUseOtpLogin(e.target.checked);
                             // ⭐ Clear existing account message
-                            setLoginMessage("");
+                            clearAllErrors();
 
-                            // ⭐ Optional: clear old login errors too
-                            setLoginError("");
                             setOtpSent(false);
+                            setOtp("");
 
                             if (e.target.checked) {
                               setLoginType("otp");
@@ -1580,7 +1634,10 @@ const Test = (props) => {
 
                       <span
                         className="switch-link"
-                        onClick={() => setMobileView("signup")}
+                        onClick={() => {
+                          clearAllErrors();
+                          setMobileView("signup");
+                        }}
                       >
                         Sign Up
                       </span>
@@ -1599,6 +1656,7 @@ const Test = (props) => {
                         onClick={() => {
                           setMenuOpen(false);
                           handleClick("signin");
+                          clearAllErrors();
                         }}
                         className="ghost"
                         id="signIn"
