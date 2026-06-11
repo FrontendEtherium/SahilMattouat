@@ -40,13 +40,14 @@ const ForgotPassword = () => {
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
-
+  const [sendingOtp, setSendingOtp] = useState(false);
   // ==================================
   // SEND OTP
   // ==================================
 
   const sendOtp = async () => {
     try {
+      setSendingOtp(true);
       setError("");
 
       if (!mobile) {
@@ -74,6 +75,8 @@ const ForgotPassword = () => {
       }
     } catch (error) {
       setError(error?.response?.data?.message || "Unable to send OTP");
+    } finally {
+      setSendingOtp(false);
     }
   };
 
@@ -204,7 +207,10 @@ const ForgotPassword = () => {
               <PhoneInput
                 placeholder="Enter Mobile Number"
                 value={mobile}
-                onChange={setMobile}
+                onChange={(value) => {
+                  setMobile(value);
+                  setError("");
+                }}
                 defaultCountry="IN"
                 disabled={otpSent}
               />
@@ -216,8 +222,9 @@ const ForgotPassword = () => {
                 startIcon={<SendIcon />}
                 className="forgot-btn"
                 onClick={sendOtp}
+                disabled={sendingOtp}
               >
-                Send Verification Code
+                {sendingOtp ? "Sending..." : "Send Verification Code"}
               </Button>
             )}
 
@@ -239,7 +246,7 @@ const ForgotPassword = () => {
 
                 <Button
                   variant="contained"
-                  className="forgot-btn"
+                  className="forgot-btn verify-otp-btn"
                   onClick={verifyOtp}
                 >
                   Verify OTP
