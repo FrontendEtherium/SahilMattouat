@@ -823,8 +823,9 @@ button.ghost:active {
   overflow: hidden;
   transition: transform 0.6s ease-in-out;
   z-index: 100;
-  border-top-right-radius: 22px;
-  border-bottom-right-radius: 22px;
+  /* border-top-right-radius: 22px;
+  border-bottom-right-radius: 22px; */
+  border-radius: 22px;
   background-color: black;
 }
 .container.right-panel-active .overlay-container {
