@@ -85,7 +85,7 @@ import ResponsePage from "./Profile/ResponsePage.js";
 import PaymentRedirect from "./Profile/PaymentRedirect.js";
 import ResponseRedirect from "./Profile/ResponseRedirect.js";
 import Bookings from "./Profile/Bookings.js";
-
+import ForgotPassword from "./LandingPage/ForgotPassword";
 import DoctorConnect from "./LandingPage/DoctorConnect.js";
 import DoctorLandingPage from "./LandingPage/DoctorLandingPage.js";
 import AllBlogs from "./BlogPage/AllBlogs.js";
@@ -171,7 +171,7 @@ const Routes = (props) => {
           path="/doctor-connect/:medicineType?"
           component={DoctorConnect}
         />
-
+         <Route exact path="/forgot-password" component={ForgotPassword} />
         <Route exact path="/doctor" component={DoctorLandingPage} />
         <Route exact path="/allcures" component={AllBlogs} />
 
