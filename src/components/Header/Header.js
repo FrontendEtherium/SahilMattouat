@@ -105,6 +105,16 @@ export default function UpdatedHeader() {
     }
   };
 
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+
+    if (params.get("openLogin") === "true") {
+      setModalShow(true);
+
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, [location]);
+
   // Add click outside handler
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -392,8 +402,11 @@ export default function UpdatedHeader() {
           </ul>
         </div>
       )}
-
-      <Test show={modalShow} onHide={() => setModalShow(false)} />
+  <Test
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        openLogin={location.search.includes("openLogin=true")}
+      />
     </>
   );
 }
