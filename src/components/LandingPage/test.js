@@ -604,6 +604,17 @@ const Test = (props) => {
   };
 
   React.useEffect(() => {
+  if (props.show && props.openLogin) {
+    setMobileView("login");
+
+    setTimeout(() => {
+      document
+        .getElementById("container")
+        ?.classList.remove("right-panel-active");
+    }, 100);
+  }
+}, [props.show, props.openLogin]);
+  React.useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
     };
@@ -1564,7 +1575,7 @@ const Test = (props) => {
 
                         <Link
                           className="text-dark"
-                          to="/loginForm/verify"
+                          to="/forgot-password"
                           id="forgetPass"
                         >
                           Forgot password?
