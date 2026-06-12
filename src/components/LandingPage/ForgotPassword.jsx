@@ -17,8 +17,12 @@ import SendIcon from "@material-ui/icons/Send";
 import { Link } from "react-router-dom";
 import { usePasswordValidation } from "../hooks/usePasswordValidation";
 import "./ForgotPassword.css";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import { BsEye, BsEyeSlash } from "react-icons/bs";
 
 const ForgotPassword = () => {
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [mobile, setMobile] = useState("");
   const [otp, setOtp] = useState("");
 
@@ -278,12 +282,29 @@ const ForgotPassword = () => {
                   fullWidth
                   variant="outlined"
                   size="small"
-                  type="password"
+                  type={showNewPassword ? "text" : "password"}
                   className="forgot-input"
                   value={newPassword}
                   onChange={(e) => {
                     setNewPassword(e.target.value);
                     if (error) setError("");
+                  }}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        {showNewPassword ? (
+                          <BsEyeSlash
+                            className="password-eye"
+                            onClick={() => setShowNewPassword(false)}
+                          />
+                        ) : (
+                          <BsEye
+                            className="password-eye"
+                            onClick={() => setShowNewPassword(true)}
+                          />
+                        )}
+                      </InputAdornment>
+                    ),
                   }}
                 />
 
@@ -293,12 +314,29 @@ const ForgotPassword = () => {
                   fullWidth
                   variant="outlined"
                   size="small"
-                  type="password"
+                  type={showConfirmPassword ? "text" : "password"}
                   className="forgot-input"
                   value={confirmPassword}
                   onChange={(e) => {
                     setConfirmPassword(e.target.value);
                     if (error) setError("");
+                  }}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        {showConfirmPassword ? (
+                          <BsEyeSlash
+                            className="password-eye"
+                            onClick={() => setShowConfirmPassword(false)}
+                          />
+                        ) : (
+                          <BsEye
+                            className="password-eye"
+                            onClick={() => setShowConfirmPassword(true)}
+                          />
+                        )}
+                      </InputAdornment>
+                    ),
                   }}
                 />
 
