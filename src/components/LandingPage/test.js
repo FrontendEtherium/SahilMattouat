@@ -499,7 +499,7 @@ import React, { useState } from "react";
 
 import { Modal } from "react-bootstrap";
 import { Alert } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import Select from "react-select";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -583,7 +583,7 @@ const Test = (props) => {
     { value: "doctor", label: "Doctor" },
     { value: "other", label: "Other" },
   ];
-
+  const history = useHistory();
   const [
     validLength,
     hasNumber,
@@ -853,6 +853,19 @@ const Test = (props) => {
     }
   };
 
+  const handleForgotPassword = () => {
+    clearAllErrors();
+
+    setUseOtpLogin(false);
+    setOtpSent(false);
+    setOtp("");
+
+    if (props.onHide) {
+      props.onHide();
+    }
+
+    history.push("/forgot-password");
+  };
   // ===== SEND OTP FUNCTION =====
   const sendOtp = async () => {
     try {
@@ -1610,13 +1623,21 @@ const Test = (props) => {
                           />
                         </FormGroup>
 
-                        <Link
+                        {/* <Link
                           className="text-dark"
                           to="/forgot-password"
                           id="forgetPass"
                         >
                           Forgot password?
-                        </Link>
+                        </Link> */}
+                        <span
+                          className="text-dark"
+                          id="forgetPass"
+                          style={{ cursor: "pointer" }}
+                          onClick={handleForgotPassword}
+                        >
+                          Forgot password?
+                        </span>
                       </div>
                     )}
 
