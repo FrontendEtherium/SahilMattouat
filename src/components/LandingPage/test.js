@@ -523,7 +523,8 @@ import "./test.css";
 import ErrorBoundary from "../ErrorBoundary";
 import { useRef } from "react";
 import { purple } from "@material-ui/core/colors";
-
+import InputAdornment from "@material-ui/core/InputAdornment";
+import { BsEye, BsEyeSlash } from "react-icons/bs";
 const Test = (props) => {
   const [click, setClick] = useState(true);
   const [email, setEmail] = useState("");
@@ -567,6 +568,8 @@ const Test = (props) => {
   const [signupOtpVerified, setSignupOtpVerified] = useState(false);
   const [signupOtpMessage, setSignupOtpMessage] = useState("");
   const [sendingSignupOtp, setSendingSignupOtp] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showSignupPassword, setShowSignupPassword] = useState(false);
   const clearAllErrors = () => {
     setLoginError("");
     setOtpMessage("");
@@ -604,16 +607,16 @@ const Test = (props) => {
   };
 
   React.useEffect(() => {
-  if (props.show && props.openLogin) {
-    setMobileView("login");
+    if (props.show && props.openLogin) {
+      setMobileView("login");
 
-    setTimeout(() => {
-      document
-        .getElementById("container")
-        ?.classList.remove("right-panel-active");
-    }, 100);
-  }
-}, [props.show, props.openLogin]);
+      setTimeout(() => {
+        document
+          .getElementById("container")
+          ?.classList.remove("right-panel-active");
+      }, 100);
+    }
+  }, [props.show, props.openLogin]);
   React.useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
@@ -1349,7 +1352,7 @@ const Test = (props) => {
                       variant="outlined"
                       size="small"
                       label="Password"
-                      type="password"
+                      type={showSignupPassword ? "text" : "password"}
                       className={`input-field ${
                         buttonSignUpClick === 1 &&
                         (!validLength ||
@@ -1361,6 +1364,23 @@ const Test = (props) => {
                       }`}
                       onChange={(e) => setFirst(e)}
                       required
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            {showSignupPassword ? (
+                              <BsEyeSlash
+                                className="password-eye"
+                                onClick={() => setShowSignupPassword(false)}
+                              />
+                            ) : (
+                              <BsEye
+                                className="password-eye"
+                                onClick={() => setShowSignupPassword(true)}
+                              />
+                            )}
+                          </InputAdornment>
+                        ),
+                      }}
                     />
 
                     <div className="password-hint">
@@ -1540,13 +1560,30 @@ const Test = (props) => {
                           variant="outlined"
                           size="small"
                           label=""
-                          type="password"
+                          type={showPassword ? "text" : "password"}
                           aria-label="Login Password"
                           className="input-field"
                           onChange={(e) => {
                             setPass(e.target.value);
                             clearAllErrors();
                             setMobilePassword(e.target.value);
+                          }}
+                          InputProps={{
+                            endAdornment: (
+                              <InputAdornment position="end">
+                                {showPassword ? (
+                                  <BsEyeSlash
+                                    className="password-eye"
+                                    onClick={() => setShowPassword(false)}
+                                  />
+                                ) : (
+                                  <BsEye
+                                    className="password-eye"
+                                    onClick={() => setShowPassword(true)}
+                                  />
+                                )}
+                              </InputAdornment>
+                            ),
                           }}
                         />
                       </>
