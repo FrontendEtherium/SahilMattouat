@@ -293,12 +293,12 @@ const ForgotPassword = () => {
                     endAdornment: (
                       <InputAdornment position="end">
                         {showNewPassword ? (
-                          <BsEyeSlash
+                          <BsEye
                             className="password-eye"
                             onClick={() => setShowNewPassword(false)}
                           />
                         ) : (
-                          <BsEye
+                          <BsEyeSlash
                             className="password-eye"
                             onClick={() => setShowNewPassword(true)}
                           />
