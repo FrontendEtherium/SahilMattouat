@@ -536,7 +536,6 @@ const Test = (props) => {
 
   const [mobileNumber, setMobileNumber] = useState("");
   const [mobilePassword, setMobilePassword] = useState("");
-
   const [otp, setOtp] = useState("");
   const [otpSent, setOtpSent] = useState(false);
   const [sendingOtp, setSendingOtp] = useState(false);
