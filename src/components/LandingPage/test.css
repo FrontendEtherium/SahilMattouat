@@ -1230,6 +1230,43 @@ button.ghost:active {
   color: #00334d;
 }
 
+.password-eye {
+  cursor: pointer;
+}
+
+/* Chrome autofill fix */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px white inset !important;
+  box-shadow: 0 0 0 1000px white inset !important;
+  -webkit-text-fill-color: #000 !important;
+  background-color: white !important;
+}
+
+.forgot-input .MuiOutlinedInput-root,
+.forgot-input .MuiOutlinedInput-root:hover,
+.forgot-input .MuiOutlinedInput-root.Mui-focused,
+.forgot-input .MuiOutlinedInput-root:focus {
+  box-shadow: none !important;
+}
+
+.forgot-input .MuiOutlinedInput-root * {
+  box-shadow: none !important;
+}
+
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}
+
+input[type="password"].MuiInputBase-input {
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
 /* ========================================= */
 /* MOBILE RESPONSIVE FINAL */
 /* ========================================= */
