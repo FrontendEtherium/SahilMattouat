@@ -1368,12 +1368,12 @@ const Test = (props) => {
                         endAdornment: (
                           <InputAdornment position="end">
                             {showSignupPassword ? (
-                              <BsEyeSlash
+                              <BsEye
                                 className="password-eye"
                                 onClick={() => setShowSignupPassword(false)}
                               />
                             ) : (
-                              <BsEye
+                              <BsEyeSlash
                                 className="password-eye"
                                 onClick={() => setShowSignupPassword(true)}
                               />
@@ -1572,12 +1572,12 @@ const Test = (props) => {
                             endAdornment: (
                               <InputAdornment position="end">
                                 {showPassword ? (
-                                  <BsEyeSlash
+                                  <BsEye
                                     className="password-eye"
                                     onClick={() => setShowPassword(false)}
                                   />
                                 ) : (
-                                  <BsEye
+                                  <BsEyeSlash
                                     className="password-eye"
                                     onClick={() => setShowPassword(true)}
                                   />
