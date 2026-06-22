@@ -1,0 +1,352 @@
+/* LOGIN WRAPPER */
+.login-wrapper {
+  display: flex;
+
+  justify-content: center;
+
+  width: 100%;
+
+  margin-top: 20px;
+}
+
+/* LOGIN CARD */
+.login-card {
+  width: 100%;
+
+  max-width: 420px;
+
+  background: #fff;
+
+  padding: 35px;
+
+  border-radius: 20px;
+
+  border: 1px solid #edf2f7;
+
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.08);
+}
+/* BACK BUTTON */
+
+.login-back {
+  padding: 0 !important;
+
+  font-size: 14px !important;
+
+  color: #1976d2 !important;
+
+  font-weight: 500 !important;
+
+  text-decoration: none !important;
+
+  margin-bottom: 18px !important;
+}
+
+.login-back:hover {
+  text-decoration: none !important;
+}
+
+/* HEADER */
+
+.login-title {
+  font-size: 36px;
+
+  font-weight: 700;
+
+  color: #111827;
+
+  margin-bottom: 8px;
+}
+
+.login-subtitle {
+  color: #6b7280;
+
+  font-size: 15px;
+
+  margin-bottom: 30px;
+}
+
+/* LABEL */
+
+.login-label {
+  font-size: 13px;
+
+  font-weight: 600;
+
+  color: #6b7280;
+
+  margin-bottom: 8px;
+}
+
+/* PHONE FIELD */
+.login-field {
+  max-width: 320px;
+
+  margin: 0 auto;
+}
+
+.login-field .PhoneInput {
+  border: 1px solid #dbe3ea;
+
+  border-radius: 12px;
+
+  height: 56px;
+
+  padding: 0 14px;
+
+  background: #fff;
+}
+
+.login-field .PhoneInput:focus-within {
+  border-color: #1976d2;
+
+  box-shadow: 0 0 0 4px rgba(25, 118, 210, 0.12);
+}
+
+/* OTP INPUT */
+.login-input {
+  height: 52px;
+
+  border-radius: 14px !important;
+
+  font-size: 18px;
+
+  text-align: center;
+
+  letter-spacing: 4px;
+}
+
+.login-input:focus {
+  border-color: #1976d2 !important;
+
+  box-shadow: 0 0 0 4px rgba(25, 118, 210, 0.12) !important;
+}
+
+/* PRIMARY BUTTON */
+.login-btn {
+  width: 100%;
+
+  height: 52px;
+
+  margin-top: 18px;
+
+  border-radius: 14px !important;
+
+  font-weight: 600;
+
+  font-size: 17px;
+
+  background: #1976d2 !important;
+
+  box-shadow: 0 10px 25px rgba(25, 118, 210, 0.25);
+}
+.login-btn:hover {
+  transform: translateY(-1px);
+}
+
+/* SWITCH */
+
+.login-switch {
+  margin-top: 28px;
+
+  padding-top: 22px;
+
+  border-top: 1px solid #edf2f7;
+
+  text-align: center;
+}
+
+.login-switch span {
+  color: #6b7280;
+}
+
+.login-switch button {
+  padding: 0 !important;
+
+  font-weight: 600;
+
+  text-decoration: none !important;
+}
+
+/* PASSWORD INPUT */
+
+.login-password {
+  margin-top: 18px;
+}
+
+.login-phone {
+  margin-top: 8px;
+}
+
+.login-phone .PhoneInput {
+  height: 56px;
+
+  border-radius: 12px;
+
+  border: 1px solid #dbe3ea;
+
+  padding: 0 14px;
+
+  background: white;
+}
+
+.login-phone .PhoneInput:focus-within {
+  border-color: #1976d2;
+
+  box-shadow: 0 0 0 4px rgba(25, 118, 210, 0.12);
+}
+
+/* STEP 2 REGISTRATION */
+
+.register-card {
+  background: #ffffff;
+
+  border-radius: 20px;
+
+  padding: 30px;
+
+  border: 1px solid #edf2f7;
+
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.06);
+}
+
+.register-label {
+  font-size: 13px;
+
+  font-weight: 600;
+
+  color: #6b7280;
+
+  margin-bottom: 8px;
+
+  display: block;
+}
+
+.register-input {
+  height: 54px;
+
+  border-radius: 14px !important;
+
+  border: 1px solid #dbe3ea !important;
+
+  padding: 0 18px !important;
+
+  font-size: 15px;
+}
+
+.register-input:focus {
+  border-color: #1976d2 !important;
+
+  box-shadow: 0 0 0 4px rgba(25, 118, 210, 0.12) !important;
+}
+
+.register-phone {
+  margin-top: 4px;
+}
+
+.register-phone .PhoneInput {
+  height: 56px;
+
+  border-radius: 14px;
+
+  border: 1px solid #dbe3ea;
+
+  padding: 0 16px;
+}
+
+.register-phone .PhoneInput:focus-within {
+  border-color: #1976d2;
+
+  box-shadow: 0 0 0 4px rgba(25, 118, 210, 0.12);
+}
+
+.otp-btn {
+  height: 50px;
+
+  border-radius: 14px !important;
+
+  background: #1976d2 !important;
+
+  border: none !important;
+
+  font-weight: 600;
+
+  padding: 0 24px;
+
+  box-shadow: 0 10px 25px rgba(25, 118, 210, 0.2);
+}
+
+.register-footer {
+  margin-top: 30px;
+
+  padding-top: 20px;
+
+  border-top: 1px solid #edf2f7;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+}
+
+.login-link {
+  font-weight: 600;
+
+  text-decoration: none;
+
+  padding: 0 !important;
+}
+
+.register-btn {
+  height: 52px;
+
+  padding: 0 28px !important;
+
+  border-radius: 14px !important;
+
+  font-weight: 600;
+
+  background: #1976d2 !important;
+
+  border: none !important;
+
+  box-shadow: 0 10px 25px rgba(25, 118, 210, 0.2);
+}
+
+.appointment-modal-dialog {
+  max-width: 1100px !important;
+  width: 95% !important;
+  margin: 20px auto !important;
+}
+
+.appointment-modal-content {
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+}
+
+.appointment-modal-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: calc(90vh - 70px);
+}
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+  .login-wrapper {
+    max-width: 100%;
+
+    margin: 20px auto;
+  }
+
+  .login-card {
+    padding: 24px;
+  }
+
+  .login-title {
+    font-size: 28px;
+  }
+}
