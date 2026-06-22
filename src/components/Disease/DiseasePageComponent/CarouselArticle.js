@@ -47,6 +47,14 @@ function CarouselArticle({ diseaseConditionId, carouselItems, id }) {
 
   // Fetch regions once when the component mounts
   useEffect(() => {
+     if (!diseaseConditionId) {
+      console.log(
+        "Skipping API because diseaseConditionId =",
+        diseaseConditionId,
+      );
+
+      return;
+    }
     const fetchRegions = async () => {
       try {
         const response = await fetch(
