@@ -152,7 +152,7 @@ export default function AllBlogs() {
   return (
     <div className="all-blogs-page">
       <Helmet>
-        <title>All Cures - Health and Wellness Articles</title>
+        <title>All-Cures - Health and Wellness Articles</title>
         <meta
           name="description"
           content="Discover expert-written health and wellness articles, cures, and medical advice from qualified healthcare professionals."
@@ -163,7 +163,7 @@ export default function AllBlogs() {
         />
         <meta
           property="og:title"
-          content="All Cures - Health and Wellness Articles"
+          content="All-Cures - Health and Wellness Articles"
         />
         <meta
           property="og:description"
