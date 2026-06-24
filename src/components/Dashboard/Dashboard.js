@@ -200,7 +200,7 @@ export default function Dashboard(props) {
   };
   
   useEffect(() => {
-    document.title = 'All Cures | Dashboard'
+    document.title = 'All-Cures | Dashboard'
     setIsLoaded(false);
     // fetch(`${backendHost}/dashboard/articlecount`)
   //   axios.defaults.withCredentials = true
