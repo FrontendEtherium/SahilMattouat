@@ -1195,7 +1195,7 @@ class Disease extends Component {
                         url={encodeURI(
                           `https://all-cures.com${this.props.location.pathname}`
                         )}
-                        title={`*All Cures -* ${items.title}`}
+                        title={`*All-Cures -* ${items.title}`}
                         separator=": "
                         className="socialMediaButton"
                       >
