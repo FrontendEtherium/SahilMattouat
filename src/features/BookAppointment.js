@@ -340,12 +340,16 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
   const [otpSent, setOtpSent] = useState(false);
   const [otpVerified, setOtpVerified] = useState(false);
   const [otp, setOtp] = useState("");
+  const [sendingOtp, setSendingOtp] = useState(false);
 
+  const [verifyingOtp, setVerifyingOtp] = useState(false);
   const [accountChecked, setAccountChecked] = useState(false);
   const [existingUser, setExistingUser] = useState(false);
 
   const [loginMethod, setLoginMethod] = useState("OTP");
   const [showLogin, setShowLogin] = useState(false);
+  const registrationRef = useRef(null);
+  useState("");
   const trackEvent = useCallback(
     (eventName, props = {}) => {
       try {
@@ -377,29 +381,16 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
       });
 
       // Auto-scroll to show booking button after time selection
+      // Auto-scroll to Step 2 after selecting a slot
       setTimeout(() => {
-        // Use ref if available, otherwise try querySelector
-        const bookingButton =
-          bookingButtonRef.current ||
-          document.querySelector('button[onClick="bookAppn"]');
-        if (bookingButton) {
-          bookingButton.scrollIntoView({
+        if (registrationRef.current) {
+          registrationRef.current.scrollIntoView({
             behavior: "smooth",
-            block: "center",
-            inline: "center",
+
+            block: "start",
           });
-        } else {
-          // Fallback: scroll the modal content to bottom
-          const modalElement =
-            modalRef.current || document.querySelector(".modal-content");
-          if (modalElement) {
-            modalElement.scrollTo({
-              top: modalElement.scrollHeight,
-              behavior: "smooth",
-            });
-          }
         }
-      }, 400); // Increased delay to ensure DOM updates are complete
+      }, 300); // Increased delay to ensure DOM updates are complete
     },
     [registrationCompleted, selectedDate, trackEvent],
   );
@@ -425,7 +416,7 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
 
       try {
         const response = await fetch(
-          `${backendHost}/appointments/get/Slots/${docId}`,
+          `${backendHost}/appointments/get/Slots/${docId}/59`,
         );
 
         if (!response.ok) {
@@ -505,21 +496,106 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
     }
   }, [registrationSuccessMessage]);
 
+  const bookAppn = async (overrideUserId = null) => {
+    setBookingLoading(true);
+    setError(null);
+    const bookingUserId = overrideUserId || activeUserId;
+
+    if (!bookingUserId) {
+      setError("Please register first");
+      setBookingLoading(false);
+      return;
+    }
+
+    if (!selectedDate || !selectedTimeSlot) {
+      setError("Please select both a date and a time slot to continue.");
+      trackEvent("Appointment Booking Blocked", {
+        reason: "missing-date-or-time",
+      });
+      setBookingLoading(false);
+      return;
+    }
+
+    try {
+      trackEvent("Appointment Booking Initiated", {
+        selectedDate,
+        selectedTimeSlot,
+        amount: amount?.totalFee,
+        currency,
+      });
+
+      const numericUserId = parseInt(bookingUserId, 10);
+      //   const response = await axios.post(`${backendHost}/appointments/create`, {
+      const response = await axios.post(
+        `${backendHost}/appointments/v2/create`,
+        {
+          docID: docId,
+          userID: numericUserId,
+          appointmentDate: selectedDate,
+          startTime: selectedTimeSlot,
+          paymentStatus: 0,
+          amount: amount.totalFee,
+          currency: "INR",
+        },
+      );
+
+      const responseObject = response.data;
+      console.log("responseObject", responseObject);
+      localStorage.setItem("encKey", responseObject.encRequest);
+      localStorage.setItem("apiResponse", JSON.stringify(response.data));
+
+      // if (responseObject.Count == 0) {
+      //   trackEvent("Appointment Booking Success", {
+      //     selectedDate,
+      //     selectedTimeSlot,
+      //     paymentStatus: "not-required",
+      //   });
+      //   window.location.href = "/booking-successful";
+      //   return;
+      // }
+
+      trackEvent("Appointment Booking Redirecting", {
+        selectedDate,
+        selectedTimeSlot,
+        paymentStatus: "gateway",
+      });
+      //   const redirectURL = `https://www.all-cures.com/paymentRedirection?encRequest=${responseObject.encRequest}&Code=AVWN42KL59BP42NWPB`;
+      //   window.location.href = redirectURL;
+      const redirectURL = `https://www.all-cures.com/paymentRedirection?encRequest=${responseObject.encRequest}&accessCode=${responseObject.accessCode}`;
+      window.location.href = redirectURL;
+    } catch (error) {
+      console.error("Error while booking appointment:", error);
+      trackEvent("Appointment Booking Failed", {
+        selectedDate,
+        selectedTimeSlot,
+        message:
+          typeof error?.response?.data === "string"
+            ? error.response.data
+            : "request-error",
+      });
+      setError("Failed to book the appointment. Please try again.");
+    } finally {
+      setBookingLoading(false);
+    }
+  };
+
   const handleRegistration = useCallback(
     async (event) => {
       event.preventDefault();
+      console.log("otpVerified =", otpVerified);
+      if (!otpVerified) {
+        setRegistrationError("Please verify OTP first.");
+        return;
+      }
       if (registrationLoading) return;
 
       setRegistrationError(null);
       setRegistrationSuccessMessage("");
       setExistingAccountError(null);
       setShowExistingAccountPrompt(false);
-
       const trimmedFirstName = firstName.trim();
-
       const trimmedEmail = email.trim();
       const emailDomain = trimmedEmail.split("@")[1] || "";
-
       if (!trimmedFirstName || !phone) {
         setRegistrationError("Please fill in all required fields.");
         trackEvent("Appointment Registration Failed", {
@@ -551,9 +627,9 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
 
       let countryDialCode = "";
       let nationalNumber = "";
+      const parsedPhone = parsePhoneNumber(phone);
 
       try {
-        const parsedPhone = parsePhoneNumber(phone);
         if (parsedPhone) {
           countryDialCode = parsedPhone.countryCallingCode
             ? `+${parsedPhone.countryCallingCode}`
@@ -576,16 +652,34 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
       }
 
       const payload = {
-        firstname: trimmedFirstName,
-        number: nationalNumber,
-        country_code: countryDialCode,
+        firstname: firstName,
+
+        email: email,
+
+        psw: "Password@123",
+
+        rempwd: "on",
+
+        doc_patient: "other",
+
+        acceptTnc: "on",
+
+        acceptPolicy: "on",
+
+        number: parsedPhone.nationalNumber,
+
+        country_code: "+" + parsedPhone.countryCallingCode,
+
+        Age: null,
       };
 
       try {
         axios.defaults.withCredentials = true;
         const response = await axios.post(
-          `${backendHost}/registration/add/auto`,
+          `${backendHost}/auth/register-user`,
+
           payload,
+
           {
             headers: {
               "Access-Control-Allow-Credentials": true,
@@ -661,10 +755,15 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
         }
 
         const newUserId = extractedRegistrationId;
+        let effectiveUserId = newUserId;
+        const autoLoginPassword =
+          typeof userPayload.pass_word === "string"
+            ? userPayload.pass_word
+            : "";
         const successMessage =
           typeof data?.message === "string" && data.message
             ? data.message
-            : "Registration successful. You’re all set to pick a slot.";
+            : "Registration successful.";
 
         setShowExistingAccountPrompt(false);
         setActiveUserId(newUserId);
@@ -673,26 +772,9 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
           autoLoggedIn: Boolean(userPayload.pass_word),
         });
         setRegistrationCompleted(true);
-        setRegistrationSuccessMessage(successMessage);
-
-        if (userPayload.first_name || trimmedFirstName) {
-          Cookies.set("uName", userPayload.first_name || trimmedFirstName, {
-            expires: 365,
-          });
-        }
-        if (userPayload.docID) {
-          localStorage.setItem("doctorid", `${userPayload.docID}`);
-        }
-        if (userPayload.value) {
-          localStorage.setItem("token", userPayload.value);
-        }
-
-        let effectiveUserId = newUserId;
-
-        const autoLoginPassword =
-          typeof userPayload.pass_word === "string"
-            ? userPayload.pass_word
-            : "";
+        setRegistrationSuccessMessage(
+          "Registration successful. Preparing your payment...",
+        );
         if (autoLoginPassword) {
           try {
             axios.defaults.withCredentials = true;
@@ -704,6 +786,7 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
 
             if (loginResponse.data?.registration_id) {
               const loginData = loginResponse.data;
+              const loggedInUserId = loginData.registration_id;
               if (loginData.first_name) {
                 Cookies.set("uName", loginData.first_name, { expires: 365 });
               }
@@ -715,6 +798,7 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
               }
               effectiveUserId = loginData.registration_id;
               setActiveUserId(loginData.registration_id);
+              await bookAppn(loggedInUserId);
             }
           } catch (autoLoginError) {
             console.warn(
@@ -723,10 +807,18 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
             );
           }
         }
-
-        await fetchAppointmentDetails(selectedDate, effectiveUserId, {
-          autoSelect: true,
-        });
+        await bookAppn(effectiveUserId);
+        if (userPayload.first_name || trimmedFirstName) {
+          Cookies.set("uName", userPayload.first_name || trimmedFirstName, {
+            expires: 365,
+          });
+        }
+        if (userPayload.docID) {
+          localStorage.setItem("doctorid", `${userPayload.docID}`);
+        }
+        if (userPayload.value) {
+          localStorage.setItem("token", userPayload.value);
+        }
       } catch (registrationException) {
         console.error("Registration error:", registrationException);
         const responseData = registrationException.response?.data;
@@ -773,9 +865,10 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
       firstName,
       email,
       phone,
-      fetchAppointmentDetails,
+      otpVerified,
       selectedDate,
       trackEvent,
+      bookAppn,
     ],
   );
 
@@ -792,119 +885,187 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
       fetchAppointmentDetails(selectedDate);
     }
   }, [show, docId, selectedDate, fetchAppointmentDetails]);
-  const bookAppn = async (e) => {
-    e.preventDefault();
-    setBookingLoading(true);
-    setError(null);
 
-    if (!otpVerified && !activeUserId) {
-      setError("Please verify your mobile number.");
-      trackEvent("Appointment Booking Blocked", {
-        reason: "missing-user",
-      });
-      setBookingLoading(false);
+  const sendOtp = async (purpose = "REGISTER") => {
+    // Clear previous errors
+
+    setRegistrationError(null);
+
+    setExistingAccountError(null);
+    // Validate phone
+
+    if (!phone) {
+      if (purpose === "LOGIN") {
+        setExistingAccountError("Please enter mobile number.");
+      } else {
+        setRegistrationError("Please enter mobile number.");
+      }
+
+      return;
+    }
+    // Validate mobile format
+
+    if (!isValidPhoneNumber(phone)) {
+      if (purpose === "LOGIN") {
+        setExistingAccountError("Please enter a valid mobile number.");
+      } else {
+        setRegistrationError("Please enter a valid mobile number.");
+      }
+
       return;
     }
 
-    if (!selectedDate || !selectedTimeSlot) {
-      setError("Please select both a date and a time slot to continue.");
-      trackEvent("Appointment Booking Blocked", {
-        reason: "missing-date-or-time",
-      });
-      setBookingLoading(false);
-      return;
-    }
-
+    setSendingOtp(true);
     try {
-      trackEvent("Appointment Booking Initiated", {
-        selectedDate,
-        selectedTimeSlot,
-        amount: amount?.totalFee,
-        currency,
-      });
+      const parsedPhone = parsePhoneNumber(phone);
 
-      const numericUserId = parseInt(activeUserId, 10);
-      //   const response = await axios.post(`${backendHost}/appointments/create`, {
-      const response = await axios.post(
-        `${backendHost}/appointments/v2/create`,
-        {
-          docID: docId,
-          userID: numericUserId,
-          appointmentDate: selectedDate,
-          startTime: selectedTimeSlot,
-          paymentStatus: 0,
-          amount: amount.totalFee,
-          currency: "INR",
+      const mobile = parsedPhone.nationalNumber;
+
+      const countryCode = "+" + parsedPhone.countryCallingCode;
+
+      const response = await axios.post(`${backendHost}/auth/send-otp`, null, {
+        params: {
+          mobile,
+          countryCode,
+          purpose,
         },
-      );
-
-      const responseObject = response.data;
-      console.log("responseObject", responseObject);
-      localStorage.setItem("encKey", responseObject.encRequest);
-      localStorage.setItem("apiResponse", JSON.stringify(response.data));
-
-      // if (responseObject.Count == 0) {
-      //   trackEvent("Appointment Booking Success", {
-      //     selectedDate,
-      //     selectedTimeSlot,
-      //     paymentStatus: "not-required",
-      //   });
-      //   window.location.href = "/booking-successful";
-      //   return;
-      // }
-
-      trackEvent("Appointment Booking Redirecting", {
-        selectedDate,
-        selectedTimeSlot,
-        paymentStatus: "gateway",
-      });
-      //   const redirectURL = `https://www.all-cures.com/paymentRedirection?encRequest=${responseObject.encRequest}&Code=AVWN42KL59BP42NWPB`;
-      //   window.location.href = redirectURL;
-      const redirectURL = `https://www.all-cures.com/paymentRedirection?encRequest=${responseObject.encRequest}&accessCode=${responseObject.accessCode}`;
-      window.location.href = redirectURL;
-    } catch (error) {
-      console.error("Error while booking appointment:", error);
-      trackEvent("Appointment Booking Failed", {
-        selectedDate,
-        selectedTimeSlot,
-        message:
-          typeof error?.response?.data === "string"
-            ? error.response.data
-            : "request-error",
-      });
-      setError("Failed to book the appaccessointment. Please try again.");
-    } finally {
-      setBookingLoading(false);
-    }
-  };
-
-  const sendOtp = async () => {
-    try {
-      const parsedPhone = parsePhoneNumber(phone);
-
-      await axios.post(`${backendHost}/otp/send`, {
-        mobile: parsedPhone.nationalNumber,
-      });
-
-      setOtpSent(true);
-    } catch (err) {
-      setRegistrationError("Failed to send OTP.");
-    }
-  };
-  const verifyOtp = async () => {
-    try {
-      const parsedPhone = parsePhoneNumber(phone);
-
-      const response = await axios.post(`${backendHost}/otp/verify`, {
-        mobile: parsedPhone.nationalNumber,
-        otp,
       });
 
       if (response.data.success) {
-        setOtpVerified(true);
+        setOtpSent(true);
+        setOtp("");
       }
-    } catch (err) {
-      setRegistrationError("Invalid OTP.");
+    } catch (error) {
+      setRegistrationError(
+        error?.response?.data?.message || "Failed to send OTP",
+      );
+    } finally {
+      setSendingOtp(false);
+    }
+  };
+  const handleExistingAccountLogin = async () => {
+    try {
+      setExistingAccountLoading(true);
+
+      setExistingAccountError(null);
+
+      const response = await axios.post(
+        `${backendHost}/login-user?email=${email}&password=${existingAccountPassword}&loginType=EMAIL&rempwd=1`,
+
+        {},
+
+        {
+          withCredentials: true,
+        },
+      );
+
+      if (response.data.registration_id) {
+        Cookies.set(
+          "uName",
+
+          response.data.first_name,
+
+          {
+            expires: 365,
+          },
+        );
+
+        localStorage.setItem(
+          "doctorid",
+
+          response.data.docID,
+        );
+
+        localStorage.setItem(
+          "token",
+
+          response.data.value,
+        );
+
+        setActiveUserId(response.data.registration_id);
+
+        setRegistrationCompleted(true);
+
+        setShowLogin(false);
+        await bookAppn(response.data.registration_id);
+      } else {
+        setExistingAccountError("Invalid credentials");
+      }
+    } catch (error) {
+      setExistingAccountError(error?.response?.data?.message || "Login failed");
+    } finally {
+      setExistingAccountLoading(false);
+    }
+  };
+  const verifyOtp = async (purpose = "REGISTER") => {
+    setVerifyingOtp(true);
+    try {
+      const parsedPhone = parsePhoneNumber(phone);
+
+      const mobile = parsedPhone.nationalNumber;
+
+      const countryCode = "+" + parsedPhone.countryCallingCode;
+
+      const response = await axios.post(
+        `${backendHost}/auth/verify-otp`,
+
+        {
+          mobile,
+
+          countryCode,
+
+          otp,
+
+          purpose,
+
+          ...(purpose === "LOGIN" && { rememberPassword: 1 }),
+        },
+        {
+          withCredentials: true,
+        },
+      );
+      console.log(response.data);
+      if (response.data.success) {
+        setRegistrationError(null);
+        setOtpVerified(true);
+        if (purpose === "LOGIN") {
+          const loginData = response.data.data;
+
+          const loggedInUserId = loginData.registration_id;
+
+          if (!loggedInUserId) {
+            setRegistrationError(
+              "Login successful, but user ID was not received.",
+            );
+            return;
+          }
+
+          if (loginData.first_name) {
+            Cookies.set("uName", loginData.first_name, {
+              expires: 365,
+            });
+          }
+
+          if (loginData.docID) {
+            localStorage.setItem("doctorid", `${loginData.docID}`);
+          }
+
+          if (loginData.value) {
+            localStorage.setItem("token", loginData.value);
+          }
+
+          setActiveUserId(loggedInUserId);
+          setRegistrationCompleted(true);
+          setShowLogin(false);
+
+          // THIS WAS MISSING
+          await bookAppn(loggedInUserId);
+        }
+      }
+    } catch (error) {
+      setRegistrationError(error?.response?.data?.message || "Invalid OTP");
+    } finally {
+      setVerifyingOtp(false);
     }
   };
   const handleDatesChange = useCallback(
@@ -1241,7 +1402,6 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
                         </div>
                       </div>
                     </div>
-
                     <div className="card-body pt-3 pb-4">
                       <div className="row g-3 appointment-summary-container">
                         {selectedDate && (
@@ -1412,8 +1572,8 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
                   </div>
                 )}
 
-                {showRegistrationCard && (
-                  <div className="register-card mb-4">
+                {showRegistrationCard && selectedDate && selectedTimeSlot && (
+                  <div ref={registrationRef} className="register-card mb-4">
                     <div className="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between">
                       <div className="d-flex align-items-center">
                         <Badge variant="success" className="mr-2">
@@ -1450,9 +1610,7 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
                               </div>
 
                               <div className="col-12 col-md-6">
-                                <label className="text-muted small mb-1">
-                                  Email
-                                </label>
+                                <label className="register-label">Email</label>
                                 <input
                                   type="email"
                                   className="form-control register-input"
@@ -1464,14 +1622,26 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
                                 />
                               </div>
                               <div className="col-12 col-md-6">
-                                <label className="text-muted small mb-1">
+                                <label className="mobile-label">
                                   Mobile Number
+                                  {otpVerified && (
+                                    <span className="mobile-verified">
+                                      ✓ Verified
+                                    </span>
+                                  )}
                                 </label>
                                 <PhoneInput
                                   international
                                   defaultCountry="IN"
                                   value={phone}
-                                  onChange={setPhone}
+                                  onChange={(value) => {
+                                    setPhone(value);
+                                    setRegistrationError(null);
+                                    setOtp("");
+                                    setOtpSent(false);
+                                    setOtpVerified(false);
+                                  }}
+                                  disabled={otpVerified}
                                   countryCallingCodeEditable={false}
                                   inputProps={{
                                     name: "phone",
@@ -1487,33 +1657,62 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
                                   <Button
                                     type="button"
                                     className="login-btn"
-                                    onClick={sendOtp}
-                                    disabled={!phone}
+                                    onClick={() => sendOtp("REGISTER")}
+                                    disabled={!phone || sendingOtp}
                                   >
-                                    Send OTP
+                                    {sendingOtp ? (
+                                      <>
+                                        <Spinner
+                                          animation="border"
+                                          size="sm"
+                                          className="mr-2"
+                                        />
+                                        Sending OTP...
+                                      </>
+                                    ) : (
+                                      "Send OTP"
+                                    )}
                                   </Button>
                                 ) : (
                                   <>
-                                    <label className="text-muted small mb-1 mt-3">
-                                      Enter OTP
-                                    </label>
+                                    {!otpVerified && (
+                                      <>
+                                        <label className="text-muted small mb-1 mt-3">
+                                          Enter OTP
+                                        </label>
 
-                                    <input
-                                      type="text"
-                                      className="form-control login-input"
-                                      value={otp}
-                                      onChange={(e) => setOtp(e.target.value)}
-                                      placeholder="Enter OTP"
-                                    />
+                                        <input
+                                          type="text"
+                                          className="form-control login-input"
+                                          value={otp}
+                                          onChange={(e) =>
+                                            setOtp(e.target.value)
+                                          }
+                                          placeholder="Enter OTP"
+                                        />
 
-                                    <Button
-                                      type="button"
-                                      className="mt-2"
-                                      variant="success"
-                                      onClick={verifyOtp}
-                                    >
-                                      Verify OTP
-                                    </Button>
+                                        <Button
+                                          type="button"
+                                          variant="success"
+                                          className="mt-3"
+                                          onClick={() => verifyOtp("REGISTER")}
+                                          disabled={verifyingOtp}
+                                        >
+                                          {verifyingOtp ? (
+                                            <>
+                                              <Spinner
+                                                animation="border"
+                                                size="sm"
+                                                className="mr-2"
+                                              />
+                                              Verifying...
+                                            </>
+                                          ) : (
+                                            "Verify OTP"
+                                          )}
+                                        </Button>
+                                      </>
+                                    )}
                                   </>
                                 )}
                               </div>
@@ -1596,14 +1795,30 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
                               <>
                                 <div className="row">
                                   <div className="login-field">
-                                    <label className="login-label">
+                                    <label className="mobile-label">
                                       Mobile Number
+                                      {otpVerified && (
+                                        <span className="mobile-verified">
+                                          ✓ Verified
+                                        </span>
+                                      )}
                                     </label>
                                     <PhoneInput
                                       international
                                       defaultCountry="IN"
                                       value={phone}
-                                      onChange={setPhone}
+                                      onChange={(value) => {
+                                        setPhone(value);
+
+                                        setRegistrationError(null);
+
+                                        setOtp("");
+
+                                        setOtpSent(false);
+
+                                        setOtpVerified(false);
+                                      }}
+                                      disabled={otpVerified}
                                       countryCallingCodeEditable={false}
                                       className="phone-input login-phone"
                                       placeholder="Enter mobile number"
@@ -1616,7 +1831,7 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
                                     type="button"
                                     variant="outline-primary"
                                     className="login-btn mt-3"
-                                    onClick={sendOtp}
+                                    onClick={() => sendOtp("LOGIN")}
                                     disabled={!phone}
                                   >
                                     Send OTP
@@ -1639,7 +1854,7 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
                                       type="button"
                                       className="mt-3"
                                       variant="primary"
-                                      onClick={verifyOtp}
+                                      onClick={() => verifyOtp("LOGIN")}
                                     >
                                       Login
                                     </Button>
@@ -1661,6 +1876,56 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
                                 </div>
                               </>
                             )}
+                            {loginMethod === "PASSWORD" && (
+                              <>
+                                <div className="mt-3">
+                                  <label className="login-label">Email</label>
+
+                                  <input
+                                    type="email"
+                                    className="form-control register-input"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                  />
+                                </div>
+
+                                <div className="mt-3">
+                                  <label className="login-label">
+                                    Password
+                                  </label>
+
+                                  <input
+                                    type="password"
+                                    className="form-control register-input"
+                                    value={existingAccountPassword}
+                                    onChange={(e) =>
+                                      setExistingAccountPassword(e.target.value)
+                                    }
+                                  />
+                                </div>
+
+                                <Button
+                                  className="register-btn mt-4"
+                                  onClick={handleExistingAccountLogin}
+                                >
+                                  Sign In
+                                </Button>
+                                {existingAccountError && (
+                                  <Alert variant="danger" className="mt-3">
+                                    {existingAccountError}
+                                  </Alert>
+                                )}
+
+                                <div className="login-switch">
+                                  <Button
+                                    variant="link"
+                                    onClick={() => setLoginMethod("OTP")}
+                                  >
+                                    Login with OTP →
+                                  </Button>
+                                </div>
+                              </>
+                            )}
                           </div>
                         </div>
                       ) : (
@@ -1678,73 +1943,6 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
                           </div>
                         </Alert>
                       )}
-                    </div>
-                  </div>
-                )}
-
-                {/* Professional Book Appointment Button */}
-                {selectedTimeSlot && (
-                  <div className="text-center mt-4">
-                    <Button
-                      ref={bookingButtonRef}
-                      size="lg"
-                      onClick={bookAppn}
-                      disabled={bookingLoading}
-                      className="px-5 py-3 appointment-book-btn-mobile"
-                      style={{
-                        backgroundColor: "#1976d2",
-                        borderColor: "#1976d2",
-                        color: "white",
-                        borderRadius: "8px",
-                        fontWeight: "600",
-                        fontSize: "1rem",
-                        minWidth: "200px",
-                        boxShadow: "0 2px 8px rgba(25, 118, 210, 0.2)",
-                        transition: "all 0.2s ease",
-                        border: "2px solid #1976d2",
-                      }}
-                      onMouseEnter={(e) => {
-                        if (!bookingLoading) {
-                          e.target.style.backgroundColor = "#1565c0";
-                          e.target.style.borderColor = "#1565c0";
-                          e.target.style.boxShadow =
-                            "0 4px 12px rgba(25, 118, 210, 0.3)";
-                          e.target.style.transform = "translateY(-1px)";
-                        }
-                      }}
-                      onMouseLeave={(e) => {
-                        if (!bookingLoading) {
-                          e.target.style.backgroundColor = "#1976d2";
-                          e.target.style.borderColor = "#1976d2";
-                          e.target.style.boxShadow =
-                            "0 2px 8px rgba(25, 118, 210, 0.2)";
-                          e.target.style.transform = "translateY(0)";
-                        }
-                      }}
-                    >
-                      {bookingLoading ? (
-                        <>
-                          <Spinner
-                            animation="border"
-                            size="sm"
-                            className="mr-2"
-                          />
-                          Processing Payment...
-                        </>
-                      ) : (
-                        <div className="d-flex align-items-center justify-content-center">
-                          <CheckCircleIcon
-                            style={{ fontSize: "1.1rem", marginRight: "8px" }}
-                          />
-                          Book Appointment
-                        </div>
-                      )}
-                    </Button>
-                    <div
-                      className="mt-2 text-muted appointment-trust-text"
-                      style={{ fontSize: "0.85rem" }}
-                    >
-                      Secure payment powered by trusted gateway
                     </div>
                   </div>
                 )}
