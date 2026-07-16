@@ -371,7 +371,90 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
     showExistingAccountPrompt ||
     Boolean(registrationSuccessMessage);
 
-   const handleTimeSlot = useCallback(
+  const bookAppn = async (overrideUserId = null) => {
+    setBookingLoading(true);
+    setError(null);
+    const bookingUserId = overrideUserId || activeUserId;
+
+    if (!bookingUserId) {
+      setError("Please register first");
+      setBookingLoading(false);
+      return;
+    }
+
+    if (!selectedDate || !selectedTimeSlot) {
+      setError("Please select both a date and a time slot to continue.");
+      trackEvent("Appointment Booking Blocked", {
+        reason: "missing-date-or-time",
+      });
+      setBookingLoading(false);
+      return;
+    }
+
+    try {
+      trackEvent("Appointment Booking Initiated", {
+        selectedDate,
+        selectedTimeSlot,
+        amount: amount?.totalFee,
+        currency,
+      });
+
+      const numericUserId = parseInt(bookingUserId, 10);
+      //   const response = await axios.post(`${backendHost}/appointments/create`, {
+      const response = await axios.post(
+        `${backendHost}/appointments/v2/create`,
+        {
+          docID: docId,
+          userID: numericUserId,
+          appointmentDate: selectedDate,
+          startTime: selectedTimeSlot,
+          paymentStatus: 0,
+          amount: amount.totalFee,
+          currency: "INR",
+        },
+      );
+
+      const responseObject = response.data;
+      console.log("responseObject", responseObject);
+      localStorage.setItem("encKey", responseObject.encRequest);
+      localStorage.setItem("apiResponse", JSON.stringify(response.data));
+
+      // if (responseObject.Count == 0) {
+      //   trackEvent("Appointment Booking Success", {
+      //     selectedDate,
+      //     selectedTimeSlot,
+      //     paymentStatus: "not-required",
+      //   });
+      //   window.location.href = "/booking-successful";
+      //   return;
+      // }
+
+      trackEvent("Appointment Booking Redirecting", {
+        selectedDate,
+        selectedTimeSlot,
+        paymentStatus: "gateway",
+      });
+      //   const redirectURL = `https://www.all-cures.com/paymentRedirection?encRequest=${responseObject.encRequest}&Code=AVWN42KL59BP42NWPB`;
+      //   window.location.href = redirectURL;
+      const redirectURL = `https://www.all-cures.com/paymentRedirection?encRequest=${responseObject.encRequest}&accessCode=${responseObject.accessCode}`;
+      window.location.href = redirectURL;
+    } catch (error) {
+      console.error("Error while booking appointment:", error);
+      trackEvent("Appointment Booking Failed", {
+        selectedDate,
+        selectedTimeSlot,
+        message:
+          typeof error?.response?.data === "string"
+            ? error.response.data
+            : "request-error",
+      });
+      setError("Failed to book the appointment. Please try again.");
+    } finally {
+      setBookingLoading(false);
+    }
+  };
+
+  const handleTimeSlot = useCallback(
     (time) => {
       setSelectedTimeSlot(time);
       setError(null); // Clear any previous errors when selecting a new time slot
@@ -381,12 +464,12 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
       });
 
       // Already logged in -> directly create appointment
-        if (registrationCompleted && activeUserId) {
-            setTimeout(() => {
-                bookAppn(activeUserId);
-            }, 200);
-            return;
-        }
+      if (registrationCompleted && activeUserId) {
+        setTimeout(() => {
+          bookAppn(activeUserId);
+        }, 200);
+        return;
+      }
       // Auto-scroll to show booking button after time selection
       // Auto-scroll to Step 2 after selecting a slot
       setTimeout(() => {
@@ -399,13 +482,7 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
         }
       }, 300); // Increased delay to ensure DOM updates are complete
     },
-    [
-        registrationCompleted,
-        activeUserId,
-        selectedDate,
-        trackEvent,
-        bookAppn,
-    ],
+    [registrationCompleted, activeUserId, selectedDate, trackEvent, bookAppn],
   );
   const [currency, setCurrency] = useState("₹");
   const [paid, setPaid] = useState(false);
@@ -508,89 +585,6 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
       return () => clearTimeout(timer);
     }
   }, [registrationSuccessMessage]);
-
-  const bookAppn = async (overrideUserId = null) => {
-    setBookingLoading(true);
-    setError(null);
-    const bookingUserId = overrideUserId || activeUserId;
-
-    if (!bookingUserId) {
-      setError("Please register first");
-      setBookingLoading(false);
-      return;
-    }
-
-    if (!selectedDate || !selectedTimeSlot) {
-      setError("Please select both a date and a time slot to continue.");
-      trackEvent("Appointment Booking Blocked", {
-        reason: "missing-date-or-time",
-      });
-      setBookingLoading(false);
-      return;
-    }
-
-    try {
-      trackEvent("Appointment Booking Initiated", {
-        selectedDate,
-        selectedTimeSlot,
-        amount: amount?.totalFee,
-        currency,
-      });
-
-      const numericUserId = parseInt(bookingUserId, 10);
-      //   const response = await axios.post(`${backendHost}/appointments/create`, {
-      const response = await axios.post(
-        `${backendHost}/appointments/v2/create`,
-        {
-          docID: docId,
-          userID: numericUserId,
-          appointmentDate: selectedDate,
-          startTime: selectedTimeSlot,
-          paymentStatus: 0,
-          amount: amount.totalFee,
-          currency: "INR",
-        },
-      );
-
-      const responseObject = response.data;
-      console.log("responseObject", responseObject);
-      localStorage.setItem("encKey", responseObject.encRequest);
-      localStorage.setItem("apiResponse", JSON.stringify(response.data));
-
-      // if (responseObject.Count == 0) {
-      //   trackEvent("Appointment Booking Success", {
-      //     selectedDate,
-      //     selectedTimeSlot,
-      //     paymentStatus: "not-required",
-      //   });
-      //   window.location.href = "/booking-successful";
-      //   return;
-      // }
-
-      trackEvent("Appointment Booking Redirecting", {
-        selectedDate,
-        selectedTimeSlot,
-        paymentStatus: "gateway",
-      });
-      //   const redirectURL = `https://www.all-cures.com/paymentRedirection?encRequest=${responseObject.encRequest}&Code=AVWN42KL59BP42NWPB`;
-      //   window.location.href = redirectURL;
-      const redirectURL = `https://www.all-cures.com/paymentRedirection?encRequest=${responseObject.encRequest}&accessCode=${responseObject.accessCode}`;
-      window.location.href = redirectURL;
-    } catch (error) {
-      console.error("Error while booking appointment:", error);
-      trackEvent("Appointment Booking Failed", {
-        selectedDate,
-        selectedTimeSlot,
-        message:
-          typeof error?.response?.data === "string"
-            ? error.response.data
-            : "request-error",
-      });
-      setError("Failed to book the appointment. Please try again.");
-    } finally {
-      setBookingLoading(false);
-    }
-  };
 
   const handleRegistration = useCallback(
     async (event) => {
