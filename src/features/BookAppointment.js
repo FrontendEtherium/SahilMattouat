@@ -371,9 +371,14 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
     showExistingAccountPrompt ||
     Boolean(registrationSuccessMessage);
 
-  const bookAppn = async (overrideUserId = null) => {
+  const bookAppn = async (
+    overrideUserId = null,
+    appointmentDate = selectedDate,
+    appointmentTime = selectedTimeSlot,
+  ) => {
     setBookingLoading(true);
     setError(null);
+
     const bookingUserId = overrideUserId || activeUserId;
 
     if (!bookingUserId) {
@@ -382,7 +387,7 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
       return;
     }
 
-    if (!selectedDate || !selectedTimeSlot) {
+    if (!appointmentDate || !appointmentTime) {
       setError("Please select both a date and a time slot to continue.");
       trackEvent("Appointment Booking Blocked", {
         reason: "missing-date-or-time",
@@ -393,21 +398,21 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
 
     try {
       trackEvent("Appointment Booking Initiated", {
-        selectedDate,
-        selectedTimeSlot,
+        selectedDate: appointmentDate,
+        selectedTimeSlot: appointmentTime,
         amount: amount?.totalFee,
         currency,
       });
 
       const numericUserId = parseInt(bookingUserId, 10);
-      //   const response = await axios.post(`${backendHost}/appointments/create`, {
+
       const response = await axios.post(
         `${backendHost}/appointments/v2/create`,
         {
           docID: docId,
           userID: numericUserId,
-          appointmentDate: selectedDate,
-          startTime: selectedTimeSlot,
+          appointmentDate: appointmentDate,
+          startTime: appointmentTime,
           paymentStatus: 0,
           amount: amount.totalFee,
           currency: "INR",
@@ -415,72 +420,63 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
       );
 
       const responseObject = response.data;
+
       console.log("responseObject", responseObject);
+
       localStorage.setItem("encKey", responseObject.encRequest);
       localStorage.setItem("apiResponse", JSON.stringify(response.data));
 
-      // if (responseObject.Count == 0) {
-      //   trackEvent("Appointment Booking Success", {
-      //     selectedDate,
-      //     selectedTimeSlot,
-      //     paymentStatus: "not-required",
-      //   });
-      //   window.location.href = "/booking-successful";
-      //   return;
-      // }
-
       trackEvent("Appointment Booking Redirecting", {
-        selectedDate,
-        selectedTimeSlot,
+        selectedDate: appointmentDate,
+        selectedTimeSlot: appointmentTime,
         paymentStatus: "gateway",
       });
-      //   const redirectURL = `https://www.all-cures.com/paymentRedirection?encRequest=${responseObject.encRequest}&Code=AVWN42KL59BP42NWPB`;
-      //   window.location.href = redirectURL;
+
       const redirectURL = `https://www.all-cures.com/paymentRedirection?encRequest=${responseObject.encRequest}&accessCode=${responseObject.accessCode}`;
+
       window.location.href = redirectURL;
     } catch (error) {
       console.error("Error while booking appointment:", error);
+
       trackEvent("Appointment Booking Failed", {
-        selectedDate,
-        selectedTimeSlot,
+        selectedDate: appointmentDate,
+        selectedTimeSlot: appointmentTime,
         message:
           typeof error?.response?.data === "string"
             ? error.response.data
             : "request-error",
       });
+
       setError("Failed to book the appointment. Please try again.");
     } finally {
       setBookingLoading(false);
     }
   };
-
   const handleTimeSlot = useCallback(
     (time) => {
       setSelectedTimeSlot(time);
-      setError(null); // Clear any previous errors when selecting a new time slot
+      setError(null);
+
       trackEvent("Appointment Time Selected", {
         selectedTimeSlot: time,
         selectedDate,
       });
 
-      // Already logged in -> directly create appointment
+      // Logged-in user -> directly create appointment
       if (registrationCompleted && activeUserId) {
-        setTimeout(() => {
-          bookAppn(activeUserId);
-        }, 200);
+        bookAppn(activeUserId, selectedDate, time);
         return;
       }
-      // Auto-scroll to show booking button after time selection
-      // Auto-scroll to Step 2 after selecting a slot
+
+      // Guest user -> continue registration flow
       setTimeout(() => {
         if (registrationRef.current) {
           registrationRef.current.scrollIntoView({
             behavior: "smooth",
-
             block: "start",
           });
         }
-      }, 300); // Increased delay to ensure DOM updates are complete
+      }, 300);
     },
     [registrationCompleted, activeUserId, selectedDate, trackEvent, bookAppn],
   );
