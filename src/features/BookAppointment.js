@@ -371,7 +371,7 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
     showExistingAccountPrompt ||
     Boolean(registrationSuccessMessage);
 
-  const handleTimeSlot = useCallback(
+   const handleTimeSlot = useCallback(
     (time) => {
       setSelectedTimeSlot(time);
       setError(null); // Clear any previous errors when selecting a new time slot
@@ -380,6 +380,13 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
         selectedDate,
       });
 
+      // Already logged in -> directly create appointment
+        if (registrationCompleted && activeUserId) {
+            setTimeout(() => {
+                bookAppn(activeUserId);
+            }, 200);
+            return;
+        }
       // Auto-scroll to show booking button after time selection
       // Auto-scroll to Step 2 after selecting a slot
       setTimeout(() => {
@@ -392,7 +399,13 @@ const AppointmentModal = ({ show, onHide, alertBooking, docId }) => {
         }
       }, 300); // Increased delay to ensure DOM updates are complete
     },
-    [registrationCompleted, selectedDate, trackEvent],
+    [
+        registrationCompleted,
+        activeUserId,
+        selectedDate,
+        trackEvent,
+        bookAppn,
+    ],
   );
   const [currency, setCurrency] = useState("₹");
   const [paid, setPaid] = useState(false);
