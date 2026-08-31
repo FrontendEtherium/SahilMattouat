@@ -13,6 +13,7 @@ import Heart from "../assets/img/heart.png";
 import Home from "./LandingPage/Home";
 import Profile from "./Profile/Profile";
 import Privacy from "../privacy.js";
+import RefundCancellation from "../RefundCancellation.js";
 
 import Search from "./Search/Search";
 import SearchName from "./Search/SearchName";
@@ -179,6 +180,11 @@ const Routes = (props) => {
         <Route exact path="/doctor" component={DoctorLandingPage} />
 
         <Route exact path="/privacy" component={Privacy} />
+        <Route
+          exact
+          path="/refund-cancellation"
+          component={RefundCancellation}
+        />
 
         {/* Health a to z Page */}
 

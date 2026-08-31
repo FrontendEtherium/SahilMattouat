@@ -177,6 +177,14 @@ const Footer = ({ hideCuresLinks }) => (
                   </Link>
                 </li>
                 <li>
+                  <Link
+                    to="/refund-cancellation"
+                    aria-label="Read our refund and cancellation policy"
+                  >
+                    Refund &amp; Cancellation
+                  </Link>
+                </li>
+                <li>
                   <Link to="/feedback" aria-label="Share your feedback with us">
                     Share your Feedback
                   </Link>
@@ -380,6 +388,14 @@ const Footer = ({ hideCuresLinks }) => (
                     aria-label="Read our terms and conditions"
                   >
                     Terms &amp; Conditions
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/refund-cancellation"
+                    aria-label="Read our refund and cancellation policy"
+                  >
+                    Refund &amp; Cancellation
                   </Link>
                 </li>
                 <li>
