@@ -1,9 +1,13 @@
 // src/RefundCancellation.js
-import React from "react";
+import React, { useEffect } from "react";
 import "./PrivacyPolicy.css";
 import Header from "./components/Header/Header";
 
 const RefundCancellation = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <>
       <Header />
